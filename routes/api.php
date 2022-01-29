@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Hammerstone\Refine\Filter;
 use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/stabilize', function (Request $request) {
     $filter = Filter::fromState([
@@ -20,6 +20,7 @@ Route::post('/stabilize', function (Request $request) {
 
 Route::post('/destabilize', function (Request $request) {
     $filter = (new UrlEncodedStabilizer)->fromStableId($request->id);
+
     return [
         'blueprint' => $filter->getBlueprint()
     ];

@@ -10,39 +10,37 @@
         @click.prevent="$emit('toggle')"
         @keydown.arrow-down.stop.prevent="$emit('open')"
     >
-        <span v-if="display.length === 0" class="refine-selector-button-placeholder">
-          Choose an option
-        </span>
+        <span v-if="display.length === 0" class="refine-selector-button-placeholder"> Choose an option </span>
         <span v-else class="refine-selector-button-selected">
-          {{ display }}
+            {{ display }}
         </span>
     </button>
 </template>
 
 <script>
-    export default {
-        name: 'selector-button',
-        props: {
-            id: {
-                type: String,
-                required: true,
-            },
-            isOpen: {
-                type: Boolean,
-                required: true,
-            },
-            display: {
-                type: String,
-                required: true,
-            },
+export default {
+    name: 'selector-button',
+    props: {
+        id: {
+            type: String,
+            required: true,
         },
-        methods: {
-            label: function () {
-                return this.display ? `${this.display} Selected` : 'Choose an option'
-            },
-            focus: function () {
-                this.$refs.button.focus();
-            },
+        isOpen: {
+            type: Boolean,
+            required: true,
         },
-    }
+        display: {
+            type: String,
+            required: true,
+        },
+    },
+    methods: {
+        label: function () {
+            return this.display ? `${this.display} Selected` : 'Choose an option';
+        },
+        focus: function () {
+            this.$refs.button.focus();
+        },
+    },
+};
 </script>

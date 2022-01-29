@@ -3,9 +3,9 @@ export default function () {
     return {
         // directive definition
         bind(el, binding) {
-            const {value: handleClick} = binding;
+            const { value: handleClick } = binding;
 
-            if (typeof (handleClick) !== 'function') {
+            if (typeof handleClick !== 'function') {
                 throw new Error('The click-away directive expects a function/method as an argument.');
             }
 
@@ -14,7 +14,7 @@ export default function () {
             }
 
             const handler = (e) => {
-                if (!(el.contains(e.target))) {
+                if (!el.contains(e.target)) {
                     handleClick();
                 }
             };
@@ -29,5 +29,5 @@ export default function () {
             document.removeEventListener('touchstart', handlers[el.id]);
             delete handlers[el.id];
         },
-    }
+    };
 }

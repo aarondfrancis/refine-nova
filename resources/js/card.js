@@ -1,14 +1,14 @@
 import VueCompositionApi from '@vue/composition-api';
-import Card from './components/Card'
+import Card from './components/Card';
 
 Nova.booting((Vue, router, store) => {
     Vue.config.devtools = true;
 
-    Vue.component('refine-nova', Card)
+    Vue.component('refine-nova', Card);
     Vue.use(VueCompositionApi);
 
-    monkeyPatchNova(router)
-})
+    monkeyPatchNova(router);
+});
 
 function monkeyPatchNova(router) {
     // We're going to do some monkey-patching here so that we can intercept
@@ -40,5 +40,5 @@ function monkeyPatchNova(router) {
         });
 
         return instance;
-    }
+    };
 }

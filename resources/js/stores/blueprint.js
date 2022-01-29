@@ -1,7 +1,7 @@
 let uid = 0;
 const getNextUid = function () {
     return uid++;
-}
+};
 
 const criterion = (id, depth, meta, refinements) => {
     const uid = getNextUid();
@@ -10,20 +10,20 @@ const criterion = (id, depth, meta, refinements) => {
     const condition = {
         condition_id: id,
         depth,
-        type: "criterion",
+        type: 'criterion',
         input: {
             clause: meta?.clauses[0].id,
             ...(firstRefinement && {
                 [firstRefinement.id]: {
                     clause: firstRefinement?.meta?.clauses[0]?.id,
-                }
+                },
             }),
         },
         uid,
     };
 
     return condition;
-}
+};
 
 const or = function (depth) {
     depth = depth === undefined ? 0 : depth;
@@ -62,13 +62,13 @@ class Blueprint {
     }
 
     mapBlueprint(blueprint) {
-        return blueprint.map(condition => {
+        return blueprint.map((condition) => {
             return {
                 ...condition,
                 id: condition.condition_id,
                 uid: getNextUid(),
             };
-        })
+        });
     }
 
     updateBlueprint(newBlueprint) {
@@ -96,14 +96,14 @@ class Blueprint {
                 groupedBlueprint[groupedBlueprint.length - 1].push({
                     ...piece,
                     position: index,
-                })
+                });
             }
-        })
+        });
 
         return groupedBlueprint;
     }
 
-    indexOfCriterion({uid}) {
+    indexOfCriterion({ uid }) {
         let index = -1;
         for (let i = 0; i < this.blueprint.length; i++) {
             if (this.blueprint[i].uid === uid) {
@@ -115,8 +115,8 @@ class Blueprint {
     }
 
     replaceCriterion(previousIndex, nextCriterion) {
-        const {meta, id, refinements,} = this.findCondition(nextCriterion.id);
-        const newCriterion = criterion(id, 1, meta, refinements)
+        const { meta, id, refinements } = this.findCondition(nextCriterion.id);
+        const newCriterion = criterion(id, 1, meta, refinements);
         this.blueprint.splice(previousIndex, 1, newCriterion);
         this.blueprintChanged();
     }
@@ -137,7 +137,7 @@ class Blueprint {
 
          These conditionals cover these cases.
          **/
-        const {blueprint} = this;
+        const { blueprint } = this;
         const previous = blueprint[position - 1];
         const next = blueprint[position + 1];
 
@@ -153,16 +153,12 @@ class Blueprint {
 
         if (isLastCriterion) {
             this.blueprint = [];
-
         } else if (isLastInGroup && previousIsOr) {
             blueprint.splice(position - 1, 2);
-
         } else if (isLastInGroup && !previous) {
             blueprint.splice(position, 2);
-
         } else if (isFirstInGroup) {
             blueprint.splice(position, 2);
-
         } else {
             blueprint.splice(position - 1, 2);
         }
@@ -170,38 +166,31 @@ class Blueprint {
     }
 
     findCriterion(uid) {
-        const conditionIndex = this.indexOfCriterion({uid});
+        const conditionIndex = this.indexOfCriterion({ uid });
         return this.blueprint[conditionIndex];
     }
 
     addGroup() {
-        const {blueprint, conditions} = this;
+        const { blueprint, conditions } = this;
         const condition = conditions[0];
-        const {meta, refinements} = condition;
+        const { meta, refinements } = condition;
 
         if (blueprint.length > 0) {
             blueprint.push(or());
         }
-        blueprint.push(
-            criterion(condition.id, 1, meta, refinements)
-        );
+        blueprint.push(criterion(condition.id, 1, meta, refinements));
 
         this.blueprintChanged();
     }
 
     addCriterion(newCriterion) {
-        const {id, depth} = newCriterion;
-        const {blueprint} = this;
+        const { id, depth } = newCriterion;
+        const { blueprint } = this;
         const generatedCriterion = criterion(id, depth);
         if (blueprint.length === 0) {
-            blueprint.push(generatedCriterion)
+            blueprint.push(generatedCriterion);
         } else {
-            blueprint.splice(
-                blueprint.length,
-                0,
-                and(),
-                generatedCriterion,
-            );
+            blueprint.splice(blueprint.length, 0, and(), generatedCriterion);
         }
 
         this.blueprintChanged();
@@ -209,28 +198,23 @@ class Blueprint {
     }
 
     insertCriterion(previousPosition) {
-        const {blueprint, conditions} = this;
+        const { blueprint, conditions } = this;
         const condition = conditions[0];
-        const {meta, refinements} = condition;
+        const { meta, refinements } = condition;
 
-        blueprint.splice(
-            previousPosition + 1,
-            0,
-            and(),
-            criterion(condition.id, 1, meta, refinements),
-        );
+        blueprint.splice(previousPosition + 1, 0, and(), criterion(condition.id, 1, meta, refinements));
 
         this.blueprintChanged();
         return blueprint[previousPosition + 1];
     }
 
     findRefinement(conditionId, findId) {
-        const {refinements} = this.findCondition(conditionId);
+        const { refinements } = this.findCondition(conditionId);
 
         let result;
         refinements.forEach((refinement) => {
             if (refinement.id === findId) {
-                result = refinement
+                result = refinement;
             }
         });
         return result;
@@ -248,8 +232,8 @@ class Blueprint {
         return foundCondition;
     }
 
-    switchClause({uid, id}, clause, refinementId) {
-        const {meta} = this.findCondition(id);
+    switchClause({ uid, id }, clause, refinementId) {
+        const { meta } = this.findCondition(id);
         const criterion = this.findCriterion(uid);
 
         if (Array.isArray(meta.options)) {
@@ -257,14 +241,14 @@ class Blueprint {
                 clause,
             };
         } else {
-            this.updateInput({uid}, {clause}, refinementId)
+            this.updateInput({ uid }, { clause }, refinementId);
         }
     }
 
-    switchRefinement({uid, id}, oldRefinementId, newRefinementId) {
+    switchRefinement({ uid, id }, oldRefinementId, newRefinementId) {
         const nextRefinement = this.findRefinement(id, newRefinementId);
         const criterion = this.findCriterion(uid);
-        const input = {...criterion.input};
+        const input = { ...criterion.input };
 
         // Have to copy and swap out the input
         // because deleting and adding properties is
@@ -277,7 +261,7 @@ class Blueprint {
         criterion.input = input;
     }
 
-    updateInput({uid}, updates, refinementId) {
+    updateInput({ uid }, updates, refinementId) {
         // Do the update iteratively on the input object to preserve it
         // as an observable to anything that references it. Swapping it out
         // means you can't pass it directly to anything you would always have
@@ -292,7 +276,6 @@ class Blueprint {
         });
         this.blueprintChanged();
     }
-
 }
 
 export default Blueprint;

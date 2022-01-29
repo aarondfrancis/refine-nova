@@ -7,21 +7,21 @@ import RefineRelativeDateInput from './relative-date-input';
 import RefineOptionInput from './option-input';
 
 export default {
-  RefineDateInput,
-  RefineDoubleDateInput,
-  RefineDoubleNumberInput,
-  RefineNumberInput,
-  RefineOptionInput,
-  RefineRelativeDateInput,
-  RefineTextInput,
+    RefineDateInput,
+    RefineDoubleDateInput,
+    RefineDoubleNumberInput,
+    RefineNumberInput,
+    RefineOptionInput,
+    RefineRelativeDateInput,
+    RefineTextInput,
 };
 
 export {
-  RefineDateInput,
-  RefineDoubleDateInput,
-  RefineDoubleNumberInput,
-  RefineNumberInput,
-  RefineOptionInput,
-  RefineRelativeDateInput,
-  RefineTextInput,
+    RefineDateInput,
+    RefineDoubleDateInput,
+    RefineDoubleNumberInput,
+    RefineNumberInput,
+    RefineOptionInput,
+    RefineRelativeDateInput,
+    RefineTextInput,
 };

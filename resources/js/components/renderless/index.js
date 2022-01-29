@@ -6,10 +6,10 @@ import RenderlessClause from './renderless-clause';
 import RenderlessRefinement from './renderless-refinement';
 
 export {
-  RenderlessClause,
-  RenderlessCondition,
-  RenderlessQueryBuilder,
-  RenderlessOption,
-  RenderlessRefinement,
-  RenderlessSelector,
-}
+    RenderlessClause,
+    RenderlessCondition,
+    RenderlessQueryBuilder,
+    RenderlessOption,
+    RenderlessRefinement,
+    RenderlessSelector,
+};
