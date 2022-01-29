@@ -1,0 +1,31 @@
+{
+    "name": "hammerstone/refine-nova",
+    "description": "A Laravel Nova integration for the Refine query builder.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.2|^8.0",
+        "hammerstone/refine-laravel": "dev-main",
+        "laravel/nova": "^2.12|^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hammerstone\\Refine\\Nova\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hammerstone\\Refine\\Nova\\CardServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

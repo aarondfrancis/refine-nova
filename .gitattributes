@@ -1,0 +1,6 @@
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/.styleci           export-ignore
+/.github            export-ignore
+/dist/css/card.css  binary
+/dist/js/card.js    binary
