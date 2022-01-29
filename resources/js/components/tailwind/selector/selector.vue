@@ -1,14 +1,7 @@
 <template>
   <div>
     <renderless-selector
-      v-slot="{
-        actions,
-        isOpen,
-        isClosed,
-        selectedOptions,
-        highlightedOption,
-        options,
-      }"
+      v-slot="{ actions, isOpen, isClosed, selectedOptions, highlightedOption, options }"
       @select-option="$emit('select-option', arguments[0])"
       @deselect-option="$emit('deselect-option', arguments[0])"
     >
@@ -74,17 +67,16 @@
   </div>
 </template>
 <script>
-
-import RenderlessSelector from "../../renderless/selector";
-import { uid } from "../../../mixins";
-import SelectorButton from "./selector-button";
-import SelectorListbox from "./selector-listbox";
-import SelectorListItem from "./selector-list-item";
+import RenderlessSelector from '../../renderless/selector';
+import { uid } from '../../../mixins';
+import SelectorButton from './selector-button';
+import SelectorListbox from './selector-listbox';
+import SelectorListItem from './selector-list-item';
 import MultiSelectorButton from './multi-selector-button.vue';
-import ClickAway from '../../../directives/click-away'
+import ClickAway from '../../../directives/click-away';
 
 export default {
-  name: "selector",
+  name: 'selector',
   mixins: [uid],
   inject: ['builderModeActive'],
   props: {
@@ -112,9 +104,9 @@ export default {
       this.$refs.button.focus();
     }
   },
-    directives: {
-      clickAway: new ClickAway()
-    },
+  directives: {
+    clickAway: new ClickAway(),
+  },
   methods: {
     isSelected(option, selectedOptions) {
       let selected = false;

@@ -1,9 +1,5 @@
 <template>
-  <selector
-    :isMultiSelect="multiple"
-    @select-option="selectOption"
-    @deselect-option="deselectOption"
-  >
+  <selector :isMultiSelect="multiple" @select-option="selectOption" @deselect-option="deselectOption">
     <selector-option
       v-for="{ id, display } in options"
       :key="id"
@@ -15,10 +11,10 @@
 </template>
 
 <script>
-import { Selector, SelectorOption } from "../selector";
+import { Selector, SelectorOption } from '../selector';
 
 export default {
-  name: "refine-option-input",
+  name: 'refine-option-input',
   components: {
     Selector,
     SelectorOption,
@@ -42,11 +38,11 @@ export default {
   methods: {
     selectOption({ selectedOptions }) {
       const selected = selectedOptions.map(({ id }) => id);
-      this.$emit("input", { selected });
+      this.$emit('input', { selected });
     },
     deselectOption({ selectedOptions }) {
       const selected = selectedOptions.map(({ id }) => id);
-      this.$emit("input", { selected });
+      this.$emit('input', { selected });
     },
     isSelected(id) {
       let selected = false;

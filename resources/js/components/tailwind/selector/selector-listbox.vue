@@ -19,29 +19,29 @@
 </template>
 
 <script>
- import { uid } from '../../../mixins';
+import { uid } from '../../../mixins';
 
- export default {
-   name: 'selector-listbox',
-   mixins: [uid],
-   props: {
-     isClosed: {
-       type: Boolean,
-       required: false,
-       default: true,
-     },
-     selectedOption: {
-       type: Object,
-       required: false,
-     },
-   },
-   methods: {
-     focus: function() {
-       this.$refs.listBox.focus();
-     },
-     createItemId: function(optionId) {
-       return `listbox-option-${this.uid}-${optionId}`
-     },
-   },
- };
+export default {
+  name: 'selector-listbox',
+  mixins: [uid],
+  props: {
+    isClosed: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    selectedOption: {
+      type: Object,
+      required: false,
+    },
+  },
+  methods: {
+    focus: function () {
+      this.$refs.listBox.focus();
+    },
+    createItemId: function (optionId) {
+      return `listbox-option-${this.uid}-${optionId}`;
+    },
+  },
+};
 </script>

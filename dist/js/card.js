@@ -788,6 +788,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _tailwind_query_builder_query_builder__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tailwind/query-builder/query-builder */ "./resources/js/components/tailwind/query-builder/query-builder.vue");
+/* harmony import */ var _tailwind_slide_down__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tailwind/slide-down */ "./resources/js/components/tailwind/slide-down.vue");
+/* harmony import */ var store2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! store2 */ "./node_modules/store2/dist/store2.js");
+/* harmony import */ var store2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(store2__WEBPACK_IMPORTED_MODULE_2__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -799,15 +802,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['card', 'resourceName'],
   components: {
+    SlideDown: _tailwind_slide_down__WEBPACK_IMPORTED_MODULE_1__["default"],
     QueryBuilder: _tailwind_query_builder_query_builder__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
+    var filter = _.toPlainObject(this.card.filter);
+
     return {
-      filter: _.toPlainObject(this.card.filter)
+      lastAppliedBlueprint: filter.blueprint,
+      collapsed: store2__WEBPACK_IMPORTED_MODULE_2___default().get('refine-collapsed', false),
+      filter: filter
     };
   },
   mounted: function mounted() {
@@ -817,67 +838,88 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var id = _.get(this, "$route.query.".concat(this.refineParameterName));
 
     if (id) {
-      this.updateFromStableId(id);
+      this.updateBlueprintFromStableId(id);
     }
   },
   computed: {
     refineParameterName: function refineParameterName() {
       return "".concat(this.resourceName, "_refine");
+    },
+    collapsedText: function collapsedText() {
+      return this.calculateCollapsedText(this.lastAppliedBlueprint);
     }
   },
   watch: {
     $route: function $route(to, from) {
       if (to.query[this.refineParameterName] !== from.query[this.refineParameterName]) {
-        this.updateFromStableId(to.query[this.refineParameterName], true);
+        this.updateBlueprintFromStableId(to.query[this.refineParameterName], true);
       }
+    },
+    collapsed: function collapsed(val) {
+      store2__WEBPACK_IMPORTED_MODULE_2___default().set('refine-collapsed', val);
     }
   },
   methods: {
-    updateFromStableId: function updateFromStableId(id) {
+    updateBlueprintFromStableId: function updateBlueprintFromStableId(id) {
       var _this = this;
 
       var refresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      var promise;
+      Nova.request().post('/nova-vendor/refine-nova/destabilize', {
+        id: id
+      }).then(function (_ref) {
+        var data = _ref.data;
+        // Without this here, the clauses in a condition won't change on
+        // back/next navigation. I'll need to have Sean or Jeff look
+        // more closely at the blueprint store to figure out why.
+        _this.filter.blueprint = [];
 
-      if (!id) {
-        this.filter.blueprint = [];
-        promise = Promise.resolve();
-      } else {
-        promise = Nova.request().post('/nova-vendor/refine-nova/destabilize', {
-          id: id
-        }).then(function (_ref) {
-          var data = _ref.data;
+        _this.$nextTick(function () {
+          _this.lastAppliedBlueprint = data.blueprint;
           _this.filter.blueprint = data.blueprint;
         });
+
+        if (refresh) {
+          Nova.$emit('refresh-resources');
+        }
+      });
+    },
+    calculateCollapsedText: function calculateCollapsedText(blueprint) {
+      var count = blueprint.filter(function (item) {
+        return item.type === 'criterion';
+      }).length;
+
+      if (count === 0) {
+        return 'No filter conditions applied.';
       }
 
-      if (refresh) {
-        promise.then(function () {
-          return Nova.$emit('refresh-resources');
-        });
+      if (count === 1) {
+        return '1 filter condition applied.';
       }
+
+      return "".concat(count, " filter conditions applied.");
     },
     submit: function submit() {
       var _this2 = this;
 
-      Nova.request().post('/nova-vendor/refine-nova/stabilize', {
+      Nova.request() // Because of the way Nova works, we have to make a round trip to
+      // stabilize the blueprint, and then pop it in the querystring.
+      .post('/nova-vendor/refine-nova/stabilize', {
         type: this.filter.type,
         blueprint: this.filter.blueprint
       }).then(function (_ref2) {
         var _this2$updateQueryStr;
 
         var data = _ref2.data;
+        console.log('updating querystring'); // Put the new stable id in the querystring, and then the router will take over.
 
         _this2.updateQueryString((_this2$updateQueryStr = {}, _defineProperty(_this2$updateQueryStr, "".concat(_this2.resourceName, "_page"), 1), _defineProperty(_this2$updateQueryStr, _this2.refineParameterName, data.id), _this2$updateQueryStr));
-
-        Nova.$emit('refresh-resources');
       });
     },
     updateQueryString: function updateQueryString(value) {
       this.$router.push({
         query: _.defaults(value, this.$route.query)
       })["catch"](function (error) {
-        if (error.name != "NavigationDuplicated") {
+        if (error.name != 'NavigationDuplicated') {
           throw error;
         }
       });
@@ -909,7 +951,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "renderless-selector",
+  name: 'renderless-selector',
   data: function data() {
     return {
       selector: (0,_vue_composition_api__WEBPACK_IMPORTED_MODULE_1__.reactive)(new _stores_selector__WEBPACK_IMPORTED_MODULE_0__["default"]()),
@@ -1020,10 +1062,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.selector.clearSelectedOptions();
     },
     deselectOption: function deselectOption(optionId) {
-      this.$emit("deselect-option", this.selector.deselectOption(optionId));
+      this.$emit('deselect-option', this.selector.deselectOption(optionId));
     },
     selectOption: function selectOption(optionId) {
-      this.$emit("select-option", this.selector.selectOption(optionId));
+      this.$emit('select-option', this.selector.selectOption(optionId));
     },
     highlightOption: function highlightOption(option) {
       this.highlightedOption = option;
@@ -1098,7 +1140,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     handleInput: function handleInput(_ref) {
       var date = _ref.date;
-      this.$emit("input", {
+      this.$emit('input', {
         date1: date
       });
     }
@@ -1151,13 +1193,13 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     updateFirstDate: function updateFirstDate(_ref) {
       var date = _ref.date;
-      this.$emit("input", {
+      this.$emit('input', {
         date1: date
       });
     },
     updateSecondDate: function updateSecondDate(_ref2) {
       var date = _ref2.date;
-      this.$emit("input", {
+      this.$emit('input', {
         date2: date
       });
     }
@@ -1178,14 +1220,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _number_input__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./number-input */ "./resources/js/components/tailwind/inputs/number-input.vue");
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -1287,7 +1321,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     handleChange: function handleChange(value) {
       this.hasError = false;
-      this.$emit("input", {
+      this.$emit('input', {
         date: value
       });
     },
@@ -1403,13 +1437,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "refine-option-input",
+  name: 'refine-option-input',
   components: {
     Selector: _selector__WEBPACK_IMPORTED_MODULE_0__.Selector,
     SelectorOption: _selector__WEBPACK_IMPORTED_MODULE_0__.SelectorOption
@@ -1439,7 +1469,7 @@ __webpack_require__.r(__webpack_exports__);
         var id = _ref2.id;
         return id;
       });
-      this.$emit("input", {
+      this.$emit('input', {
         selected: selected
       });
     },
@@ -1449,7 +1479,7 @@ __webpack_require__.r(__webpack_exports__);
         var id = _ref4.id;
         return id;
       });
-      this.$emit("input", {
+      this.$emit('input', {
         selected: selected
       });
     },
@@ -1480,9 +1510,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../selector */ "./resources/js/components/tailwind/selector/index.js");
 /* harmony import */ var _mixins__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../mixins */ "./resources/js/mixins/index.js");
-//
-//
-//
 //
 //
 //
@@ -1669,7 +1696,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     switchClause: function switchClause(_ref) {
       var nextClause = _ref.selectedOption;
-      this.$emit("switch-clause", nextClause);
+      this.$emit('switch-clause', nextClause);
     }
   },
   components: _objectSpread({
@@ -1737,11 +1764,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "criterion",
+  name: 'criterion',
   props: {
     conditions: {
       required: true,
@@ -1766,10 +1801,10 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     switchCondition: function switchCondition(_ref) {
       var nextCondition = _ref.selectedOption;
-      this.$emit("switch-condition", nextCondition);
+      this.$emit('switch-condition', nextCondition);
     },
     switchClause: function switchClause(nextClause) {
-      this.$emit("switch-clause", nextClause);
+      this.$emit('switch-clause', nextClause);
     }
   },
   components: {
@@ -1795,6 +1830,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _criterion__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./criterion */ "./resources/js/components/tailwind/query-builder/criterion.vue");
 /* harmony import */ var _renderless__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../renderless */ "./resources/js/components/renderless/index.js");
+/* harmony import */ var _heroicon_plus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../heroicon-plus */ "./resources/js/components/heroicon-plus.vue");
 //
 //
 //
@@ -1868,24 +1904,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "query-builder",
+  name: 'query-builder',
   model: {
-    prop: "blueprint",
-    event: "change"
+    prop: 'blueprint',
+    event: 'change'
   },
   props: {
     blueprint: {
@@ -1910,15 +1936,16 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onChange: function onChange(newBlueprint) {
       // bubble up the change event.
-      this.$emit("change", newBlueprint);
+      this.$emit('change', newBlueprint);
     }
   },
   created: function created() {
     if (this.conditions.length === 0) {
-      throw new Error("You must provide at least one condition to the query builder.");
+      throw new Error('You must provide at least one condition to the query builder.');
     }
   },
   components: {
+    HeroiconPlus: _heroicon_plus__WEBPACK_IMPORTED_MODULE_2__["default"],
     Criterion: _criterion__WEBPACK_IMPORTED_MODULE_0__["default"],
     RenderlessCondition: _renderless__WEBPACK_IMPORTED_MODULE_1__.RenderlessCondition,
     RenderlessQueryBuilder: _renderless__WEBPACK_IMPORTED_MODULE_1__.RenderlessQueryBuilder
@@ -1941,12 +1968,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../selector */ "./resources/js/components/tailwind/selector/index.js");
 /* harmony import */ var _renderless__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../renderless */ "./resources/js/components/renderless/index.js");
 /* harmony import */ var _clause__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./clause */ "./resources/js/components/tailwind/query-builder/clause.vue");
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2062,6 +2083,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'multi-selector-button',
   props: {
@@ -2125,8 +2150,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'selector-button',
   props: {
@@ -2166,8 +2189,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
 //
 //
 //
@@ -2314,10 +2335,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2424,13 +2441,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2439,7 +2449,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "selector",
+  name: 'selector',
   mixins: [_mixins__WEBPACK_IMPORTED_MODULE_2__.uid],
   inject: ['builderModeActive'],
   props: {
@@ -2677,6 +2687,113 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     SelectorListItem: _selector_list_item__WEBPACK_IMPORTED_MODULE_5__["default"],
     SelectorButton: _selector_button__WEBPACK_IMPORTED_MODULE_3__["default"],
     SelectorListbox: _selector_listbox__WEBPACK_IMPORTED_MODULE_4__["default"]
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/slide-down.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/slide-down.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    show: {
+      required: true,
+      type: Boolean
+    }
+  },
+  data: function data() {
+    return {
+      animating: false,
+      open: null
+    };
+  },
+  created: function created() {
+    this.open = this.show;
+  },
+  methods: {
+    outerHeight: function outerHeight(el) {
+      var height = el.offsetHeight;
+      var style = getComputedStyle(el);
+      height += parseInt(style.marginTop) + parseInt(style.marginBottom);
+      return height;
+    },
+    beforeEnter: function beforeEnter(wrapper) {
+      wrapper.style.overflowY = 'hidden';
+      wrapper.style.height = '0px';
+    },
+    beforeLeave: function beforeLeave(wrapper) {
+      wrapper.style.overflowY = 'hidden';
+      wrapper.style.height = wrapper.style.offsetHeight + 'px';
+    },
+    enter: function enter(wrapper, done) {
+      var _this = this;
+
+      setTimeout(function () {
+        var start = +Date.now();
+
+        _this.animate(true, start, wrapper, done);
+      }, 0);
+    },
+    leave: function leave(wrapper, done) {
+      var _this2 = this;
+
+      setTimeout(function () {
+        var start = +Date.now();
+
+        _this2.animate(false, start, wrapper, done);
+      }, 0);
+    },
+    animationIsDone: function animationIsDone(growing) {
+      this.animating = false;
+      this.open = growing;
+    },
+    animate: function animate(growing, start, wrapper, done) {
+      var _this3 = this;
+
+      this.animating = true;
+      var elapsedMs = +Date.now() - start;
+      var progress = Math.min(elapsedMs / 350, 1); // https://gist.github.com/gre/1650294
+
+      var factor = function (t) {
+        return t * t * t;
+      }(progress);
+
+      var original = growing ? 0 : this.outerHeight(wrapper.firstChild);
+      var destination = growing ? this.outerHeight(wrapper.firstChild) : 0;
+      var height = original + (destination - original) * factor;
+      wrapper.style.height = height + 'px';
+
+      if (progress === 1) {
+        if (growing) {
+          wrapper.style.height = null;
+          wrapper.style.overflowY = null;
+        }
+
+        this.animationIsDone(growing);
+        return done();
+      }
+
+      requestAnimationFrame(function () {
+        _this3.animate(growing, start, wrapper, done);
+      });
+    }
   }
 });
 
@@ -3280,7 +3397,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   }); // Renderless condition doesn't accept a criterion prop, this
   // reference to props.condition is an outdated interface that is
-  // only used by the non builder mode components. 
+  // only used by the non builder mode components.
   // TODO: update non builder components to use the same props
   // as renderless condition. (see conditionProps in mixins/condition.js)
 
@@ -3523,7 +3640,7 @@ var criterion = function criterion(id, depth, meta, refinements) {
   var condition = {
     condition_id: id,
     depth: depth,
-    type: "criterion",
+    type: 'criterion',
     input: _objectSpread({
       clause: meta === null || meta === void 0 ? void 0 : meta.clauses[0].id
     }, firstRefinement && _defineProperty({}, firstRefinement.id, {
@@ -3966,6 +4083,295 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/store2/dist/store2.js":
+/*!********************************************!*\
+  !*** ./node_modules/store2/dist/store2.js ***!
+  \********************************************/
+/***/ (function(module) {
+
+/*! store2 - v2.13.1 - 2021-12-20
+* Copyright (c) 2021 Nathan Bubna; Licensed (MIT OR GPL-3.0) */
+;(function(window, define) {
+    var _ = {
+        version: "2.13.1",
+        areas: {},
+        apis: {},
+
+        // utilities
+        inherit: function(api, o) {
+            for (var p in api) {
+                if (!o.hasOwnProperty(p)) {
+                    Object.defineProperty(o, p, Object.getOwnPropertyDescriptor(api, p));
+                }
+            }
+            return o;
+        },
+        stringify: function(d, fn) {
+            return d === undefined || typeof d === "function" ? d+'' : JSON.stringify(d,fn||_.replace);
+        },
+        parse: function(s, fn) {
+            // if it doesn't parse, return as is
+            try{ return JSON.parse(s,fn||_.revive); }catch(e){ return s; }
+        },
+
+        // extension hooks
+        fn: function(name, fn) {
+            _.storeAPI[name] = fn;
+            for (var api in _.apis) {
+                _.apis[api][name] = fn;
+            }
+        },
+        get: function(area, key){ return area.getItem(key); },
+        set: function(area, key, string){ area.setItem(key, string); },
+        remove: function(area, key){ area.removeItem(key); },
+        key: function(area, i){ return area.key(i); },
+        length: function(area){ return area.length; },
+        clear: function(area){ area.clear(); },
+
+        // core functions
+        Store: function(id, area, namespace) {
+            var store = _.inherit(_.storeAPI, function(key, data, overwrite) {
+                if (arguments.length === 0){ return store.getAll(); }
+                if (typeof data === "function"){ return store.transact(key, data, overwrite); }// fn=data, alt=overwrite
+                if (data !== undefined){ return store.set(key, data, overwrite); }
+                if (typeof key === "string" || typeof key === "number"){ return store.get(key); }
+                if (typeof key === "function"){ return store.each(key); }
+                if (!key){ return store.clear(); }
+                return store.setAll(key, data);// overwrite=data, data=key
+            });
+            store._id = id;
+            try {
+                var testKey = '__store2_test';
+                area.setItem(testKey, 'ok');
+                store._area = area;
+                area.removeItem(testKey);
+            } catch (e) {
+                store._area = _.storage('fake');
+            }
+            store._ns = namespace || '';
+            if (!_.areas[id]) {
+                _.areas[id] = store._area;
+            }
+            if (!_.apis[store._ns+store._id]) {
+                _.apis[store._ns+store._id] = store;
+            }
+            return store;
+        },
+        storeAPI: {
+            // admin functions
+            area: function(id, area) {
+                var store = this[id];
+                if (!store || !store.area) {
+                    store = _.Store(id, area, this._ns);//new area-specific api in this namespace
+                    if (!this[id]){ this[id] = store; }
+                }
+                return store;
+            },
+            namespace: function(namespace, singleArea) {
+                if (!namespace){
+                    return this._ns ? this._ns.substring(0,this._ns.length-1) : '';
+                }
+                var ns = namespace, store = this[ns];
+                if (!store || !store.namespace) {
+                    store = _.Store(this._id, this._area, this._ns+ns+'.');//new namespaced api
+                    if (!this[ns]){ this[ns] = store; }
+                    if (!singleArea) {
+                        for (var name in _.areas) {
+                            store.area(name, _.areas[name]);
+                        }
+                    }
+                }
+                return store;
+            },
+            isFake: function(force) {
+                if (force) {
+                    this._real = this._area;
+                    this._area = _.storage('fake');
+                } else if (force === false) {
+                    this._area = this._real || this._area;
+                }
+                return this._area.name === 'fake';
+            },
+            toString: function() {
+                return 'store'+(this._ns?'.'+this.namespace():'')+'['+this._id+']';
+            },
+
+            // storage functions
+            has: function(key) {
+                if (this._area.has) {
+                    return this._area.has(this._in(key));//extension hook
+                }
+                return !!(this._in(key) in this._area);
+            },
+            size: function(){ return this.keys().length; },
+            each: function(fn, fill) {// fill is used by keys(fillList) and getAll(fillList))
+                for (var i=0, m=_.length(this._area); i<m; i++) {
+                    var key = this._out(_.key(this._area, i));
+                    if (key !== undefined) {
+                        if (fn.call(this, key, this.get(key), fill) === false) {
+                            break;
+                        }
+                    }
+                    if (m > _.length(this._area)) { m--; i--; }// in case of removeItem
+                }
+                return fill || this;
+            },
+            keys: function(fillList) {
+                return this.each(function(k, v, list){ list.push(k); }, fillList || []);
+            },
+            get: function(key, alt) {
+                var s = _.get(this._area, this._in(key)),
+                    fn;
+                if (typeof alt === "function") {
+                    fn = alt;
+                    alt = null;
+                }
+                return s !== null ? _.parse(s, fn) :
+                    alt != null ? alt : s;
+            },
+            getAll: function(fillObj) {
+                return this.each(function(k, v, all){ all[k] = v; }, fillObj || {});
+            },
+            transact: function(key, fn, alt) {
+                var val = this.get(key, alt),
+                    ret = fn(val);
+                this.set(key, ret === undefined ? val : ret);
+                return this;
+            },
+            set: function(key, data, overwrite) {
+                var d = this.get(key),
+                    replacer;
+                if (d != null && overwrite === false) {
+                    return data;
+                }
+                if (typeof overwrite !== "boolean") {
+                    replacer = overwrite;
+                }
+                return _.set(this._area, this._in(key), _.stringify(data, replacer)) || d;
+            },
+            setAll: function(data, overwrite) {
+                var changed, val;
+                for (var key in data) {
+                    val = data[key];
+                    if (this.set(key, val, overwrite) !== val) {
+                        changed = true;
+                    }
+                }
+                return changed;
+            },
+            add: function(key, data, replacer) {
+                var d = this.get(key);
+                if (d instanceof Array) {
+                    data = d.concat(data);
+                } else if (d !== null) {
+                    var type = typeof d;
+                    if (type === typeof data && type === 'object') {
+                        for (var k in data) {
+                            d[k] = data[k];
+                        }
+                        data = d;
+                    } else {
+                        data = d + data;
+                    }
+                }
+                _.set(this._area, this._in(key), _.stringify(data, replacer));
+                return data;
+            },
+            remove: function(key, alt) {
+                var d = this.get(key, alt);
+                _.remove(this._area, this._in(key));
+                return d;
+            },
+            clear: function() {
+                if (!this._ns) {
+                    _.clear(this._area);
+                } else {
+                    this.each(function(k){ _.remove(this._area, this._in(k)); }, 1);
+                }
+                return this;
+            },
+            clearAll: function() {
+                var area = this._area;
+                for (var id in _.areas) {
+                    if (_.areas.hasOwnProperty(id)) {
+                        this._area = _.areas[id];
+                        this.clear();
+                    }
+                }
+                this._area = area;
+                return this;
+            },
+
+            // internal use functions
+            _in: function(k) {
+                if (typeof k !== "string"){ k = _.stringify(k); }
+                return this._ns ? this._ns + k : k;
+            },
+            _out: function(k) {
+                return this._ns ?
+                    k && k.indexOf(this._ns) === 0 ?
+                        k.substring(this._ns.length) :
+                        undefined : // so each() knows to skip it
+                    k;
+            }
+        },// end _.storeAPI
+        storage: function(name) {
+            return _.inherit(_.storageAPI, { items: {}, name: name });
+        },
+        storageAPI: {
+            length: 0,
+            has: function(k){ return this.items.hasOwnProperty(k); },
+            key: function(i) {
+                var c = 0;
+                for (var k in this.items){
+                    if (this.has(k) && i === c++) {
+                        return k;
+                    }
+                }
+            },
+            setItem: function(k, v) {
+                if (!this.has(k)) {
+                    this.length++;
+                }
+                this.items[k] = v;
+            },
+            removeItem: function(k) {
+                if (this.has(k)) {
+                    delete this.items[k];
+                    this.length--;
+                }
+            },
+            getItem: function(k){ return this.has(k) ? this.items[k] : null; },
+            clear: function(){ for (var k in this.items){ this.removeItem(k); } }
+        }// end _.storageAPI
+    };
+
+    var store =
+        // safely set this up (throws error in IE10/32bit mode for local files)
+        _.Store("local", (function(){try{ return localStorage; }catch(e){}})());
+    store.local = store;// for completeness
+    store._ = _;// for extenders and debuggers...
+    // safely setup store.session (throws exception in FF for file:/// urls)
+    store.area("session", (function(){try{ return sessionStorage; }catch(e){}})());
+    store.area("page", _.storage("page"));
+
+    if (typeof define === 'function' && define.amd !== undefined) {
+        define('store2', [], function () {
+            return store;
+        });
+    } else if ( true && module.exports) {
+        module.exports = store;
+    } else {
+        // expose the primary store fn to the global object and save conflicts
+        if (window.store){ _.conflict = window.store; }
+        window.store = store;
+    }
+
+})(this, this && this.define);
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Card.vue":
 /*!******************************************!*\
   !*** ./resources/js/components/Card.vue ***!
@@ -4001,6 +4407,43 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/components/Card.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/heroicon-plus.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/components/heroicon-plus.vue ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./heroicon-plus.vue?vue&type=template&id=9b667d0e& */ "./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.render,
+  _heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/heroicon-plus.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -4745,6 +5188,45 @@ component.options.__file = "resources/js/components/tailwind/selector/selector.v
 
 /***/ }),
 
+/***/ "./resources/js/components/tailwind/slide-down.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/tailwind/slide-down.vue ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _slide_down_vue_vue_type_template_id_798c9e4c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./slide-down.vue?vue&type=template&id=798c9e4c& */ "./resources/js/components/tailwind/slide-down.vue?vue&type=template&id=798c9e4c&");
+/* harmony import */ var _slide_down_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./slide-down.vue?vue&type=script&lang=js& */ "./resources/js/components/tailwind/slide-down.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _slide_down_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _slide_down_vue_vue_type_template_id_798c9e4c___WEBPACK_IMPORTED_MODULE_0__.render,
+  _slide_down_vue_vue_type_template_id_798c9e4c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/tailwind/slide-down.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Card.vue?vue&type=script&lang=js&":
 /*!*******************************************************************!*\
   !*** ./resources/js/components/Card.vue?vue&type=script&lang=js& ***!
@@ -5065,6 +5547,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/tailwind/slide-down.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/tailwind/slide-down.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_slide_down_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./slide-down.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/slide-down.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_slide_down_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/Card.vue?vue&type=template&id=b9bc2c0a&":
 /*!*************************************************************************!*\
   !*** ./resources/js/components/Card.vue?vue&type=template&id=b9bc2c0a& ***!
@@ -5078,6 +5576,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Card_vue_vue_type_template_id_b9bc2c0a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Card_vue_vue_type_template_id_b9bc2c0a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Card.vue?vue&type=template&id=b9bc2c0a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Card.vue?vue&type=template&id=b9bc2c0a&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e& ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./heroicon-plus.vue?vue&type=template&id=9b667d0e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&");
 
 
 /***/ }),
@@ -5388,6 +5903,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/tailwind/slide-down.vue?vue&type=template&id=798c9e4c&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/tailwind/slide-down.vue?vue&type=template&id=798c9e4c& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_slide_down_vue_vue_type_template_id_798c9e4c___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_slide_down_vue_vue_type_template_id_798c9e4c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_slide_down_vue_vue_type_template_id_798c9e4c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./slide-down.vue?vue&type=template&id=798c9e4c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/slide-down.vue?vue&type=template&id=798c9e4c&");
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Card.vue?vue&type=template&id=b9bc2c0a&":
 /*!****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Card.vue?vue&type=template&id=b9bc2c0a& ***!
@@ -5407,45 +5939,139 @@ var render = function () {
   return _c(
     "div",
     [
-      _c("query-builder", {
-        attrs: { conditions: _vm.filter.conditions },
-        nativeOn: {
-          keydown: function ($event) {
-            if (
-              !$event.type.indexOf("key") &&
-              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-            ) {
-              return null
-            }
-            return _vm.submit.apply(null, arguments)
-          },
-        },
-        model: {
-          value: _vm.filter.blueprint,
-          callback: function ($$v) {
-            _vm.$set(_vm.filter, "blueprint", $$v)
-          },
-          expression: "filter.blueprint",
-        },
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "text-right" }, [
+      _c("slide-down", { attrs: { show: !_vm.collapsed } }, [
         _c(
-          "button",
-          {
-            staticClass: "btn btn-default btn-primary",
-            on: {
-              click: function ($event) {
-                $event.preventDefault()
-                return _vm.submit.apply(null, arguments)
+          "div",
+          [
+            _c("query-builder", {
+              attrs: { conditions: _vm.filter.conditions },
+              nativeOn: {
+                keydown: function ($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.submit.apply(null, arguments)
+                },
               },
-            },
+              model: {
+                value: _vm.filter.blueprint,
+                callback: function ($$v) {
+                  _vm.$set(_vm.filter, "blueprint", $$v)
+                },
+                expression: "filter.blueprint",
+              },
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "text-right" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "text-sm mr-6 text-80",
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      _vm.collapsed = !_vm.collapsed
+                    },
+                  },
+                },
+                [_vm._v("Collapse")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-default btn-primary",
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      return _vm.submit.apply(null, arguments)
+                    },
+                  },
+                },
+                [_vm._v("Filter")]
+              ),
+            ]),
+          ],
+          1
+        ),
+      ]),
+      _vm._v(" "),
+      _c("slide-down", { attrs: { show: _vm.collapsed } }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "border rounded-lg shadow border-60 p-4 text-80 bg-white flex items-center justify-between text-sm",
           },
-          [_vm._v("Filter")]
+          [
+            _c("div", [_vm._v(_vm._s(_vm.collapsedText))]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "text-80",
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    _vm.collapsed = !_vm.collapsed
+                  },
+                },
+              },
+              [_vm._v("Expand Filter")]
+            ),
+          ]
         ),
       ]),
     ],
     1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "svg",
+    {
+      staticClass: "h-4 w-4 -mt-px text-80",
+      attrs: {
+        xmlns: "http://www.w3.org/2000/svg",
+        viewBox: "0 0 20 20",
+        fill: "currentColor",
+        "aria-hidden": "true",
+      },
+    },
+    [
+      _c("path", {
+        attrs: {
+          "fill-rule": "evenodd",
+          d: "M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z",
+          "clip-rule": "evenodd",
+        },
+      }),
+    ]
   )
 }
 var staticRenderFns = []
@@ -6052,201 +6678,201 @@ var render = function () {
           var removeCriterion = ref.removeCriterion
           var conditionFor = ref.conditionFor
           return [
-            _c(
-              "div",
-              {},
-              [
-                _vm._l(groupedBlueprint, function (group, index) {
-                  return _c("div", { key: index }, [
+            _c("div", [
+              _vm.blueprint.length === 0
+                ? _c("div", [
                     _c(
                       "div",
-                      { staticClass: "border rounded-lg shadow border-60" },
+                      {
+                        staticClass:
+                          "border rounded-lg shadow border-60 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4",
+                      },
                       [
-                        _vm._l(group, function (criterion, index) {
-                          return _c(
-                            "div",
-                            {
-                              key: criterion.uid,
-                              staticClass:
-                                "border-b border-50 py-3 pl-2 bg-white w-full",
-                              class: { "rounded-t-lg": index === 0 },
-                            },
-                            [
-                              _c(
-                                "renderless-condition",
-                                _vm._b(
-                                  {
-                                    scopedSlots: _vm._u(
-                                      [
-                                        {
-                                          key: "default",
-                                          fn: function (ref) {
-                                            var switchClause = ref.switchClause
-                                            return [
-                                              _c("criterion", {
-                                                attrs: {
-                                                  conditionId:
-                                                    criterion.condition_id,
-                                                  conditions: _vm.conditions,
-                                                  errors: _vm.errors[index],
-                                                  input: criterion.input,
-                                                },
-                                                on: {
-                                                  "switch-clause": function (
-                                                    ref
-                                                  ) {
-                                                    var clause = ref.id
-
-                                                    return switchClause(clause)
-                                                  },
-                                                  "remove-condition": function (
-                                                    $event
-                                                  ) {
-                                                    return removeCriterion(
-                                                      criterion.position
-                                                    )
-                                                  },
-                                                  "switch-condition": function (
-                                                    nextCondition
-                                                  ) {
-                                                    return replaceCriterion(
-                                                      criterion.position,
-                                                      conditionFor(
-                                                        nextCondition
-                                                      )
-                                                    )
-                                                  },
-                                                },
-                                              }),
-                                            ]
-                                          },
-                                        },
-                                      ],
-                                      null,
-                                      true
-                                    ),
-                                  },
-                                  "renderless-condition",
-                                  conditionFor(
-                                    Object.assign(
-                                      {},
-                                      { id: criterion.condition_id },
-                                      criterion
-                                    )
-                                  ),
-                                  false
-                                )
-                              ),
-                            ],
-                            1
-                          )
-                        }),
-                        _vm._v(" "),
                         _c(
                           "button",
                           {
                             staticClass: "text-sm flex items-center p-2",
                             attrs: { tabindex: "0", type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return insertCriterion(
-                                  group[group.length - 1].position
-                                )
-                              },
-                            },
+                            on: { click: addGroup },
                           },
                           [
-                            _c(
-                              "svg",
-                              {
-                                staticClass: "h-4 w-4 -mt-px text-80",
-                                attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  viewBox: "0 0 20 20",
-                                  fill: "currentColor",
-                                  "aria-hidden": "true",
-                                },
-                              },
-                              [
-                                _c("path", {
-                                  attrs: {
-                                    "fill-rule": "evenodd",
-                                    d: "M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z",
-                                    "clip-rule": "evenodd",
-                                  },
-                                }),
-                              ]
-                            ),
+                            _c("heroicon-plus"),
                             _vm._v(" "),
                             _c("span", { staticClass: "pt-px text-80" }, [
-                              _vm._v("And"),
+                              _vm._v("Add condition"),
                             ]),
-                          ]
+                          ],
+                          1
                         ),
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    index < groupedBlueprint.length - 1
-                      ? _c(
-                          "div",
-                          { staticClass: "my-2 text-80 flex items-center" },
-                          [
-                            _c("div", {
-                              staticClass: "border-t w-4 border-60",
-                            }),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mx-2 text-sm" }, [
-                              _vm._v("Or"),
-                            ]),
-                            _vm._v(" "),
-                            _c("div", {
-                              staticClass: "border-t w-full border-60 mr-1",
-                            }),
-                          ]
-                        )
-                      : _vm._e(),
-                  ])
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "text-sm flex items-center p-2",
-                    attrs: { type: "button" },
-                    on: { click: addGroup },
-                  },
-                  [
-                    _c(
-                      "svg",
-                      {
-                        staticClass: "h-4 w-4 -mt-px text-90",
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 20 20",
-                          fill: "currentColor",
-                          "aria-hidden": "true",
-                        },
-                      },
-                      [
-                        _c("path", {
-                          attrs: {
-                            "fill-rule": "evenodd",
-                            d: "M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z",
-                            "clip-rule": "evenodd",
-                          },
-                        }),
                       ]
                     ),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "pt-px text-90" }, [
-                      _vm._v("Or"),
-                    ]),
-                  ]
-                ),
-              ],
-              2
-            ),
+                  ])
+                : _c(
+                    "div",
+                    [
+                      _vm._l(groupedBlueprint, function (group, index) {
+                        return _c("div", { key: index }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "border rounded-lg shadow border-60",
+                            },
+                            [
+                              _vm._l(group, function (criterion, index) {
+                                return _c(
+                                  "div",
+                                  {
+                                    key: criterion.uid,
+                                    staticClass:
+                                      "border-b border-50 py-3 pl-2 bg-white w-full",
+                                    class: { "rounded-t-lg": index === 0 },
+                                  },
+                                  [
+                                    _c(
+                                      "renderless-condition",
+                                      _vm._b(
+                                        {
+                                          scopedSlots: _vm._u(
+                                            [
+                                              {
+                                                key: "default",
+                                                fn: function (ref) {
+                                                  var switchClause =
+                                                    ref.switchClause
+                                                  return [
+                                                    _c("criterion", {
+                                                      attrs: {
+                                                        conditionId:
+                                                          criterion.condition_id,
+                                                        conditions:
+                                                          _vm.conditions,
+                                                        errors:
+                                                          _vm.errors[index],
+                                                        input: criterion.input,
+                                                      },
+                                                      on: {
+                                                        "switch-clause":
+                                                          function (ref) {
+                                                            var clause = ref.id
+
+                                                            return switchClause(
+                                                              clause
+                                                            )
+                                                          },
+                                                        "remove-condition":
+                                                          function ($event) {
+                                                            return removeCriterion(
+                                                              criterion.position
+                                                            )
+                                                          },
+                                                        "switch-condition":
+                                                          function (
+                                                            nextCondition
+                                                          ) {
+                                                            return replaceCriterion(
+                                                              criterion.position,
+                                                              conditionFor(
+                                                                nextCondition
+                                                              )
+                                                            )
+                                                          },
+                                                      },
+                                                    }),
+                                                  ]
+                                                },
+                                              },
+                                            ],
+                                            null,
+                                            true
+                                          ),
+                                        },
+                                        "renderless-condition",
+                                        conditionFor(
+                                          Object.assign(
+                                            {},
+                                            { id: criterion.condition_id },
+                                            criterion
+                                          )
+                                        ),
+                                        false
+                                      )
+                                    ),
+                                  ],
+                                  1
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "text-sm flex items-center p-2",
+                                  attrs: { tabindex: "0", type: "button" },
+                                  on: {
+                                    click: function ($event) {
+                                      return insertCriterion(
+                                        group[group.length - 1].position
+                                      )
+                                    },
+                                  },
+                                },
+                                [
+                                  _c("heroicon-plus"),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "pt-px text-80" }, [
+                                    _vm._v("And"),
+                                  ]),
+                                ],
+                                1
+                              ),
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          index < groupedBlueprint.length - 1
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "my-2 text-80 flex items-center",
+                                },
+                                [
+                                  _c("div", {
+                                    staticClass: "border-t w-4 border-60",
+                                  }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "mx-2 text-sm" }, [
+                                    _vm._v("Or"),
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", {
+                                    staticClass:
+                                      "border-t w-full border-60 mr-1",
+                                  }),
+                                ]
+                              )
+                            : _vm._e(),
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "text-sm flex items-center p-2",
+                          attrs: { type: "button" },
+                          on: { click: addGroup },
+                        },
+                        [
+                          _c("heroicon-plus"),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "pt-px text-90" }, [
+                            _vm._v("Or"),
+                          ]),
+                        ],
+                        1
+                      ),
+                    ],
+                    2
+                  ),
+            ]),
           ]
         },
       },
@@ -6396,7 +7022,7 @@ var render = function () {
         ? _c(
             "span",
             { staticClass: "refine-multi-selector-button-placeholder" },
-            [_vm._v("\n  Choose an option\n")]
+            [_vm._v("\n        Choose an option\n    ")]
           )
         : _vm._l(_vm.selectedOptions, function (ref) {
             var id = ref.id
@@ -6405,7 +7031,7 @@ var render = function () {
               "span",
               { key: id, staticClass: "refine-multi-selector-button-selected" },
               [
-                _vm._v("\n  " + _vm._s(display) + "\n  "),
+                _vm._v("\n        " + _vm._s(display) + "\n        "),
                 _c(
                   "span",
                   {
@@ -6511,10 +7137,10 @@ var render = function () {
     [
       _vm.display.length === 0
         ? _c("span", { staticClass: "refine-selector-button-placeholder" }, [
-            _vm._v("\n      Choose an option\n    "),
+            _vm._v(" Choose an option "),
           ])
         : _c("span", { staticClass: "refine-selector-button-selected" }, [
-            _vm._v("\n      " + _vm._s(_vm.display) + "\n    "),
+            _vm._v("\n        " + _vm._s(_vm.display) + "\n    "),
           ]),
     ]
   )
@@ -6573,7 +7199,7 @@ var render = function () {
           staticClass: "refine-selector-list-item-text",
           class: { "refine-selector-list-item-text-selected": _vm.selected },
         },
-        [_vm._v("\n    " + _vm._s(_vm.optionDisplay) + "\n  ")]
+        [_vm._v("\n        " + _vm._s(_vm.optionDisplay) + "\n    ")]
       ),
       _vm._v(" "),
       _c(
@@ -6970,6 +7596,58 @@ var render = function () {
       }),
     ],
     1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/slide-down.vue?vue&type=template&id=798c9e4c&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/slide-down.vue?vue&type=template&id=798c9e4c& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "transition",
+    {
+      on: {
+        "before-enter": _vm.beforeEnter,
+        "before-leave": _vm.beforeLeave,
+        enter: _vm.enter,
+        leave: _vm.leave,
+      },
+    },
+    [
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.show,
+              expression: "show",
+            },
+          ],
+        },
+        [_vm._t("default")],
+        2
+      ),
+    ]
   )
 }
 var staticRenderFns = []
@@ -9396,7 +10074,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;

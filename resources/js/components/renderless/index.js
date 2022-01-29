@@ -12,4 +12,4 @@ export {
   RenderlessOption,
   RenderlessRefinement,
   RenderlessSelector,
-}
+};

@@ -5,7 +5,7 @@ export default {
     id: {
       type: String,
       required: true,
-    }
+    },
   },
   provide() {
     return {
@@ -16,5 +16,5 @@ export default {
     if (this.$scopedSlots?.default) {
       return this.$scopedSlots.default();
     }
-  }
+  },
 };

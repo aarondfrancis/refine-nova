@@ -5,7 +5,7 @@ export default {
   inject: ['selector'],
   mixins: [optionProps],
   computed: {
-    isSelected: function() {
+    isSelected: function () {
       const { selector, id } = this;
       return selector.isSelected(id);
     },

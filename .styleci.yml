@@ -13,7 +13,7 @@ php:
   risky: false
 
 vue:
-  tab-width: 4
+  tab-width: 2
   use-tabs: false
   print-width: 120
   double-quotes: false
@@ -30,7 +30,7 @@ vue:
       - "dist"
 
 js:
-  tab-width: 4
+  tab-width: 2
   use-tabs: false
   print-width: 120
   double-quotes: false

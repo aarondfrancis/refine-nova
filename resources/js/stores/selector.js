@@ -34,7 +34,7 @@ class Selector {
       if (option.id === optionId) {
         isSelected = true;
       }
-    })
+    });
     return isSelected;
   }
 
@@ -57,7 +57,7 @@ class Selector {
   }
 
   clearSelectedOptions() {
-    this.selectedOptions.splice(0, this.selectedOptions.length)
+    this.selectedOptions.splice(0, this.selectedOptions.length);
   }
 
   deselectOption(optionId) {
@@ -77,8 +77,8 @@ class Selector {
       this.selectedOptions.push(selectedOption);
     }
 
-    return { 
-      selectedOption, 
+    return {
+      selectedOption,
       selectedOptions: this.selectedOptions,
     };
   }

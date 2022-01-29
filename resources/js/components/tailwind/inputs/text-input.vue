@@ -8,14 +8,14 @@
 </template>
 
 <script>
- export default {
-   name: 'refine-text-input',
-   props: {
-     value: {
-       type: String,
-       required: false,
-       default: '',
-     },
-   }
- };
+export default {
+  name: 'refine-text-input',
+  props: {
+    value: {
+      type: String,
+      required: false,
+      default: '',
+    },
+  },
+};
 </script>

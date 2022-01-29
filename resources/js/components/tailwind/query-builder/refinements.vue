@@ -1,31 +1,21 @@
 <template>
-  <selector 
-    @select-option="selectRefinement" 
-    innerClass="mr-4"
-    class="pt-4"
-  >
-  <selector-option
-    v-for="{id, meta, display} in refinements"
-    :key="id"  
-    :id="id"
-    :display="display"
-    :selected="!!input[id]"
-  >
-    <renderless-refinement 
+  <selector @select-option="selectRefinement" innerClass="mr-4" class="pt-4">
+    <selector-option
+      v-for="{ id, meta, display } in refinements"
+      :key="id"
       :id="id"
+      :display="display"
+      :selected="!!input[id]"
     >
-      <clause
-        :meta="meta"
-        :input="input[id]"
-        @switch-clause="({ id: clause }) => updateInput({ clause }, id)"
-      />
-    </renderless-refinement>
-  </selector-option>
+      <renderless-refinement :id="id">
+        <clause :meta="meta" :input="input[id]" @switch-clause="({ id: clause }) => updateInput({ clause }, id)" />
+      </renderless-refinement>
+    </selector-option>
   </selector>
 </template>
 
 <script>
-import { Selector, SelectorOption } from "../selector";
+import { Selector, SelectorOption } from '../selector';
 import { RenderlessRefinement } from '../../renderless';
 import Clause from './clause';
 
@@ -46,9 +36,11 @@ export default {
     input: {
       required: false,
       type: Object,
-      default: () => { return {}; },
+      default: () => {
+        return {};
+      },
     },
-  }, 
+  },
   methods: {
     selectedRefinementId() {
       let selectedId;
@@ -60,11 +52,11 @@ export default {
 
       return selectedId;
     },
-    
+
     selectRefinement({ selectedOption }) {
       const { id: nextId } = selectedOption;
       this.switchRefinement(this.selectedRefinementId(), nextId);
     },
   },
-}
+};
 </script>
