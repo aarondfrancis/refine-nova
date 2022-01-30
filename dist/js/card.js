@@ -825,6 +825,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -907,11 +912,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         id: id
       }).then(function (_ref) {
         var data = _ref.data;
+
         // Without this here, the clauses in a condition won't change on
         // back/next navigation. I'll need to have Sean or Jeff look
         // more closely at the blueprint store to figure out why.
-        _this2.filter.blueprint = [];
-
         _this2.$nextTick(function () {
           _this2.lastAppliedBlueprint = data.blueprint;
           _this2.filter.blueprint = data.blueprint;

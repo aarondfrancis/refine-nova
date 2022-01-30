@@ -115,7 +115,6 @@ export default {
           // Without this here, the clauses in a condition won't change on
           // back/next navigation. I'll need to have Sean or Jeff look
           // more closely at the blueprint store to figure out why.
-          this.filter.blueprint = [];
           this.$nextTick(() => {
             this.lastAppliedBlueprint = data.blueprint;
             this.filter.blueprint = data.blueprint;
