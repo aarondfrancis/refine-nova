@@ -1,15 +1,5 @@
 <template>
   <div class="">
-    <!--    <ul class="refine-criterion-errors">-->
-    <!--      <li-->
-    <!--        class="refine-criterion-error"-->
-    <!--        v-for="error in errors"-->
-    <!--        :key="error.id"-->
-    <!--      >-->
-    <!--        {{ error.message }}-->
-    <!--      </li>-->
-    <!--    </ul>-->
-
     <div class="flex items-start">
       <div class="">
         <selector @select-option="switchCondition" inner-class="mr-4">
@@ -40,6 +30,9 @@
           />
         </svg>
       </button>
+    </div>
+    <div v-for="error in errors" class="text-red-dark ml-1 mt-2 text-danger-dark text-sm">
+      {{ error }}
     </div>
   </div>
 </template>

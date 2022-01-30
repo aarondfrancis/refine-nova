@@ -793,6 +793,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var store2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(store2__WEBPACK_IMPORTED_MODULE_2__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -826,10 +838,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var filter = _.toPlainObject(this.card.filter);
 
     return {
+      errors: {},
       lastAppliedBlueprint: filter.blueprint,
       collapsed: store2__WEBPACK_IMPORTED_MODULE_2___default().get('refine-collapsed', false),
       filter: filter
     };
+  },
+  created: function created() {
+    var _this = this;
+
+    Nova.$on('validation-error', function (response) {
+      var _response$data;
+
+      // this.errors = {};
+      if (response === false) {
+        return;
+      }
+
+      var errors = response === null || response === void 0 ? void 0 : (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.errors;
+
+      if (!errors) {
+        return;
+      }
+
+      var rebuilt = {};
+      Object.keys(errors).map(function (k) {
+        var uid = k.split('.')[0];
+        rebuilt[uid] = [].concat(_toConsumableArray(rebuilt[uid] || []), _toConsumableArray(errors[k]));
+      });
+      _this.errors = rebuilt;
+    });
   },
   mounted: function mounted() {
     // When the page initially loads, we only want to update from
@@ -861,9 +899,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     updateBlueprintFromStableId: function updateBlueprintFromStableId(id) {
-      var _this = this;
+      var _this2 = this;
 
       var refresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      this.errors = {};
       Nova.request().post('/nova-vendor/refine-nova/destabilize', {
         id: id
       }).then(function (_ref) {
@@ -871,11 +910,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         // Without this here, the clauses in a condition won't change on
         // back/next navigation. I'll need to have Sean or Jeff look
         // more closely at the blueprint store to figure out why.
-        _this.filter.blueprint = [];
+        _this2.filter.blueprint = [];
 
-        _this.$nextTick(function () {
-          _this.lastAppliedBlueprint = data.blueprint;
-          _this.filter.blueprint = data.blueprint;
+        _this2.$nextTick(function () {
+          _this2.lastAppliedBlueprint = data.blueprint;
+          _this2.filter.blueprint = data.blueprint;
         });
 
         if (refresh) {
@@ -899,7 +938,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "".concat(count, " filter conditions applied.");
     },
     submit: function submit() {
-      var _this2 = this;
+      var _this3 = this;
 
       Nova.request() // Because of the way Nova works, we have to make a round trip to
       // stabilize the blueprint, and then pop it in the querystring.
@@ -907,12 +946,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         type: this.filter.type,
         blueprint: this.filter.blueprint
       }).then(function (_ref2) {
-        var _this2$updateQueryStr;
+        var _this3$updateQueryStr;
 
         var data = _ref2.data;
-        console.log('updating querystring'); // Put the new stable id in the querystring, and then the router will take over.
 
-        _this2.updateQueryString((_this2$updateQueryStr = {}, _defineProperty(_this2$updateQueryStr, "".concat(_this2.resourceName, "_page"), 1), _defineProperty(_this2$updateQueryStr, _this2.refineParameterName, data.id), _this2$updateQueryStr));
+        // Put the new stable id in the querystring, and then the router will take over.
+        _this3.updateQueryString((_this3$updateQueryStr = {}, _defineProperty(_this3$updateQueryStr, "".concat(_this3.resourceName, "_page"), 1), _defineProperty(_this3$updateQueryStr, _this3.refineParameterName, data.id), _this3$updateQueryStr));
       });
     },
     updateQueryString: function updateQueryString(value) {
@@ -1671,11 +1710,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -1722,17 +1756,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../selector */ "./resources/js/components/tailwind/selector/index.js");
 /* harmony import */ var _clause__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./clause */ "./resources/js/components/tailwind/query-builder/clause.vue");
 /* harmony import */ var _refinements_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./refinements.vue */ "./resources/js/components/tailwind/query-builder/refinements.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -1830,7 +1853,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _criterion__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./criterion */ "./resources/js/components/tailwind/query-builder/criterion.vue");
 /* harmony import */ var _renderless__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../renderless */ "./resources/js/components/renderless/index.js");
-/* harmony import */ var _heroicon_plus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../heroicon-plus */ "./resources/js/components/heroicon-plus.vue");
+/* harmony import */ var _heroicon_plus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../heroicon-plus */ "./resources/js/components/tailwind/heroicon-plus.vue");
+//
+//
 //
 //
 //
@@ -1984,10 +2009,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -2048,11 +2069,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2815,38 +2831,40 @@ Nova.booting(function (Vue, router, store) {
   Vue.config.devtools = true;
   Vue.component('refine-nova', _components_Card__WEBPACK_IMPORTED_MODULE_0__["default"]);
   Vue.use(_vue_composition_api__WEBPACK_IMPORTED_MODULE_1__["default"]);
-  monkeyPatchNova(router);
+  attachInterceptors(router);
 });
 
-function monkeyPatchNova(router) {
-  // We're going to do some monkey-patching here so that we can intercept
-  // every request that Nova makes and check to see if it's one that
-  // needs to be Refined. First, we copy the real function to a
-  // temp variable and then reassign it to our own function.
-  var originalRequestFunction = Nova.request;
-
-  Nova.request = function (options) {
-    // Call the parent method, passing along the correct `this`.
-    var instance = originalRequestFunction.call(this, options);
-    instance.interceptors.request.use(function (config) {
-      // Instead of checking route patterns, just piggyback onto
-      // any request where the filters are included, because
-      // we'll want to Refine all of those requests.
-      if (_.has(config, 'params.filters')) {
-        for (var param in router.currentRoute.query) {
-          // Add every query param that ends in _refine, because
-          // each resource will start with something different,
-          // but they all end in _refine.
-          if (_.endsWith(param, '_refine')) {
-            config.params[param] = router.currentRoute.query[param];
-          }
+function attachInterceptors(router) {
+  // Add a request interceptor so that we can add our Refine query params.
+  Nova.request().interceptors.request.use(function (config) {
+    // Instead of checking route patterns, just piggyback onto
+    // any request where the filters are included, because
+    // we'll want to Refine all of those requests.
+    if (_.has(config, 'params.filters')) {
+      for (var param in router.currentRoute.query) {
+        // Add every query param that ends in _refine, because
+        // each resource will start with something different,
+        // but they all end in _refine.
+        if (_.endsWith(param, '_refine')) {
+          config.params[param] = router.currentRoute.query[param];
         }
       }
+    }
 
-      return config;
-    });
-    return instance;
-  };
+    return config;
+  }); // Add a response interceptor so we can catch validation errors.
+
+  Nova.request().interceptors.response.use(function (response) {
+    return response;
+  }, function (error) {
+    if (error.response && error.response.status === 422) {
+      // Emit an event with the error data over to our Card
+      // component and then let the rejection fall through.
+      Nova.$emit('validation-error', error.response);
+    }
+
+    return Promise.reject(error);
+  });
 }
 
 /***/ }),
@@ -3622,10 +3640,10 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var uid = 0;
-
 var getNextUid = function getNextUid() {
-  return uid++;
+  var r1 = ~~(Math.random() * 10000 + 10000);
+  var r2 = ~~(Date.now() / 1000);
+  return "".concat(r1, "-").concat(r2);
 };
 
 var criterion = function criterion(id, depth, meta, refinements) {
@@ -3675,7 +3693,6 @@ var Blueprint = /*#__PURE__*/function () {
 
     _classCallCheck(this, Blueprint);
 
-    uid = 0;
     initialBlueprint = initialBlueprint || [];
     conditions = conditions || [];
     this.conditions = conditions;
@@ -3692,16 +3709,16 @@ var Blueprint = /*#__PURE__*/function () {
     key: "mapBlueprint",
     value: function mapBlueprint(blueprint) {
       return blueprint.map(function (condition) {
-        return _objectSpread(_objectSpread({}, condition), {}, {
-          id: condition.condition_id,
+        return _objectSpread(_objectSpread({
           uid: getNextUid()
+        }, condition), {}, {
+          id: condition.condition_id
         });
       });
     }
   }, {
     key: "updateBlueprint",
     value: function updateBlueprint(newBlueprint) {
-      uid = 0;
       this.blueprint = this.mapBlueprint(newBlueprint);
     }
   }, {
@@ -3758,15 +3775,15 @@ var Blueprint = /*#__PURE__*/function () {
     key: "removeCriterion",
     value: function removeCriterion(position) {
       /**
-       To support 'groups' there is some complicated logic for deleting criterion.
-        Imagine this simplified blueprint: [eq, and, sw, or, eq]
-        User clicks to delete the last eq. We also have to delete the preceding or
-       otherwise we're left with a hanging empty group
-        What if the user deletes the sw? We have to clean up the preceding and.
-        Imagine another scenario: [eq or sw and ew]
-       Now we delete the first eq but this time we need to clean up the or.
-        These conditionals cover these cases.
-       **/
+           To support 'groups' there is some complicated logic for deleting criterion.
+            Imagine this simplified blueprint: [eq, and, sw, or, eq]
+            User clicks to delete the last eq. We also have to delete the preceding or
+           otherwise we're left with a hanging empty group
+            What if the user deletes the sw? We have to clean up the preceding and.
+            Imagine another scenario: [eq or sw and ew]
+           Now we delete the first eq but this time we need to clean up the or.
+            These conditionals cover these cases.
+           **/
       var blueprint = this.blueprint;
       var previous = blueprint[position - 1];
       var next = blueprint[position + 1];
@@ -4411,43 +4428,6 @@ component.options.__file = "resources/js/components/Card.vue"
 
 /***/ }),
 
-/***/ "./resources/js/components/heroicon-plus.vue":
-/*!***************************************************!*\
-  !*** ./resources/js/components/heroicon-plus.vue ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./heroicon-plus.vue?vue&type=template&id=9b667d0e& */ "./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-var script = {}
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
-  _heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.render,
-  _heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/heroicon-plus.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
 /***/ "./resources/js/components/renderless/selector/renderless-selector.vue":
 /*!*****************************************************************************!*\
   !*** ./resources/js/components/renderless/selector/renderless-selector.vue ***!
@@ -4482,6 +4462,43 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/components/renderless/selector/renderless-selector.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/tailwind/heroicon-plus.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/tailwind/heroicon-plus.vue ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _heroicon_plus_vue_vue_type_template_id_5e63cbc8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./heroicon-plus.vue?vue&type=template&id=5e63cbc8& */ "./resources/js/components/tailwind/heroicon-plus.vue?vue&type=template&id=5e63cbc8&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _heroicon_plus_vue_vue_type_template_id_5e63cbc8___WEBPACK_IMPORTED_MODULE_0__.render,
+  _heroicon_plus_vue_vue_type_template_id_5e63cbc8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/tailwind/heroicon-plus.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -5580,19 +5597,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e& ***!
-  \**********************************************************************************/
+/***/ "./resources/js/components/tailwind/heroicon-plus.vue?vue&type=template&id=5e63cbc8&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/tailwind/heroicon-plus.vue?vue&type=template&id=5e63cbc8& ***!
+  \*******************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_5e63cbc8___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_5e63cbc8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_9b667d0e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./heroicon-plus.vue?vue&type=template&id=9b667d0e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_heroicon_plus_vue_vue_type_template_id_5e63cbc8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./heroicon-plus.vue?vue&type=template&id=5e63cbc8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/heroicon-plus.vue?vue&type=template&id=5e63cbc8&");
 
 
 /***/ }),
@@ -5944,7 +5961,7 @@ var render = function () {
           "div",
           [
             _c("query-builder", {
-              attrs: { conditions: _vm.filter.conditions },
+              attrs: { errors: _vm.errors, conditions: _vm.filter.conditions },
               nativeOn: {
                 keydown: function ($event) {
                   if (
@@ -6004,7 +6021,7 @@ var render = function () {
           "div",
           {
             staticClass:
-              "border rounded-lg shadow border-60 p-4 text-80 bg-white flex items-center justify-between text-sm",
+              "border rounded-lg shadow border-50 p-4 text-80 bg-white flex items-center justify-between text-sm",
           },
           [
             _c("div", [_vm._v(_vm._s(_vm.collapsedText))]),
@@ -6036,10 +6053,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/heroicon-plus.vue?vue&type=template&id=9b667d0e& ***!
-  \*************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/heroicon-plus.vue?vue&type=template&id=5e63cbc8&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/tailwind/heroicon-plus.vue?vue&type=template&id=5e63cbc8& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6547,99 +6564,112 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", {}, [
-    _c("div", { staticClass: "flex items-start" }, [
-      _c(
-        "div",
-        {},
-        [
-          _c(
-            "selector",
-            {
-              attrs: { "inner-class": "mr-4" },
-              on: { "select-option": _vm.switchCondition },
-            },
-            _vm._l(_vm.conditions, function (ref) {
-              var id = ref.id
-              var display = ref.display
-              var meta = ref.meta
-              var refinements = ref.refinements
-              return _c(
-                "selector-option",
-                {
-                  key: id,
-                  attrs: {
-                    id: id,
-                    display: display,
-                    selected: _vm.conditionId === id,
+  return _c(
+    "div",
+    {},
+    [
+      _c("div", { staticClass: "flex items-start" }, [
+        _c(
+          "div",
+          {},
+          [
+            _c(
+              "selector",
+              {
+                attrs: { "inner-class": "mr-4" },
+                on: { "select-option": _vm.switchCondition },
+              },
+              _vm._l(_vm.conditions, function (ref) {
+                var id = ref.id
+                var display = ref.display
+                var meta = ref.meta
+                var refinements = ref.refinements
+                return _c(
+                  "selector-option",
+                  {
+                    key: id,
+                    attrs: {
+                      id: id,
+                      display: display,
+                      selected: _vm.conditionId === id,
+                    },
                   },
-                },
-                [
-                  _c(
-                    "div",
-                    [
-                      _c("clause", {
-                        attrs: { input: _vm.input, meta: meta },
-                        on: { "switch-clause": _vm.switchClause },
-                      }),
-                      _vm._v(" "),
-                      refinements && refinements.length > 0
-                        ? _c("refinements", {
-                            attrs: {
-                              input: _vm.input,
-                              refinements: refinements,
-                            },
-                          })
-                        : _vm._e(),
-                    ],
-                    1
-                  ),
-                ]
-              )
-            }),
-            1
-          ),
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "ml-auto py-2 px-4 flex items-center text-60",
-          attrs: { type: "button" },
-          on: {
-            click: function ($event) {
-              $event.preventDefault()
-              return _vm.$emit("remove-condition")
-            },
-          },
-        },
-        [
-          _c(
-            "svg",
-            {
-              staticClass: "h-5 w-5",
-              attrs: {
-                xmlns: "http://www.w3.org/2000/svg",
-                viewBox: "0 0 20 20",
-                fill: "currentColor",
+                  [
+                    _c(
+                      "div",
+                      [
+                        _c("clause", {
+                          attrs: { input: _vm.input, meta: meta },
+                          on: { "switch-clause": _vm.switchClause },
+                        }),
+                        _vm._v(" "),
+                        refinements && refinements.length > 0
+                          ? _c("refinements", {
+                              attrs: {
+                                input: _vm.input,
+                                refinements: refinements,
+                              },
+                            })
+                          : _vm._e(),
+                      ],
+                      1
+                    ),
+                  ]
+                )
+              }),
+              1
+            ),
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "ml-auto py-2 px-4 flex items-center text-60",
+            attrs: { type: "button" },
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.$emit("remove-condition")
               },
             },
-            [
-              _c("path", {
+          },
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "h-5 w-5",
                 attrs: {
-                  "fill-rule": "evenodd",
-                  d: "M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z",
-                  "clip-rule": "evenodd",
+                  xmlns: "http://www.w3.org/2000/svg",
+                  viewBox: "0 0 20 20",
+                  fill: "currentColor",
                 },
-              }),
-            ]
-          ),
-        ]
-      ),
-    ]),
-  ])
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d: "M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z",
+                    "clip-rule": "evenodd",
+                  },
+                }),
+              ]
+            ),
+          ]
+        ),
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.errors, function (error) {
+        return _c(
+          "div",
+          { staticClass: "text-red-dark ml-1 mt-2 text-danger-dark text-sm" },
+          [_vm._v("\n    " + _vm._s(error) + "\n  ")]
+        )
+      }),
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -6685,7 +6715,7 @@ var render = function () {
                       "div",
                       {
                         staticClass:
-                          "border rounded-lg shadow border-60 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4",
+                          "border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4",
                       },
                       [
                         _c(
@@ -6715,7 +6745,7 @@ var render = function () {
                           _c(
                             "div",
                             {
-                              staticClass: "border rounded-lg shadow border-60",
+                              staticClass: "border rounded-lg shadow border-50",
                             },
                             [
                               _vm._l(group, function (criterion, index) {
@@ -6747,7 +6777,9 @@ var render = function () {
                                                         conditions:
                                                           _vm.conditions,
                                                         errors:
-                                                          _vm.errors[index],
+                                                          _vm.errors[
+                                                            criterion.uid
+                                                          ],
                                                         input: criterion.input,
                                                       },
                                                       on: {
@@ -6863,7 +6895,7 @@ var render = function () {
                         [
                           _c("heroicon-plus"),
                           _vm._v(" "),
-                          _c("span", { staticClass: "pt-px text-90" }, [
+                          _c("span", { staticClass: "pt-px text-80" }, [
                             _vm._v("Or"),
                           ]),
                         ],
@@ -7022,7 +7054,7 @@ var render = function () {
         ? _c(
             "span",
             { staticClass: "refine-multi-selector-button-placeholder" },
-            [_vm._v("\n        Choose an option\n    ")]
+            [_vm._v(" Choose an option ")]
           )
         : _vm._l(_vm.selectedOptions, function (ref) {
             var id = ref.id
@@ -7031,7 +7063,7 @@ var render = function () {
               "span",
               { key: id, staticClass: "refine-multi-selector-button-selected" },
               [
-                _vm._v("\n        " + _vm._s(display) + "\n        "),
+                _vm._v("\n    " + _vm._s(display) + "\n    "),
                 _c(
                   "span",
                   {
@@ -7140,7 +7172,7 @@ var render = function () {
             _vm._v(" Choose an option "),
           ])
         : _c("span", { staticClass: "refine-selector-button-selected" }, [
-            _vm._v("\n        " + _vm._s(_vm.display) + "\n    "),
+            _vm._v("\n    " + _vm._s(_vm.display) + "\n  "),
           ]),
     ]
   )
@@ -7199,7 +7231,7 @@ var render = function () {
           staticClass: "refine-selector-list-item-text",
           class: { "refine-selector-list-item-text-selected": _vm.selected },
         },
-        [_vm._v("\n        " + _vm._s(_vm.optionDisplay) + "\n    ")]
+        [_vm._v("\n    " + _vm._s(_vm.optionDisplay) + "\n  ")]
       ),
       _vm._v(" "),
       _c(

@@ -9,7 +9,7 @@
       <!-- When there are no conditions, we need to show something reasonable instead of just "+ OR"-->
       <div v-if="blueprint.length === 0">
         <div
-          class="border rounded-lg shadow border-60 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4"
+          class="border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4"
         >
           <button @click="addGroup" class="text-sm flex items-center p-2" tabindex="0" type="button">
             <heroicon-plus />
@@ -19,7 +19,7 @@
       </div>
       <div v-else>
         <div v-for="(group, index) in groupedBlueprint" :key="index">
-          <div class="border rounded-lg shadow border-60">
+          <div class="border rounded-lg shadow border-50">
             <div
               class="border-b border-50 py-3 pl-2 bg-white w-full"
               :class="{ 'rounded-t-lg': index === 0 }"
@@ -38,7 +38,7 @@
                   "
                   :conditionId="criterion.condition_id"
                   :conditions="conditions"
-                  :errors="errors[index]"
+                  :errors="errors[criterion.uid]"
                   :input="criterion.input"
                 />
               </renderless-condition>
@@ -66,7 +66,7 @@
         <!-- The "add an or" button -->
         <button @click="addGroup" type="button" class="text-sm flex items-center p-2">
           <heroicon-plus />
-          <span class="pt-px text-90">Or</span>
+          <span class="pt-px text-80">Or</span>
         </button>
       </div>
     </div>
@@ -76,7 +76,7 @@
 <script>
 import Criterion from './criterion';
 import { RenderlessQueryBuilder, RenderlessCondition } from '../../renderless';
-import HeroiconPlus from '../../heroicon-plus';
+import HeroiconPlus from '../heroicon-plus';
 
 export default {
   name: 'query-builder',

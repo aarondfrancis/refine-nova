@@ -1,7 +1,9 @@
-let uid = 0;
 const getNextUid = function () {
-  return uid++;
-};
+  const r1 = ~~(Math.random() * (10000) + 10000);
+  const r2 = ~~(Date.now() / 1000);
+
+  return `${r1}-${r2}`;
+}
 
 const criterion = (id, depth, meta, refinements) => {
   const uid = getNextUid();
@@ -45,8 +47,6 @@ const and = function (depth) {
 
 class Blueprint {
   constructor(initialBlueprint, conditions, onChange) {
-    uid = 0;
-
     initialBlueprint = initialBlueprint || [];
     conditions = conditions || [];
 
@@ -64,16 +64,14 @@ class Blueprint {
   mapBlueprint(blueprint) {
     return blueprint.map((condition) => {
       return {
+        uid: getNextUid(),
         ...condition,
         id: condition.condition_id,
-        uid: getNextUid(),
       };
     });
   }
 
   updateBlueprint(newBlueprint) {
-    uid = 0;
-
     this.blueprint = this.mapBlueprint(newBlueprint);
   }
 
