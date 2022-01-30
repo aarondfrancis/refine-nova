@@ -7,19 +7,18 @@ namespace Hammerstone\Refine\Nova;
 
 use Hammerstone\Refine\Filter;
 use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;
-use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 trait RefinesModels
 {
     /**
-     * @param NovaRequest $request
+     * @param  NovaRequest  $request
      * @return string|Filter
      */
     abstract public static function refineFilter(NovaRequest $request);
 
     /**
-     * @param NovaRequest $request
+     * @param  NovaRequest  $request
      * @param $query
      * @return mixed
      */
@@ -42,5 +41,4 @@ trait RefinesModels
 
         return $query;
     }
-
 }
