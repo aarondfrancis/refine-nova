@@ -1,9 +1,9 @@
 const getNextUid = function () {
-  const r1 = ~~(Math.random() * (10000) + 10000);
+  const r1 = ~~(Math.random() * 10000 + 10000);
   const r2 = ~~(Date.now() / 1000);
 
   return `${r1}-${r2}`;
-}
+};
 
 const criterion = (id, depth, meta, refinements) => {
   const uid = getNextUid();

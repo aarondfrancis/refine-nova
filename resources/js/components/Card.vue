@@ -2,7 +2,12 @@
   <div>
     <slide-down :show="!collapsed">
       <div>
-        <query-builder :errors='errors' @keydown.native.enter="submit" v-model="filter.blueprint" :conditions="filter.conditions" />
+        <query-builder
+          :errors="errors"
+          @keydown.native.enter="submit"
+          v-model="filter.blueprint"
+          :conditions="filter.conditions"
+        />
         <div class="text-right">
           <button @click.prevent="collapsed = !collapsed" class="text-sm mr-6 text-80">Collapse</button>
           <button @click.prevent="submit" class="btn btn-default btn-primary">Filter</button>
@@ -19,152 +24,149 @@
 </template>
 
 <script>
-  import QueryBuilder from './tailwind/query-builder/query-builder';
-  import SlideDown from './tailwind/slide-down';
-  import store from 'store2';
+import QueryBuilder from './tailwind/query-builder/query-builder';
+import SlideDown from './tailwind/slide-down';
+import store from 'store2';
 
-  export default {
-    props: ['card', 'resourceName'],
+export default {
+  props: ['card', 'resourceName'],
 
-    components: {
-      SlideDown,
-      QueryBuilder,
+  components: {
+    SlideDown,
+    QueryBuilder,
+  },
+
+  data() {
+    let filter = _.toPlainObject(this.card.filter);
+
+    return {
+      errors: {},
+      lastAppliedBlueprint: filter.blueprint,
+      collapsed: store.get('refine-collapsed', false),
+      filter: filter,
+    };
+  },
+
+  created() {
+    Nova.$on('validation-error', (response) => {
+      // this.errors = {};
+
+      if (response === false) {
+        return;
+      }
+
+      let errors = response?.data?.errors;
+
+      if (!errors) {
+        return;
+      }
+
+      let rebuilt = {};
+
+      Object.keys(errors).map((k) => {
+        let uid = k.split('.')[0];
+        rebuilt[uid] = [...(rebuilt[uid] || []), ...errors[k]];
+      });
+
+      this.errors = rebuilt;
+    });
+  },
+
+  mounted() {
+    // When the page initially loads, we only want to update from
+    // the stable ID if there is an ID. Otherwise we will just
+    // show the blueprint that the backend has provided.
+    let id = _.get(this, `$route.query.${this.refineParameterName}`);
+
+    if (id) {
+      this.updateBlueprintFromStableId(id);
+    }
+  },
+
+  computed: {
+    refineParameterName() {
+      return `${this.resourceName}_refine`;
     },
 
-    data() {
-      let filter = _.toPlainObject(this.card.filter);
-
-      return {
-        errors: {},
-        lastAppliedBlueprint: filter.blueprint,
-        collapsed: store.get('refine-collapsed', false),
-        filter: filter,
-      };
+    collapsedText() {
+      return this.calculateCollapsedText(this.lastAppliedBlueprint);
     },
+  },
 
-    created() {
-      Nova.$on('validation-error', (response) => {
-        // this.errors = {};
-
-        if (response === false) {
-          return;
-        }
-
-        let errors = response?.data?.errors;
-
-        if (!errors) {
-          return;
-        }
-
-        let rebuilt = {};
-
-        Object.keys(errors).map(k => {
-          let uid = k.split('.')[0];
-          rebuilt[uid] = [
-            ...(rebuilt[uid] || []),
-            ...errors[k]
-          ];
-        });
-
-        this.errors = rebuilt;
-      })
-    },
-
-    mounted() {
-      // When the page initially loads, we only want to update from
-      // the stable ID if there is an ID. Otherwise we will just
-      // show the blueprint that the backend has provided.
-      let id = _.get(this, `$route.query.${this.refineParameterName}`);
-
-      if (id) {
-        this.updateBlueprintFromStableId(id);
+  watch: {
+    $route(to, from) {
+      if (to.query[this.refineParameterName] !== from.query[this.refineParameterName]) {
+        this.updateBlueprintFromStableId(to.query[this.refineParameterName], true);
       }
     },
 
-    computed: {
-      refineParameterName() {
-        return `${this.resourceName}_refine`;
-      },
-
-      collapsedText() {
-        return this.calculateCollapsedText(this.lastAppliedBlueprint);
-      },
+    collapsed(val) {
+      store.set('refine-collapsed', val);
     },
+  },
 
-    watch: {
-      $route(to, from) {
-        if (to.query[this.refineParameterName] !== from.query[this.refineParameterName]) {
-          this.updateBlueprintFromStableId(to.query[this.refineParameterName], true);
-        }
-      },
+  methods: {
+    updateBlueprintFromStableId(id, refresh = false) {
+      this.errors = {};
 
-      collapsed(val) {
-        store.set('refine-collapsed', val);
-      },
-    },
-
-    methods: {
-      updateBlueprintFromStableId(id, refresh = false) {
-        this.errors = {};
-
-        Nova.request()
-          .post('/nova-vendor/refine-nova/destabilize', {id})
-          .then(({data}) => {
-            // Without this here, the clauses in a condition won't change on
-            // back/next navigation. I'll need to have Sean or Jeff look
-            // more closely at the blueprint store to figure out why.
-            this.filter.blueprint = [];
-            this.$nextTick(() => {
-              this.lastAppliedBlueprint = data.blueprint;
-              this.filter.blueprint = data.blueprint;
-            });
-
-            if (refresh) {
-              Nova.$emit('refresh-resources');
-            }
+      Nova.request()
+        .post('/nova-vendor/refine-nova/destabilize', { id })
+        .then(({ data }) => {
+          // Without this here, the clauses in a condition won't change on
+          // back/next navigation. I'll need to have Sean or Jeff look
+          // more closely at the blueprint store to figure out why.
+          this.filter.blueprint = [];
+          this.$nextTick(() => {
+            this.lastAppliedBlueprint = data.blueprint;
+            this.filter.blueprint = data.blueprint;
           });
-      },
 
-      calculateCollapsedText(blueprint) {
-        let count = blueprint.filter((item) => item.type === 'criterion').length;
-
-        if (count === 0) {
-          return 'No filter conditions applied.';
-        }
-
-        if (count === 1) {
-          return '1 filter condition applied.';
-        }
-
-        return `${count} filter conditions applied.`;
-      },
-
-      submit() {
-        Nova.request()
-          // Because of the way Nova works, we have to make a round trip to
-          // stabilize the blueprint, and then pop it in the querystring.
-          .post('/nova-vendor/refine-nova/stabilize', {
-            type: this.filter.type,
-            blueprint: this.filter.blueprint,
-          })
-          .then(({data}) => {
-            // Put the new stable id in the querystring, and then the router will take over.
-            this.updateQueryString({
-              // Reset to the first page, just like Nova does when
-              // a user changes a filter.
-              [`${this.resourceName}_page`]: 1,
-              [this.refineParameterName]: data.id,
-            });
-          });
-      },
-
-      updateQueryString(value) {
-        this.$router.push({query: _.defaults(value, this.$route.query)}).catch((error) => {
-          if (error.name != 'NavigationDuplicated') {
-            throw error;
+          if (refresh) {
+            Nova.$emit('refresh-resources');
           }
         });
-      },
     },
-  };
+
+    calculateCollapsedText(blueprint) {
+      let count = blueprint.filter((item) => item.type === 'criterion').length;
+
+      if (count === 0) {
+        return 'No filter conditions applied.';
+      }
+
+      if (count === 1) {
+        return '1 filter condition applied.';
+      }
+
+      return `${count} filter conditions applied.`;
+    },
+
+    submit() {
+      Nova.request()
+        // Because of the way Nova works, we have to make a round trip to
+        // stabilize the blueprint, and then pop it in the querystring.
+        .post('/nova-vendor/refine-nova/stabilize', {
+          type: this.filter.type,
+          blueprint: this.filter.blueprint,
+        })
+        .then(({ data }) => {
+          // Put the new stable id in the querystring, and then the router will take over.
+          this.updateQueryString({
+            // Reset to the first page, just like Nova does when
+            // a user changes a filter.
+            [`${this.resourceName}_page`]: 1,
+            [this.refineParameterName]: data.id,
+          });
+        });
+    },
+
+    updateQueryString(value) {
+      this.$router.push({ query: _.defaults(value, this.$route.query) }).catch((error) => {
+        if (error.name != 'NavigationDuplicated') {
+          throw error;
+        }
+      });
+    },
+  },
+};
 </script>
