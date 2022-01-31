@@ -1,6 +1,6 @@
 # Refine for Laravel Nova
 
-[Refine](https://hammerstone.dev/refine/laravel/docs/main) is a powerful, visual query builder for Laravel (and Rails!).
+[Refine](https://hammerstone.dev/refine/laravel/docs/main) is a powerful, visual query builder for Laravel (and Rails!)
 
 This repository is the integration for Refine and Laravel Nova.
 
