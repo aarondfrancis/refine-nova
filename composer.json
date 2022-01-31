@@ -8,7 +8,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2|^8.0",
-        "hammerstone/refine-laravel": "dev-main",
+        "hammerstone/refine-laravel": "^0.3.4",
         "laravel/nova": "^2.12|^3.0"
     },
     "autoload": {
