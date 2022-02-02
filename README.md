@@ -18,10 +18,18 @@ install `hammerstone/refine-laravel` as well.
 To use Refine with one of your Nova resources, add the `RefinesModels` trait to your resource.
 
 ```php
-
 class Company extends Resource
 {
     use RefinesModels;
+}
+```
+
+In your AppServiceProvider (or FilterServiceProvider if you want) you'll need to tell Refine to use the Vue2 frontend.
+
+```php
+public function boot()
+{
+    Clause::$resolveComponentUsing = Vue2Frontend::class;
 }
 ```
 
