@@ -1447,7 +1447,7 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.currentValue = newValue;
         this.$emit('input', {
-          value: newValue
+          value1: newValue
         });
       }
     }
