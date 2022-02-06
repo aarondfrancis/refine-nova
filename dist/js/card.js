@@ -1613,17 +1613,20 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     var modifier = this.modifier;
+    console.log(this.modifiers);
     this.$emit('input', {
       modifier: modifier
     });
   },
   methods: {
-    id: function id(seed) {
-      return "".concat(this.uid, "-").concat(seed);
-    },
-    updateModifier: function updateModifier(nextOption) {
+    updateModifier: function updateModifier(_ref) {
+      var selectedOptions = _ref.selectedOptions;
+      var selected = selectedOptions.map(function (_ref2) {
+        var id = _ref2.id;
+        return id;
+      });
       this.$emit('input', {
-        modifier: nextOption.id
+        modifier: selected[0]
       });
     },
     updateAmount: function updateAmount(event) {
@@ -1632,9 +1635,14 @@ __webpack_require__.r(__webpack_exports__);
         amount: amount
       });
     },
-    updateUnit: function updateUnit(nextOption) {
+    updateUnit: function updateUnit(_ref3) {
+      var selectedOptions = _ref3.selectedOptions;
+      var selected = selectedOptions.map(function (_ref4) {
+        var id = _ref4.id;
+        return id;
+      });
       this.$emit('input', {
-        unit: nextOption.id
+        unit: selected[0]
       });
     }
   }
@@ -6391,7 +6399,7 @@ var render = function () {
         _vm._l(_vm.units, function (unit) {
           return _c("selector-option", {
             key: unit.id,
-            attrs: { id: _vm.id("unit-" + unit.id), display: unit.display },
+            attrs: { id: unit.id, display: unit.display },
           })
         }),
         1
@@ -6403,10 +6411,7 @@ var render = function () {
         _vm._l(_vm.modifiers, function (modifier) {
           return _c("selector-option", {
             key: modifier.id,
-            attrs: {
-              id: _vm.id("modifier-" + modifier.id),
-              display: modifier.display,
-            },
+            attrs: { id: modifier.id, display: modifier.display },
           })
         }),
         1
