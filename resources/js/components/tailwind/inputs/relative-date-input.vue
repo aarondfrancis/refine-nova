@@ -15,12 +15,7 @@
     </selector>
 
     <selector @select-option="updateModifier">
-      <selector-option
-        v-for="modifier in modifiers"
-        :key="modifier.id"
-        :id="modifier.id"
-        :display="modifier.display"
-      />
+      <selector-option v-for="modifier in modifiers" :key="modifier.id" :id="modifier.id" :display="modifier.display" />
     </selector>
   </div>
 </template>
