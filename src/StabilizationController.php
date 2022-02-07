@@ -8,7 +8,6 @@ namespace Hammerstone\Refine\Nova;
 use Hammerstone\Refine\Filter;
 use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 class StabilizationController
 {
@@ -40,6 +39,4 @@ class StabilizationController
             'blueprint' => $filter->getBlueprint()
         ];
     }
-
-
 }
