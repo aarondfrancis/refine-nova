@@ -1401,11 +1401,11 @@ __webpack_require__.r(__webpack_exports__);
   name: 'refine-number-input',
   data: function data() {
     return {
-      currentValue: this.value
+      currentValue: this.value1
     };
   },
   props: {
-    value: {
+    value1: {
       type: Number,
       required: false
     },

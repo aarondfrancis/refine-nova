@@ -13,11 +13,11 @@ export default {
   name: 'refine-number-input',
   data() {
     return {
-      currentValue: this.value,
+      currentValue: this.value1,
     };
   },
   props: {
-    value: {
+    value1: {
       type: Number,
       required: false,
     },

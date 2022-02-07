@@ -1,33 +1,7 @@
 <?php
 
-use Hammerstone\Refine\Filter;
-use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;
-use Illuminate\Http\Request;
+use Hammerstone\Refine\Nova\StabilizationController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/stabilize', function (Request $request) {
-    $filter = Filter::fromState([
-        'type' => $request->type,
-        'blueprint' => $request->blueprint
-    ]);
-
-    $stabilizer = new UrlEncodedStabilizer;
-
-    return [
-        'id' => $stabilizer->toStableId($filter)
-    ];
-});
-
-Route::post('/destabilize', function (Request $request) {
-    if (!$request->id) {
-        return [
-            'blueprint' => []
-        ];
-    }
-
-    $filter = (new UrlEncodedStabilizer)->fromStableId($request->id);
-
-    return [
-        'blueprint' => $filter->getBlueprint()
-    ];
-});
+Route::post('/stabilize', [StabilizationController::class, 'stabilize']);
+Route::post('/destabilize', [StabilizationController::class, 'destabilize']);
