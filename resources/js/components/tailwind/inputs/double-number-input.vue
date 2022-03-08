@@ -1,8 +1,8 @@
 <template>
   <div class="refine-double-number-wrapper">
-    <number-input :meta="meta" :value="currentValue" @input="updateFirstValue" />
+    <number-input :meta="meta" :value="value1" @input="updateFirstValue" />
     <span class="refine-double-number-joiner" v-if="joinWord">{{ joinWord }}</span>
-    <number-input :meta="meta" :value="currentValue" @input="updateSecondValue" />
+    <number-input :meta="meta" :value="value2" @input="updateSecondValue" />
   </div>
 </template>
 
@@ -11,11 +11,6 @@ import NumberInput from './number-input';
 
 export default {
   name: 'refine-double-number-input',
-  data() {
-    return {
-      currentValue: this.value,
-    };
-  },
   computed: {
     joinWord() {
       // @TODO Meta helper
@@ -23,11 +18,11 @@ export default {
     },
   },
   methods: {
-    updateFirstValue: function ({ value }) {
-      this.$emit('input', { value1: value });
+    updateFirstValue: function ({ value1 }) {
+      this.$emit('input', { value1: value1 });
     },
-    updateSecondValue: function ({ value }) {
-      this.$emit('input', { value2: value });
+    updateSecondValue: function ({ value1 }) {
+      this.$emit('input', { value2: value1 });
     },
   },
   props: {

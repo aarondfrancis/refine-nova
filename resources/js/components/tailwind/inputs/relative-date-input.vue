@@ -55,7 +55,6 @@ export default {
   },
   created() {
     const { modifier } = this;
-    console.log(this.modifiers);
     this.$emit('input', { modifier });
   },
   methods: {
