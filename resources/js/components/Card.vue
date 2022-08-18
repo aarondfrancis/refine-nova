@@ -37,7 +37,8 @@ export default {
   },
 
   data() {
-    let filter = _.toPlainObject(this.card.filter);
+    // Converts the filter to a plain object
+    let filter = JSON.parse(JSON.stringify(this.card.filter));
 
     return {
       errors: {},
