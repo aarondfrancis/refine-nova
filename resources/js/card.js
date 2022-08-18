@@ -1,11 +1,9 @@
-import VueCompositionApi from '@vue/composition-api';
 import Card from './components/Card';
 
 Nova.booting((Vue, router, store) => {
   Vue.config.devtools = true;
 
   Vue.component('refine-nova', Card);
-  Vue.use(VueCompositionApi);
 
   attachInterceptors(router);
 });

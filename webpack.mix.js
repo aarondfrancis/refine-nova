@@ -1,16 +1,10 @@
-const mix = require('laravel-mix');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+let mix = require('laravel-mix')
+
+require('./nova.mix')
 
 mix
   .setPublicPath('dist')
-  .postCss('resources/css/card.css', 'dist/css')
   .js('resources/js/card.js', 'js')
-  .vue()
-  .webpackConfig({
-    externals: {
-      vue: 'undefined',
-    },
-    plugins: [
-      // new BundleAnalyzerPlugin()
-    ],
-  });
+  .vue({ version: 3 })
+  .css('resources/css/card.css', 'css')
+  .nova('{{ name }}')
