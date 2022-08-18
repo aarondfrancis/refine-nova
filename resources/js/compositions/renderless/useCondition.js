@@ -1,4 +1,4 @@
-import { inject, provide, onUnmounted } from '@vue/composition-api';
+import { inject, provide, onUnmounted } from 'vue';
 
 export default (id, props, context) => {
   const blueprint = inject('blueprint');

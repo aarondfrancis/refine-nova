@@ -1,4 +1,4 @@
-import { inject, onUnmounted } from '@vue/composition-api';
+import { inject, onUnmounted } from 'vue';
 
 export default (id, props, context) => {
   const criterion = inject('criterion');

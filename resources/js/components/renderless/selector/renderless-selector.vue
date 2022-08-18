@@ -1,5 +1,5 @@
 <script>
-import { reactive, nextTick } from '@vue/composition-api';
+import { reactive, nextTick } from 'vue';
 import SelectorStore from '../../../stores/selector';
 
 export default {
