@@ -24,8 +24,8 @@ export default {
   },
   render() {
     const { isSelected } = this;
-    if (this.$scopedSlots?.default && isSelected) {
-      return this.$scopedSlots.default();
+    if (this.$slots?.default && isSelected) {
+      return this.$slots.default();
     }
     return null;
   },

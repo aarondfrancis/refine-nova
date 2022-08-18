@@ -76,8 +76,8 @@ export default {
       removeCriterion,
     } = this;
 
-    if (this.$scopedSlots?.default) {
-      return this.$scopedSlots.default({
+    if (this.$slots?.default) {
+      return this.$slots.default({
         insertCriterion,
         addGroup,
         blueprint,
