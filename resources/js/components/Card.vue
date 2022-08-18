@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import QueryBuilder from './tailwind/query-builder/query-builder';
 import SlideDown from './tailwind/slide-down';
 import store from 'store2';
@@ -37,8 +38,7 @@ export default {
   },
 
   data() {
-    // Converts the filter to a plain object
-    let filter = JSON.parse(JSON.stringify(this.card.filter));
+    let filter = _.toPlainObject(this.card.filter);
 
     return {
       errors: {},
