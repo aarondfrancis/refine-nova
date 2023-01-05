@@ -15,11 +15,28 @@ trait RefinesModels
      * @param  NovaRequest  $request
      * @return string|Filter
      */
-    abstract public static function refineFilter(NovaRequest $request);
+    public static function refineFilter(NovaRequest $request = null)
+    {
+        return static::$filter;
+    }
 
-    public static function refineCard(NovaRequest $request)
+    /**
+     * @param  NovaRequest  $request
+     * @return RefineCard
+     */
+    public static function refineCard(NovaRequest $request = null)
     {
         return RefineCard::forFilter(static::refineFilter($request));
+    }
+
+    /**
+     * @param  NovaRequest  $request
+     * @param $query
+     * @return mixed
+     */
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return static::refine($request, $query);
     }
 
     /**

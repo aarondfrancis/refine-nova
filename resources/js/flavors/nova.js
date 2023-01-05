@@ -1,40 +1,43 @@
-const inputBase =
-  'bg-white relative border border-gray-300 rounded-md shadow-sm text-left cursor-default';
-const inputFocus = 'focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500';
-const inputSizing = 'w-60 pl-3 py-2';
-
-const inputClassName = `${inputBase} ${inputFocus} ${inputSizing}`;
-
 const novaFlavor = {
   emptyGroup: {
-    class: '',
+    class: 'border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4',
 
     wrapper: {
-      class: '',
+      class: 'border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4',
     },
 
     addCriterionButton: {
-      class: '',
+      class: 'text-sm flex items-center p-2',
 
       wrapper: {},
 
       icon: {
-        class: 'h-4 w-4',
+        class: 'text-80 h-4 w-4',
       },
 
-      text: {},
+      text: {
+        class: 'pt-px text-80'
+      },
     },
   },
 
   group: {
-    class: 'border rounded-lg shadow border-50 overflow-hidden',
+    class: 'border rounded-lg shadow border-50',
     wrapper: {
       class: '',
     },
 
+    divider: {
+      component: 'custom-group-divider',
+      // Dont show the divider on the last iteration
+      class: ({ index, total }) => {
+        return index === total - 1 ? 'hidden' : 'flex'
+      },
+    },
+
     addCriterionButton: {
       wrapper: {
-        class:'text-sm flex items-center p-2'
+        class: 'text-sm flex items-center p-2'
       },
 
       class: 'text-80 flex items-center',
@@ -50,13 +53,20 @@ const novaFlavor = {
   },
 
   addGroupButton: {
-    class: '',
+    class: 'text-sm flex items-center p-2 text-80',
+
+    // Use a custom component, because the default is inexplicably bad.
+    component: 'custom-or-button'
+  },
+
+  condition: {
+    class: 'first:rounded-t-lg bg-white w-full'
   },
 
   criterion: {
     wrapper: {
       order: ['errors', 'selector', 'remove'],
-      class: 'flex border-b border-50 py-3 pl-2 bg-white w-full',
+      class: 'flex border-b border-50 py-3 pl-2 ',
     },
     removeCriterionButton: {
       class:
@@ -86,19 +96,17 @@ const novaFlavor = {
       },
     },
     listbox: {
-      class: (options) => {
-        return options.isClosed
-          ? 'refine-selector-listbox-hidden'
-          : 'refine-selector-listbox shadow list-reset border border-50 rounded-lg';
+      class: ({ isClosed }) => {
+        return isClosed ? 'hidden' : 'max-h-60 shadow list-reset border border-50 rounded-lg overflow-auto';
       },
 
       wrapper: {
-        class: 'absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg',
+        class: 'absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg',
       },
 
       item: {
-        class: (options) => {
-          return `refine-selector-list-item ${options.isHighlighted ? 'bg-primary text-white' : ''}`;
+        class: ({ isHighlighted }) => {
+          return `py-2 pr-8 pl-3 relative cursor-pointer select-none ${isHighlighted ? 'bg-primary text-white' : ''}`;
         },
 
         text: {
@@ -110,7 +118,7 @@ const novaFlavor = {
           class: 'w-5 h-5',
           wrapper: {
             class: (options) =>
-              `absolute inset-y-0 right-0 flex items-center pr-4 ${
+              `absolute pin-t pin-b pin-r flex items-center pr-4 ${
                 !options.isHighlighted ? 'text-blue-600' : 'text-white'
               }`,
           },
@@ -139,15 +147,21 @@ const novaFlavor = {
 
     multi: {
       button: {
-        class:
-          'relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500',
+        class: 'form-control form-select w-full text-left flex items-center overflow-x-auto',
 
         placeholder: {
           class: 'block text-gray-300 truncate select-none',
         },
 
         selected: {
-          class: 'inline-flex p-1 mr-1 border border-gray-300 rounded',
+          class: 'inline-flex mr-1 rounded border border-50 p-1 text-sm',
+        },
+
+        icon: {
+          class: 'hidden',
+          wrapper: {
+            class: 'hidden',
+          },
         },
 
         deselect: {
@@ -159,25 +173,14 @@ const novaFlavor = {
             },
           },
         },
-
-        icon: {
-          class: 'w-5 h-5 text-gray-400',
-
-          wrapper: {
-            class: 'absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none',
-          },
-        },
       },
     },
   },
 
   inputs: {
     date: {
-      pickerInput: {
-        class: `${inputBase} ${inputFocus} block w-full pl-3 py-2 pr-0`,
-      },
       relative: {
-        class: `${inputClassName} mr-4`,
+        class: `form-control form-input form-input-bordered mr-4`,
 
         wrapper: {
           class: 'flex mr-4',
@@ -194,14 +197,16 @@ const novaFlavor = {
     },
 
     number: {
-      class: inputClassName,
+      class: 'form-control form-input form-input-bordered',
 
       double: {
         wrapper: {
           class: 'flex items-center gap-[1ch]',
         },
 
-        joiner: {},
+        joiner: {
+          class: 'ml-2 mr-2'
+        },
       },
     },
 
