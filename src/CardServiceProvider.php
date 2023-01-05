@@ -2,6 +2,8 @@
 
 namespace Hammerstone\Refine\Nova;
 
+use Hammerstone\Refine\Conditions\Clause;
+use Hammerstone\Refine\Frontend\Vue2Frontend;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
@@ -19,6 +21,12 @@ class CardServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $this->routes();
         });
+
+        if (class_exists('\Hammerstone\Refine\Conditions\Clause')) {
+            if (is_null(Clause::$resolveComponentUsing)) {
+                Clause::$resolveComponentUsing = Vue2Frontend::class;
+            }
+        }
 
         Nova::serving(function (ServingNova $event) {
             Nova::script('refine-nova-card', __DIR__ . '/../dist/js/card.js');

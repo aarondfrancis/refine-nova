@@ -31,9 +31,7 @@ export default {
   methods: {
     handleChange(value) {
       this.hasError = false;
-      this.$emit('input', {
-        date: value,
-      });
+      this.$emit('input', value);
     },
     handleInputError: function () {
       this.hasError = true;

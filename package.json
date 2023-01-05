@@ -17,7 +17,8 @@
         "webpack-bundle-analyzer": "^4.5.0"
     },
     "dependencies": {
-        "@vue/composition-api": "^1.4.2",
+        "@hammerstone/refine-vue2-dev": "^1.0.1672698708",
+        "@vue/composition-api": "^1.7.1",
         "store2": "^2.13.1"
     }
 }

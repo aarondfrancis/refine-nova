@@ -8,7 +8,7 @@ mix
   .vue()
   .webpackConfig({
     externals: {
-      vue: 'undefined',
+      vue: '{use: () => {}}',
     },
     plugins: [
       // new BundleAnalyzerPlugin()

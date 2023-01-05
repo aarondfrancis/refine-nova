@@ -1,0 +1,12 @@
+#services:
+#  - name: Queue
+#    command: php artisan horizon
+#    restart:
+#      watch:
+#        - app/Jobs
+#
+#  - name: Vite
+#    command: npm run dev
+#
+#  - name: Octane
+#    command: php artisan octane:start --port=8000 --no-interaction

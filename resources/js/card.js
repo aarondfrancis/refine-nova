@@ -1,11 +1,15 @@
 import VueCompositionApi from '@vue/composition-api';
 import Card from './components/Card';
+import {DatePickerPlugin} from "@hammerstone/refine-vue2-dev";
+import NovaDatePicker from "./components/tailwind/inputs/nova-date-picker";
+
 
 Nova.booting((Vue, router, store) => {
   Vue.config.devtools = true;
 
-  Vue.component('refine-nova', Card);
   Vue.use(VueCompositionApi);
+  Vue.use(DatePickerPlugin, { DatePicker: NovaDatePicker });
+  Vue.component('refine-nova', Card);
 
   attachInterceptors(router);
 });

@@ -3,11 +3,23 @@
     <slide-down :show="!collapsed">
       <div>
         <query-builder
-          :errors="errors"
-          @keydown.native.enter="submit"
-          v-model="filter.blueprint"
-          :conditions="filter.conditions"
+            :errors="errors"
+            @keydown.native.enter="submit"
+            v-model:blueprint="filter.blueprint"
+            :conditions="filter.conditions"
+            :flavor="flavor"
         />
+
+        <query-builder-old
+            :errors="errors"
+            @keydown.native.enter="submit"
+            v-model="filter.blueprint"
+            :conditions="filter.conditions"
+        />
+
+
+        {{ filter.blueprint }}
+
         <div class="text-right">
           <button @click.prevent="collapsed = !collapsed" class="text-sm mr-6 text-80">Collapse</button>
           <button @click.prevent="submit" class="btn btn-default btn-primary">Filter</button>
@@ -24,6 +36,8 @@
 </template>
 
 <script>
+import {QueryBuilder as QB} from '@hammerstone/refine-vue2-dev'
+import novaFlavor from "../flavors/nova";
 import QueryBuilder from './tailwind/query-builder/query-builder';
 import SlideDown from './tailwind/slide-down';
 import store from 'store2';
@@ -33,13 +47,39 @@ export default {
 
   components: {
     SlideDown,
-    QueryBuilder,
+    'query-builder': QB,
+    'query-builder-old': QueryBuilder,
   },
 
   data() {
     let filter = _.toPlainObject(this.card.filter);
 
+    filter.blueprint = [{
+      "id": "is_subscriber",
+      "condition_id": "is_subscriber",
+      "depth": 1,
+      "type": "criterion",
+      "input": { "clause": "true" },
+      "uid": "13622-1655136397"
+    }, { "depth": 1, "type": "conjunction", "word": "and", "uid": "18877-1672704525" }, {
+      "id": "name",
+      "condition_id": "name",
+      "depth": 1,
+      "type": "criterion",
+      "input": { "clause": "eq", "value": "Aaron" },
+      "uid": "13351-1655136400"
+    }, { "depth": 1, "type": "conjunction", "word": "and", "uid": "11209-1672704528" }, {
+      "id": "created_at",
+      "condition_id": "created_at",
+      "depth": 1,
+      "type": "criterion",
+      "input": { "clause": "eq", "value1": "2023-01-01" },
+      "uid": "19483-1672704530"
+    }]
+
     return {
+      flavor: novaFlavor,
+
       errors: {},
       lastAppliedBlueprint: filter.blueprint,
       collapsed: store.get('refine-collapsed', false),
@@ -110,20 +150,20 @@ export default {
       this.errors = {};
 
       Nova.request()
-        .post('/nova-vendor/refine-nova/destabilize', { id })
-        .then(({ data }) => {
-          // Without this here, the clauses in a condition won't change on
-          // back/next navigation. I'll need to have Sean or Jeff look
-          // more closely at the blueprint store to figure out why.
-          this.$nextTick(() => {
-            this.lastAppliedBlueprint = data.blueprint;
-            this.filter.blueprint = data.blueprint;
-          });
+          .post('/nova-vendor/refine-nova/destabilize', { id })
+          .then(({ data }) => {
+            // Without this here, the clauses in a condition won't change on
+            // back/next navigation. I'll need to have Sean or Jeff look
+            // more closely at the blueprint store to figure out why.
+            this.$nextTick(() => {
+              this.lastAppliedBlueprint = data.blueprint;
+              this.filter.blueprint = data.blueprint;
+            });
 
-          if (refresh) {
-            Nova.$emit('refresh-resources');
-          }
-        });
+            if (refresh) {
+              Nova.$emit('refresh-resources');
+            }
+          });
     },
 
     calculateCollapsedText(blueprint) {
@@ -142,21 +182,21 @@ export default {
 
     submit() {
       Nova.request()
-        // Because of the way Nova works, we have to make a round trip to
-        // stabilize the blueprint, and then pop it in the querystring.
-        .post('/nova-vendor/refine-nova/stabilize', {
-          type: this.filter.type,
-          blueprint: this.filter.blueprint,
-        })
-        .then(({ data }) => {
-          // Put the new stable id in the querystring, and then the router will take over.
-          this.updateQueryString({
-            // Reset to the first page, just like Nova does when
-            // a user changes a filter.
-            [`${this.resourceName}_page`]: 1,
-            [this.refineParameterName]: data.id,
+          // Because of the way Nova works, we have to make a round trip to
+          // stabilize the blueprint, and then pop it in the querystring.
+          .post('/nova-vendor/refine-nova/stabilize', {
+            type: this.filter.type,
+            blueprint: this.filter.blueprint,
+          })
+          .then(({ data }) => {
+            // Put the new stable id in the querystring, and then the router will take over.
+            this.updateQueryString({
+              // Reset to the first page, just like Nova does when
+              // a user changes a filter.
+              [`${this.resourceName}_page`]: 1,
+              [this.refineParameterName]: data.id,
+            });
           });
-        });
     },
 
     updateQueryString(value) {

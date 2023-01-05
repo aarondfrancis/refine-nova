@@ -17,6 +17,11 @@ trait RefinesModels
      */
     abstract public static function refineFilter(NovaRequest $request);
 
+    public static function refineCard(NovaRequest $request)
+    {
+        return RefineCard::forFilter(static::refineFilter($request));
+    }
+
     /**
      * @param  NovaRequest  $request
      * @param $query
