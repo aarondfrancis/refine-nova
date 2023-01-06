@@ -16,7 +16,7 @@ const novaFlavor = {
       },
 
       text: {
-        class: 'pt-px text-80'
+        class: 'pt-px text-80',
       },
     },
   },
@@ -31,13 +31,13 @@ const novaFlavor = {
       component: 'custom-group-divider',
       // Dont show the divider on the last iteration
       class: ({ index, total }) => {
-        return index === total - 1 ? 'hidden' : 'flex'
+        return index === total - 1 ? 'hidden' : 'flex';
       },
     },
 
     addCriterionButton: {
       wrapper: {
-        class: 'text-sm flex items-center p-2'
+        class: 'text-sm flex items-center p-2',
       },
 
       class: 'text-80 flex items-center',
@@ -56,11 +56,11 @@ const novaFlavor = {
     class: 'text-sm flex items-center p-2 text-80',
 
     // Use a custom component, because the default is inexplicably bad.
-    component: 'custom-or-button'
+    component: 'custom-or-button',
   },
 
   condition: {
-    class: 'first:rounded-t-lg bg-white w-full'
+    class: 'first:rounded-t-lg bg-white w-full',
   },
 
   criterion: {
@@ -69,8 +69,7 @@ const novaFlavor = {
       class: 'flex border-b border-50 py-3 pl-2 ',
     },
     removeCriterionButton: {
-      class:
-        'ml-auto py-2 px-4 flex items-center text-60',
+      class: 'ml-auto py-2 px-4 flex items-center text-60',
       icon: {
         class: 'h-5 w-5',
       },
@@ -110,8 +109,7 @@ const novaFlavor = {
         },
 
         text: {
-          class: (options) =>
-            `block truncate ${options.selected ? 'font-semibold' : 'font-normal'}`,
+          class: (options) => `block truncate ${options.selected ? 'font-semibold' : 'font-normal'}`,
         },
 
         icon: {
@@ -205,7 +203,7 @@ const novaFlavor = {
         },
 
         joiner: {
-          class: 'ml-2 mr-2'
+          class: 'ml-2 mr-2',
         },
       },
     },

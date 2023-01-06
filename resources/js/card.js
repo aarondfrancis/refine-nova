@@ -1,11 +1,11 @@
 import VueCompositionApi from '@vue/composition-api';
 import Card from './components/Card';
-import {DatePickerPlugin} from "@hammerstone/refine-vue2-dev";
+import { DatePickerPlugin } from '@hammerstone/refine-vue2-dev';
 
 // Custom components for Nova 3.
-import NovaDatePicker from "./components/DatePicker";
-import OrButton from "./components/OrButton"
-import GroupDivider from "./components/GroupDivider";
+import NovaDatePicker from './components/DatePicker';
+import OrButton from './components/OrButton';
+import GroupDivider from './components/GroupDivider';
 
 Nova.booting((Vue, router, store) => {
   // Turn on for to get the Devtools to show up.
@@ -17,7 +17,7 @@ Nova.booting((Vue, router, store) => {
 
   // Use Nova's default date picker for Refine.
   Vue.use(DatePickerPlugin, {
-    DatePicker: NovaDatePicker
+    DatePicker: NovaDatePicker,
   });
 
   // Custom components for flavors.

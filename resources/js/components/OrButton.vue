@@ -1,6 +1,6 @@
 <template>
   <button v-on="$listeners">
-    <heroicon-plus/>
+    <heroicon-plus />
     <span class="pt-px">Or</span>
   </button>
 </template>
@@ -15,4 +15,3 @@ export default {
   },
 };
 </script>
-
