@@ -1,0 +1,26 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production",
+        "nova:install": "composer update --working-dir \"../../\" --with laravel/nova:\"^4.0\" && npm --prefix='../../vendor/laravel/nova' ci"
+    },
+    "devDependencies": {
+        "@vue/compiler-sfc": "^3.2.22",
+        "laravel-mix": "^6.0.41",
+        "postcss": "^8.3.11",
+        "tailwindcss": "^3.2.4",
+        "vue-loader": "^16.8.3",
+        "vue": "^3.0.0"
+    },
+    "dependencies": {
+        "@hammerstone/refine-vue3-dev": "^1.0.1673298944",
+        "lodash": "^4.17.21",
+        "store2": "^2.14.2"
+    }
+}

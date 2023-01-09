@@ -2,12 +2,12 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
+        "development": "./node_modules/.bin/mix",
+        "watch": "./node_modules/.bin/mix watch",
+        "watch-poll": "./node_modules/.bin/mix watch -- --watch-options-poll=1000",
+        "hot": "./node_modules/.bin/mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "./node_modules/.bin/mix --production"
     },
     "devDependencies": {
         "cross-env": "^5.0.0",
@@ -18,7 +18,7 @@
         "webpack-bundle-analyzer": "^4.5.0"
     },
     "dependencies": {
-        "@hammerstone/refine-vue2-dev": "^1.0.1673275245",
+        "@hammerstone/refine-vue2-dev": "^1.0.1673298940",
         "@vue/composition-api": "^1.7.1",
         "store2": "^2.13.1"
     }
