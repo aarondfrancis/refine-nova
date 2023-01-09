@@ -1,18 +1,14 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
-        "development": "./node_modules/.bin/mix",
-        "watch": "./node_modules/.bin/mix watch",
-        "watch-poll": "./node_modules/.bin/mix watch -- --watch-options-poll=1000",
-        "hot": "./node_modules/.bin/mix watch --hot",
-        "prod": "npm run production",
-        "production": "./node_modules/.bin/mix --production"
+        "demi": "vue-demi-switch 2",
+        "dev": "npm run demi && mix",
+        "watch": "npm run demi && mix watch",
+        "prod": "npm run demi && mix --production"
     },
     "devDependencies": {
         "cross-env": "^5.0.0",
         "laravel-mix": "^6.0.39",
-        "prettier": "^2.8.2",
         "vue-loader": "^15.9.8",
         "vue-template-compiler": "^2.6.14",
         "webpack-bundle-analyzer": "^4.5.0"

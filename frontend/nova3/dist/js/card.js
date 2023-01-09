@@ -435,9 +435,9 @@ __webpack_require__.r(__webpack_exports__);
 
 Nova.booting(function (Vue, router) {
   // Turn on for to get the Devtools to show up.
-  // Vue.config.devtools = true;
-  // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
-  // Required for Refine Vue2 to work.
+  Vue.config.devtools = true;
+  __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue; // Required for Refine Vue2 to work.
+
   Vue.use(_vue_composition_api__WEBPACK_IMPORTED_MODULE_5__["default"]);
   Vue.use(_hammerstone_refine_vue2_dev__WEBPACK_IMPORTED_MODULE_1__.RefinePlugin); // Custom components for our Nova flavor.
 
