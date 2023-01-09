@@ -1,34 +1,32 @@
-import VueCompositionApi from '@vue/composition-api';
-import Card from './components/Card';
-import { DatePickerPlugin } from '@hammerstone/refine-vue2-dev';
+import VueCompositionApi from '@vue/composition-api'
+import Card from './components/Card'
+import { RefinePlugin } from '@hammerstone/refine-vue2-dev'
 
 // Custom components for Nova 3.
-import NovaDatePicker from './components/DatePicker';
-import OrButton from './components/OrButton';
-import GroupDivider from './components/GroupDivider';
+import NovaDatePicker from './components/DatePicker'
+import OrButton from './components/OrButton'
+import GroupDivider from './components/GroupDivider'
 
-Nova.booting((Vue, router, store) => {
+Nova.booting((Vue, router) => {
   // Turn on for to get the Devtools to show up.
   // Vue.config.devtools = true;
   // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
 
   // Required for Refine Vue2 to work.
-  Vue.use(VueCompositionApi);
+  Vue.use(VueCompositionApi)
 
-  // Use Nova's default date picker for Refine.
-  Vue.use(DatePickerPlugin, {
-    DatePicker: NovaDatePicker,
-  });
+  Vue.use(RefinePlugin)
 
-  // Custom components for flavors.
-  Vue.component('custom-or-button', OrButton);
-  Vue.component('custom-group-divider', GroupDivider);
+  // Custom components for our Nova flavor.
+  Vue.component('refine-custom-or-button', OrButton)
+  Vue.component('refine-custom-group-divider', GroupDivider)
+  Vue.component('refine-custom-date-picker', NovaDatePicker)
 
   // Main card.
-  Vue.component('refine-nova', Card);
+  Vue.component('refine-nova', Card)
 
-  attachInterceptors(router);
-});
+  attachInterceptors(router)
+})
 
 function attachInterceptors(router) {
   // Add a request interceptor so that we can add our Refine query params.
@@ -42,27 +40,27 @@ function attachInterceptors(router) {
         // each resource will start with something different,
         // but they all end in _refine.
         if (_.endsWith(param, '_refine')) {
-          config.params[param] = router.currentRoute.query[param];
+          config.params[param] = router.currentRoute.query[param]
         }
       }
     }
 
-    return config;
-  });
+    return config
+  })
 
   // Add a response interceptor so we can catch validation errors.
   Nova.request().interceptors.response.use(
     function (response) {
-      return response;
+      return response
     },
     function (error) {
       if (error.response && error.response.status === 422) {
         // Emit an event with the error data over to our Card
         // component and then let the rejection fall through.
-        Nova.$emit('validation-error', error.response);
+        Nova.$emit('validation-error', error.response)
       }
 
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
-  );
+  )
 }

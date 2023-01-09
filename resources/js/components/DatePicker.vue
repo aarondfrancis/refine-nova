@@ -14,28 +14,23 @@
 </template>
 
 <script>
-export default {
-  props: {
-    date: {
-      type: String,
-      required: false,
+  export default {
+    props: {
+      date: {
+        type: String,
+        required: false,
+      },
+      placeholder: {
+        type: String,
+        required: false,
+        default: new Date().toISOString().split('T')[0]
+      }
     },
-  },
 
-  data() {
-    return {
-      hasError: false,
-    };
-  },
-
-  methods: {
-    handleChange(value) {
-      this.hasError = false;
-      this.$emit('input', value);
+    methods: {
+      handleChange(value) {
+        this.$emit('input', {value});
+      },
     },
-    handleInputError: function () {
-      this.hasError = true;
-    },
-  },
-};
+  };
 </script>
