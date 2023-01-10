@@ -2,10 +2,8 @@
 // uses, but just change where we look for content.
 let novaTailwindConfig = require('../vendor/laravel/nova/tailwind.config.js');
 
-novaTailwindConfig.content = [
-    './resources/**/*{js,vue}',
-]
+novaTailwindConfig.content = ['./resources/**/*{js,vue}'];
 
-novaTailwindConfig.important = '.refine-nova-card'
+novaTailwindConfig.important = '.refine-nova-card';
 
 module.exports = novaTailwindConfig;
