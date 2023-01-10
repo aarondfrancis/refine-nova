@@ -30,9 +30,6 @@
         </div>
       </slide-down>
     </div>
-  <pre>
-    {{ filter.blueprint }}
-  </pre>
   </div>
 </template>
 
@@ -99,7 +96,7 @@
       this.dark = getDarkMode();
 
       let observer = new MutationObserver(() => {
-        this.dark = document.documentElement.classList.contains("dark")
+        this.dark = getDarkMode()
       });
 
       // Watch for class changes on the documentElement

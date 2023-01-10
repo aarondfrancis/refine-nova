@@ -5,7 +5,7 @@
         "dev": "npm run demi && mix",
         "watch": "npm run demi && mix watch",
         "prod": "npm run demi && mix --production",
-        "nova:install": "composer update --working-dir \"../../\" --with laravel/nova:\"^4.0\" && npm --prefix='../../vendor/laravel/nova' ci"
+        "nova:install": "composer update --working-dir \"../\" --with laravel/nova:\"^4.0\" && npm --prefix='../vendor/laravel/nova' ci"
     },
     "devDependencies": {
         "@vue/compiler-sfc": "^3.2.22",

@@ -347,37 +347,31 @@ __webpack_require__.r(__webpack_exports__);
       height += parseInt(style.marginTop) + parseInt(style.marginBottom);
       return height;
     },
-    beforeEnter: function beforeEnter(wrapper) {
-      wrapper.style.overflowY = 'hidden';
-      wrapper.style.height = '0px';
+    beforeEnter: function beforeEnter() {
+      this.$refs.wrapper.style.overflowY = 'hidden';
+      this.$refs.wrapper.style.height = '0px';
     },
-    beforeLeave: function beforeLeave(wrapper) {
-      wrapper.style.overflowY = 'hidden';
-      wrapper.style.height = wrapper.style.offsetHeight + 'px';
+    beforeLeave: function beforeLeave() {
+      this.$refs.wrapper.style.height = this.outerHeight(this.$refs.wrapper) + 'px';
+      this.$refs.wrapper.style.overflowY = 'hidden';
     },
-    enter: function enter(wrapper, done) {
+    enter: function enter(arg1, arg2) {
       var _this = this;
 
-      setTimeout(function () {
-        var start = +Date.now();
-
-        _this.animate(true, start, wrapper, done);
-      }, 0);
+      var done =  true ? arg1 : 0;
+      this.$nextTick(function () {
+        return _this.animate(true, +Date.now(), done);
+      });
     },
-    leave: function leave(wrapper, done) {
+    leave: function leave(arg1, arg2) {
       var _this2 = this;
 
-      setTimeout(function () {
-        var start = +Date.now();
-
-        _this2.animate(false, start, wrapper, done);
-      }, 0);
+      var done =  true ? arg1 : 0;
+      this.$nextTick(function () {
+        return _this2.animate(false, +Date.now(), done);
+      });
     },
-    animationIsDone: function animationIsDone(growing) {
-      this.animating = false;
-      this.open = growing;
-    },
-    animate: function animate(growing, start, wrapper, done) {
+    animate: function animate(growing, start, done) {
       var _this3 = this;
 
       this.animating = true;
@@ -388,23 +382,24 @@ __webpack_require__.r(__webpack_exports__);
         return t * t * t;
       }(progress);
 
-      var original = growing ? 0 : this.outerHeight(wrapper.firstChild);
-      var destination = growing ? this.outerHeight(wrapper.firstChild) : 0;
+      var original = growing ? 0 : this.outerHeight(this.$refs.wrapper.children.item(0));
+      var destination = growing ? this.outerHeight(this.$refs.wrapper.children.item(0)) : 0;
       var height = original + (destination - original) * factor;
-      wrapper.style.height = height + 'px';
+      this.$refs.wrapper.style.height = height + 'px';
 
       if (progress === 1) {
         if (growing) {
-          wrapper.style.height = null;
-          wrapper.style.overflowY = null;
+          this.$refs.wrapper.style.height = null;
+          this.$refs.wrapper.style.overflowY = null;
         }
 
-        this.animationIsDone(growing);
+        this.animating = false;
+        this.open = growing;
         return done();
       }
 
       requestAnimationFrame(function () {
-        _this3.animate(growing, start, wrapper, done);
+        _this3.animate(growing, start, done);
       });
     }
   }
@@ -435,9 +430,9 @@ __webpack_require__.r(__webpack_exports__);
 
 Nova.booting(function (Vue, router) {
   // Turn on for to get the Devtools to show up.
-  Vue.config.devtools = true;
-  __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue; // Required for Refine Vue2 to work.
-
+  // Vue.config.devtools = true;
+  // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
+  // Required for Refine Vue2 to work.
   Vue.use(_vue_composition_api__WEBPACK_IMPORTED_MODULE_5__["default"]);
   Vue.use(_hammerstone_refine_vue2_dev__WEBPACK_IMPORTED_MODULE_1__.RefinePlugin); // Custom components for our Nova flavor.
 
@@ -1642,6 +1637,7 @@ var render = function () {
               expression: "show",
             },
           ],
+          ref: "wrapper",
         },
         [_vm._t("default")],
         2

@@ -3,7 +3,7 @@
 /.styleci           export-ignore
 /.github            export-ignore
 
-/frontend/nova3/dist/css/card.css  binary
-/frontend/nova3/dist/js/card.js    binary
-/frontend/nova4/dist/css/card.css  binary
-/frontend/nova4/dist/js/card.js    binary
+/nova3/dist/css/card.css  binary
+/nova3/dist/js/card.js    binary
+/nova4/dist/css/card.css  binary
+/nova4/dist/js/card.js    binary
