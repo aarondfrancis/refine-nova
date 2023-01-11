@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Nova\Events\ServingNova;
+use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Fields\FieldCollection;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 
 class CardServiceProvider extends ServiceProvider
@@ -34,6 +37,25 @@ class CardServiceProvider extends ServiceProvider
         Nova::serving(function (ServingNova $event) use ($path) {
             Nova::script('refine-nova-card', __DIR__ . "/../dist/$path/js/card.js");
             Nova::style('refine-nova', __DIR__ . "/../dist/$path/css/card.css");
+        });
+
+        /** @TODO */
+        FieldCollection::macro('onlyRequested', function (NovaRequest $request) {
+            $fields = $request->get('refined_fields');
+
+            if (is_string($fields)) {
+                $fields = explode(',', $fields);
+            }
+
+            if (empty($fields)) {
+                return $this;
+            }
+
+            return $this
+                ->filter(function (Field $field) use ($fields) {
+                    return in_array($field->attribute, $fields);
+                })
+                ->values();
         });
     }
 

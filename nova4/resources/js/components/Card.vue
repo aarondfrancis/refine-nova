@@ -32,6 +32,10 @@
           <button class="text-80" @click.prevent="collapsed = !collapsed">Expand Filter</button>
         </div>
       </slide-down>
+
+      <Teleport v-if='target' :to='target' >
+        <test style='order: -1' :fields='card.fields'></test>
+      </Teleport>
     </div>
   </div>
 </template>
@@ -42,6 +46,7 @@ function getDarkMode() {
   return document.documentElement.classList.contains('dark');
 }
 
+import Test from './Test.vue'
 import { QueryBuilder } from '@hammerstone/refine-vue3-dev';
 import novaFlavor from '../flavors/nova4';
 import SlideDown from './SlideDown';
@@ -53,6 +58,7 @@ export default {
   props: ['card', 'resourceName'],
 
   components: {
+    Test,
     SlideDown,
     QueryBuilder,
   },
@@ -63,6 +69,7 @@ export default {
     return {
       flavor: novaFlavor,
       dark: false,
+      target: null,
       errors: {},
       lastAppliedBlueprint: filter.blueprint,
       collapsed: store.get('refine-collapsed', false),
@@ -97,6 +104,10 @@ export default {
 
   mounted() {
     this.dark = getDarkMode();
+
+    let el = document.querySelector('[dusk="filter-selector"]');
+
+    this.target = el.parentNode;
 
     let observer = new MutationObserver(() => {
       this.dark = getDarkMode();
@@ -170,7 +181,6 @@ export default {
     },
 
     submit() {
-      console.log('here');
       this.errors = {};
       Nova.request()
         // Because of the way Nova works, we have to make a round trip to

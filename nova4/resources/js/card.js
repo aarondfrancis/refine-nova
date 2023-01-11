@@ -55,6 +55,10 @@ function attachInterceptors(axios) {
         if (endsWith(key, '_refine')) {
           config.params[key] = value;
         }
+
+        if (endsWith(key, 'refined_fields')) {
+          config.params[key] = value;
+        }
       });
     }
 
