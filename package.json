@@ -12,9 +12,9 @@
         "prod:nova3": "cd nova3 && npm run prod",
         "prod:nova4": "cd nova4 && npm run prod",
         "prod": "concurrently npm:prod:*",
-        "prepare:nova3": "cd nova3 && npm ci",
-        "prepare:nova4": "cd nova4 && npm ci && npm run nova:install",
-        "prepare": "concurrently npm:prepare:*",
+        "prep:nova3": "cd nova3 && npm ci",
+        "prep:nova4": "cd nova4 && npm ci && npm run nova:install",
+        "prep": "concurrently npm:prepare:*",
         "build": "npm run prepare && npm run prod"
     },
     "devDependencies": {
