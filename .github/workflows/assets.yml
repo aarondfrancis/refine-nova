@@ -17,8 +17,8 @@ jobs:
       - name: Install root dependencies
         run: npm ci
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
         with:
           path: ~/.composer/cache/files
           key: dependencies-laravel-composer-${{ hashFiles('composer.json') }}
@@ -37,9 +37,6 @@ jobs:
         run: |
           composer config http-basic.nova.laravel.com aarondfrancis@gmail.com ${{ env.NOVA_KEY }}
           composer config http-basic.refine.unlock.sh aarondfrancis@gmail.com ${{ env.REFINE_KEY }}
-
-      - name: Install root dependencies
-        run: npm ci
 
       - name: Build everything
         run: npm run build

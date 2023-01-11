@@ -14,8 +14,8 @@
         "prod": "concurrently npm:prod:*",
         "prep:nova3": "cd nova3 && npm ci",
         "prep:nova4": "cd nova4 && npm ci && npm run nova:install",
-        "prep": "concurrently npm:prepare:*",
-        "build": "npm run prepare && npm run prod"
+        "prep": "concurrently npm:prep:*",
+        "build": "npm run prep && npm run prod"
     },
     "devDependencies": {
         "concurrently": "^7.6.0"
