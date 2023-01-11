@@ -5,10 +5,17 @@
     "scripts": {
         "watch:nova3": "cd nova3 && npm run watch",
         "watch:nova4": "cd nova4 && npm run watch",
-        "watch": "concurrently \"npm:watch:*\"",
+        "watch": "concurrently npm:watch:*",
         "dev:nova3": "cd nova3 && npm run dev",
         "dev:nova4": "cd nova4 && npm run dev",
-        "dev": "concurrently \"npm:dev:*\""
+        "dev": "concurrently npm:dev:*",
+        "prod:nova3": "cd nova3 && npm run prod",
+        "prod:nova4": "cd nova4 && npm run prod",
+        "prod": "concurrently npm:prod:*",
+        "prepare:nova3": "cd nova3 && npm ci",
+        "prepare:nova4": "cd nova4 && npm ci && npm run nova:install",
+        "prepare": "concurrently npm:prepare:*",
+        "build": "npm run prepare && npm run prod"
     },
     "devDependencies": {
         "concurrently": "^7.6.0"

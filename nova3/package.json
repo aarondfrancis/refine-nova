@@ -4,7 +4,7 @@
         "demi": "vue-demi-switch 2",
         "dev": "npm run demi && mix",
         "watch": "npm run demi && mix watch",
-        "prod": "npm run demi && mix --production"
+        "prod": "npm run demi && mix # @TODO Cant use --production here because it mangles something with vue-demi."
     },
     "devDependencies": {
         "cross-env": "^5.0.0",

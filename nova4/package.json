@@ -4,7 +4,7 @@
         "demi": "vue-demi-switch 3",
         "dev": "npm run demi && mix",
         "watch": "npm run demi && mix watch",
-        "prod": "npm run demi && mix --production",
+        "prod": "npm run demi && mix # @TODO Cant use --production here because it mangles something with vue-demi.",
         "nova:install": "composer update --working-dir \"../\" --with laravel/nova:\"^4.0\" && npm --prefix='../vendor/laravel/nova' ci"
     },
     "devDependencies": {
