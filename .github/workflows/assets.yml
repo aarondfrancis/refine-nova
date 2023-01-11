@@ -34,9 +34,13 @@ jobs:
         env:
           NOVA_KEY: ${{ secrets.NOVA_KEY }}
           REFINE_KEY: ${{ secrets.REFINE_KEY }}
-        run: |
-          composer config http-basic.nova.laravel.com aarondfrancis@gmail.com ${{ env.NOVA_KEY }}
-          composer config http-basic.refine.unlock.sh aarondfrancis@gmail.com ${{ env.REFINE_KEY }}
+        run: composer config http-basic.nova.laravel.com aarondfrancis@gmail.com ${{ env.NOVA_KEY }}
+
+      - name: Composer auth
+        env:
+          NOVA_KEY: ${{ secrets.NOVA_KEY }}
+          REFINE_KEY: ${{ secrets.REFINE_KEY }}
+        run: composer config http-basic.refine.unlock.sh aarondfrancis@gmail.com ${{ env.REFINE_KEY }}
 
       - name: Build everything
         run: npm run build
