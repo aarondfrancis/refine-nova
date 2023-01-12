@@ -51,13 +51,11 @@ export default {
       this.$refs.wrapper.style.overflowY = 'hidden'
     },
 
-    enter: function (arg1, arg2) {
-      let done = true ? arg1 : arg2
+    enter: function (el, done) {
       this.$nextTick(() => this.animate(true, +Date.now(), done))
     },
 
-    leave: function (arg1, arg2) {
-      let done = true ? arg1 : arg2
+    leave: function (el, done) {
       this.$nextTick(() => this.animate(false, +Date.now(), done))
     },
 

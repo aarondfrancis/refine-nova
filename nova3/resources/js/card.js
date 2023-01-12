@@ -1,6 +1,6 @@
 import VueCompositionApi from '@vue/composition-api'
 import Card from './components/Card'
-import { RefinePlugin } from '@hammerstone/refine-vue2-dev'
+import { RefinePlugin } from '@hammerstone/refine-vue2'
 
 // Custom components for Nova 3.
 import NovaDatePicker from './components/DatePicker'

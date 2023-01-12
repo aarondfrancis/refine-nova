@@ -51,7 +51,7 @@ function getDarkMode() {
   return document.documentElement.classList.contains('dark')
 }
 
-import { QueryBuilder } from '@hammerstone/refine-vue3-dev'
+import { QueryBuilder } from '@hammerstone/refine-vue3'
 import novaFlavor from '../flavors/nova4'
 import SlideDown from './SlideDown'
 import store from 'store2'

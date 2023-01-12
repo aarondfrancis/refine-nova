@@ -1,10 +1,10 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/@hammerstone/refine-vue2-dev/dist/vue2/refine-vue.esm.js":
-/*!*******************************************************************************!*\
-  !*** ./node_modules/@hammerstone/refine-vue2-dev/dist/vue2/refine-vue.esm.js ***!
-  \*******************************************************************************/
+/***/ "./node_modules/@hammerstone/refine-vue2/dist/vue2/refine-vue.esm.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@hammerstone/refine-vue2/dist/vue2/refine-vue.esm.js ***!
+  \***************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38,7 +38,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _hammerstone_refine_vue2_dev__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hammerstone/refine-vue2-dev */ "./node_modules/@hammerstone/refine-vue2-dev/dist/vue2/refine-vue.esm.js");
+/* harmony import */ var _hammerstone_refine_vue2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @hammerstone/refine-vue2 */ "./node_modules/@hammerstone/refine-vue2/dist/vue2/refine-vue.esm.js");
 /* harmony import */ var _flavors_nova__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../flavors/nova */ "./resources/js/flavors/nova.js");
 /* harmony import */ var _SlideDown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SlideDown */ "./resources/js/components/SlideDown.vue");
 /* harmony import */ var store2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! store2 */ "./node_modules/store2/dist/store2.js");
@@ -84,6 +84,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -92,7 +103,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   props: ['card', 'resourceName'],
   components: {
     SlideDown: _SlideDown__WEBPACK_IMPORTED_MODULE_2__["default"],
-    QueryBuilder: _hammerstone_refine_vue2_dev__WEBPACK_IMPORTED_MODULE_0__.QueryBuilder
+    QueryBuilder: _hammerstone_refine_vue2__WEBPACK_IMPORTED_MODULE_0__.QueryBuilder
   },
   data: function data() {
     var filter = _.toPlainObject(this.card.filter);
@@ -324,6 +335,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     show: {
@@ -355,18 +371,16 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.wrapper.style.height = this.outerHeight(this.$refs.wrapper) + 'px';
       this.$refs.wrapper.style.overflowY = 'hidden';
     },
-    enter: function enter(arg1, arg2) {
+    enter: function enter(el, done) {
       var _this = this;
 
-      var done =  true ? arg1 : 0;
       this.$nextTick(function () {
         return _this.animate(true, +Date.now(), done);
       });
     },
-    leave: function leave(arg1, arg2) {
+    leave: function leave(el, done) {
       var _this2 = this;
 
-      var done =  true ? arg1 : 0;
       this.$nextTick(function () {
         return _this2.animate(false, +Date.now(), done);
       });
@@ -417,7 +431,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vue_composition_api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @vue/composition-api */ "./node_modules/@vue/composition-api/dist/vue-composition-api.mjs");
 /* harmony import */ var _components_Card__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Card */ "./resources/js/components/Card.vue");
-/* harmony import */ var _hammerstone_refine_vue2_dev__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @hammerstone/refine-vue2-dev */ "./node_modules/@hammerstone/refine-vue2-dev/dist/vue2/refine-vue.esm.js");
+/* harmony import */ var _hammerstone_refine_vue2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @hammerstone/refine-vue2 */ "./node_modules/@hammerstone/refine-vue2/dist/vue2/refine-vue.esm.js");
 /* harmony import */ var _components_DatePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/DatePicker */ "./resources/js/components/DatePicker.vue");
 /* harmony import */ var _components_OrButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/OrButton */ "./resources/js/components/OrButton.vue");
 /* harmony import */ var _components_GroupDivider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/GroupDivider */ "./resources/js/components/GroupDivider.vue");
@@ -434,7 +448,7 @@ Nova.booting(function (Vue, router) {
   // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
   // Required for Refine Vue2 to work.
   Vue.use(_vue_composition_api__WEBPACK_IMPORTED_MODULE_5__["default"]);
-  Vue.use(_hammerstone_refine_vue2_dev__WEBPACK_IMPORTED_MODULE_1__.RefinePlugin); // Custom components for our Nova flavor.
+  Vue.use(_hammerstone_refine_vue2__WEBPACK_IMPORTED_MODULE_1__.RefinePlugin); // Custom components for our Nova flavor.
 
   Vue.component('refine-custom-or-button', _components_OrButton__WEBPACK_IMPORTED_MODULE_3__["default"]);
   Vue.component('refine-custom-group-divider', _components_GroupDivider__WEBPACK_IMPORTED_MODULE_4__["default"]);
@@ -1381,7 +1395,7 @@ var render = function () {
                     },
                   },
                 },
-                [_vm._v("Collapse")]
+                [_vm._v("\n          Collapse\n        ")]
               ),
               _vm._v(" "),
               _c(
@@ -1395,7 +1409,7 @@ var render = function () {
                     },
                   },
                 },
-                [_vm._v("Filter")]
+                [_vm._v("\n          Filter\n        ")]
               ),
             ]),
           ],
@@ -1424,7 +1438,7 @@ var render = function () {
                   },
                 },
               },
-              [_vm._v("Expand Filter")]
+              [_vm._v("\n        Expand Filter\n      ")]
             ),
           ]
         ),

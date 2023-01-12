@@ -1,6 +1,6 @@
 import Card from './components/Card'
 import endsWith from 'lodash/endsWith'
-import { RefinePlugin } from '@hammerstone/refine-vue3-dev'
+import { RefinePlugin } from '@hammerstone/refine-vue3'
 
 import SelectIcon from './components/SelectIcon'
 import OrButton from './components/OrButton'

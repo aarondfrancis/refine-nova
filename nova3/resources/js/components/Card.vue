@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { QueryBuilder } from '@hammerstone/refine-vue2-dev'
+import { QueryBuilder } from '@hammerstone/refine-vue2'
 import novaFlavor from '../flavors/nova'
 import SlideDown from './SlideDown'
 import store from 'store2'
