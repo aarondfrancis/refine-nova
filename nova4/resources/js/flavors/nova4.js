@@ -33,7 +33,7 @@ const novaFlavor = {
       component: 'custom-group-divider',
       // Dont show the divider on the last iteration
       class: ({ index, total }) => {
-        return index === total - 1 ? 'hidden' : 'flex';
+        return index === total - 1 ? 'hidden' : 'flex'
       },
     },
 
@@ -68,10 +68,12 @@ const novaFlavor = {
   criterion: {
     wrapper: {
       order: ['selector', 'remove', 'errors'],
-      class: 'flex flex-wrap border-b border-gray-100 dark:border-gray-700 py-3 pl-2',
+      class:
+        'flex flex-wrap border-b border-gray-100 dark:border-gray-700 py-3 pl-2',
     },
     removeCriterionButton: {
-      class: 'ml-auto py-2 px-4 flex items-center text-gray-300 hover:text-gray-500 dark:hover:text-white',
+      class:
+        'ml-auto py-2 px-4 flex items-center text-gray-300 hover:text-gray-500 dark:hover:text-white',
       icon: {
         class: 'h-5 w-5',
       },
@@ -100,30 +102,38 @@ const novaFlavor = {
 
     listbox: {
       class: ({ isClosed }) => {
-        return isClosed ? 'hidden' : 'focus:outline-none max-h-60 shadow list-reset rounded overflow-auto';
+        return isClosed
+          ? 'hidden'
+          : 'focus:outline-none max-h-60 shadow list-reset rounded overflow-auto'
       },
 
       wrapper: {
-        class: 'absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 rounded shadow-lg',
+        class:
+          'absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 rounded shadow-lg',
       },
 
       item: {
         class: ({ isHighlighted }) => {
           return `py-2 pr-8 pl-3 relative cursor-pointer select-none ${
             isHighlighted ? 'bg-primary-600 text-white' : ''
-          }`;
+          }`
         },
 
         text: {
-          class: (options) => `block truncate ${options.selected ? 'font-semibold' : 'font-normal'}`,
+          class: options =>
+            `block truncate ${
+              options.selected ? 'font-semibold' : 'font-normal'
+            }`,
         },
 
         icon: {
           class: 'w-5 h-5',
           wrapper: {
-            class: (options) =>
+            class: options =>
               `absolute top-0 bottom-0 right-0 flex items-center pr-4 ${
-                !options.isHighlighted ? 'text-blue-600 dark:text-gray-400' : 'text-white  dark:text-white'
+                !options.isHighlighted
+                  ? 'text-blue-600 dark:text-gray-400'
+                  : 'text-white  dark:text-white'
               }`,
           },
         },
@@ -131,7 +141,8 @@ const novaFlavor = {
     },
 
     button: {
-      class: 'w-full block form-control form-select text-left form-select-bordered flex items-center',
+      class:
+        'w-full block form-control form-select text-left form-select-bordered flex items-center',
 
       placeholder: {
         class: 'block text-gray-300 truncate select-none',
@@ -151,7 +162,8 @@ const novaFlavor = {
 
     multi: {
       button: {
-        class: 'form-control form-select w-full text-left flex items-center overflow-x-auto',
+        class:
+          'form-control form-select w-full text-left flex items-center overflow-x-auto',
 
         placeholder: {
           class: 'block text-gray-300 truncate select-none',
@@ -219,6 +231,6 @@ const novaFlavor = {
       class: 'form-control form-input form-input-bordered',
     },
   },
-};
+}
 
-export default novaFlavor;
+export default novaFlavor

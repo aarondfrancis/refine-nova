@@ -14,7 +14,7 @@ class StabilizationController
     public function stabilize(Request $request)
     {
         $filter = Filter::fromState([
-            'type'      => $request->type,
+            'type' => $request->type,
             'blueprint' => $request->blueprint,
         ]);
 

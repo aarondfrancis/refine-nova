@@ -32,8 +32,8 @@ class CardServiceProvider extends ServiceProvider
         $path = Str::startsWith(Nova::version(), '4.') ? 'nova4' : 'nova3';
 
         Nova::serving(function (ServingNova $event) use ($path) {
-            Nova::script('refine-nova-card', __DIR__."/../dist/$path/js/card.js");
-            Nova::style('refine-nova', __DIR__."/../dist/$path/css/card.css");
+            Nova::script('refine-nova-card', __DIR__ . "/../dist/$path/js/card.js");
+            Nova::style('refine-nova', __DIR__ . "/../dist/$path/css/card.css");
         });
     }
 
@@ -50,7 +50,7 @@ class CardServiceProvider extends ServiceProvider
 
         Route::middleware(['nova'])
             ->prefix('nova-vendor/refine-nova')
-            ->group(__DIR__.'/../routes/api.php');
+            ->group(__DIR__ . '/../routes/api.php');
     }
 
     /**

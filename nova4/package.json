@@ -1,23 +1,23 @@
 {
-    "private": true,
-    "scripts": {
-        "demi": "vue-demi-switch 3",
-        "dev": "npm run demi && mix",
-        "watch": "npm run demi && mix watch",
-        "prod": "npm run demi && mix # @TODO Cant use --production here because it mangles something with vue-demi.",
-        "nova:install": "composer update --working-dir \"../\" --with laravel/nova:\"^4.0\" && npm --prefix='../vendor/laravel/nova' ci"
-    },
-    "devDependencies": {
-        "@vue/compiler-sfc": "^3.2.22",
-        "laravel-mix": "^6.0.41",
-        "postcss": "^8.3.11",
-        "tailwindcss": "^3.2.4",
-        "vue-loader": "^16.8.3"
-    },
-    "dependencies": {
-        "@hammerstone/refine-vue3-dev": "^1.0.1673298944",
-        "lodash": "^4.17.21",
-        "store2": "^2.14.2",
-        "webpack-bundle-analyzer": "^4.7.0"
-    }
+  "private": true,
+  "scripts": {
+    "demi": "vue-demi-switch 3",
+    "dev": "npm run demi && mix",
+    "watch": "npm run demi && mix watch",
+    "prod": "npm run demi && mix # @TODO Cant use --production here because it mangles something with vue-demi.",
+    "nova:install": "composer update --working-dir \"../\" --with laravel/nova:\"^4.0\" && npm --prefix='../vendor/laravel/nova' ci"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.22",
+    "laravel-mix": "^6.0.41",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^3.2.4",
+    "vue-loader": "^16.8.3"
+  },
+  "dependencies": {
+    "@hammerstone/refine-vue3-dev": "^1.0.1673298944",
+    "lodash": "^4.17.21",
+    "store2": "^2.14.2",
+    "webpack-bundle-analyzer": "^4.7.0"
+  }
 }

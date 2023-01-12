@@ -29,8 +29,8 @@ export default {
 
   methods: {
     handleChange(value) {
-      this.$emit('input', { value });
+      this.$emit('input', { value })
     },
   },
-};
+}
 </script>

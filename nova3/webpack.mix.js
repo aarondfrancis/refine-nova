@@ -1,5 +1,6 @@
-const mix = require('laravel-mix');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const mix = require('laravel-mix')
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 mix
   .setPublicPath('dist')
@@ -13,4 +14,4 @@ mix
     plugins: [
       // new BundleAnalyzerPlugin()
     ],
-  });
+  })

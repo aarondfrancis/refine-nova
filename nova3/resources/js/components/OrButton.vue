@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import HeroiconPlus from './HeroIconPlus';
+import HeroiconPlus from './HeroIconPlus'
 
 export default {
   inheritAttrs: true,
   components: {
     HeroiconPlus,
   },
-};
+}
 </script>

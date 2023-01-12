@@ -1,9 +1,9 @@
 /* Shims for Tailwind 0.7.4 */
 .first\:rounded-t-lg:first-child {
-    border-top-left-radius: .5rem;
-    border-top-right-radius: .5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 
 .max-h-60 {
-    max-height: 15rem;
+  max-height: 15rem;
 }
