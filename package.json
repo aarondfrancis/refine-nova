@@ -19,6 +19,7 @@
     "format": "prettier . -w"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "prettier": "^2.8.2"
   }
 }
