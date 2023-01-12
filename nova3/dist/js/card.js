@@ -1498,22 +1498,15 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "my-2 text-80 items-center" }, [
+    _c("div", { staticClass: "border-t w-4 border-60" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "mx-2 text-sm" }, [_vm._v(_vm._s(_vm.__("Or")))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "border-t w-full border-60 mr-1" }),
+  ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "my-2 text-80 items-center" }, [
-      _c("div", { staticClass: "border-t w-4 border-60" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "mx-2 text-sm" }, [_vm._v("Or")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "border-t w-full border-60 mr-1" }),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -1587,7 +1580,7 @@ var render = function () {
     [
       _c("heroicon-plus"),
       _vm._v(" "),
-      _c("span", { staticClass: "pt-px" }, [_vm._v("Or")]),
+      _c("span", { staticClass: "pt-px" }, [_vm._v(_vm._s(_vm.__("Or")))]),
     ],
     1
   )
