@@ -439,6 +439,19 @@ var _hoisted_2 = {
 var _hoisted_3 = {
   "class": "border rounded-lg shadow border-50 p-4 text-80 bg-white flex items-center justify-between text-sm"
 };
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  "stroke-width": "1.5",
+  stroke: "currentColor",
+  "class": "w-6 h-6"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  d: "M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+})], -1 /* HOISTED */);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_query_builder = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("query-builder");
   var _component_slide_down = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("slide-down");
@@ -489,11 +502,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     key: 0,
     to: $data.target
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_test, {
-    style: {
-      "order": "-1"
-    },
+    style: {},
     fields: $props.card.fields
-  }, null, 8 /* PROPS */, ["fields"])], 8 /* PROPS */, ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */)]);
+  }, null, 8 /* PROPS */, ["fields"])], 8 /* PROPS */, ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.target ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Teleport, {
+    key: 1,
+    to: $data.target
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_test, {
+    style: {},
+    fields: $props.card.fields
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_4];
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["fields"])], 8 /* PROPS */, ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */)]);
 }
 
 /***/ }),
@@ -536,7 +558,7 @@ var _hoisted_4 = {
 };
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
   "class": "px-3 text-xs uppercase font-bold tracking-wide"
-}, " Columns ", -1 /* HOISTED */);
+}, " Download As ", -1 /* HOISTED */);
 var _hoisted_6 = {
   "class": "mt-1 px-3"
 };
@@ -594,13 +616,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "toolbar-button px-2"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_2];
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default", {}, function () {
+            return [_hoisted_2];
+          })];
         }),
-        _: 1 /* STABLE */
+        _: 3 /* FORWARDED */
       })];
     }),
 
-    _: 1 /* STABLE */
+    _: 3 /* FORWARDED */
   }, 8 /* PROPS */, ["onMenuClosed"]);
 }
 
