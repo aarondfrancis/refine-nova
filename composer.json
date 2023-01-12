@@ -9,13 +9,23 @@
     "require": {
         "php": "^7.2|^8.0",
         "hammerstone/refine-laravel": "^0.3.4",
-        "laravel/nova": "^2.12|^3.0"
+        "laravel/nova": "^2.12|^3.0|^4.0"
     },
     "autoload": {
         "psr-4": {
             "Hammerstone\\Refine\\Nova\\": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        },
+        {
+            "type": "composer",
+            "url": "https://refine.composer.sh"
+        }
+    ],
     "extra": {
         "laravel": {
             "providers": [

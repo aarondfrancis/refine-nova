@@ -1,0 +1,347 @@
+.refine-nova-card .pointer-events-none {
+    pointer-events: none
+}
+.refine-nova-card .absolute {
+    position: absolute
+}
+.refine-nova-card .relative {
+    position: relative
+}
+.refine-nova-card .top-0 {
+    top: 0px
+}
+.refine-nova-card .bottom-0 {
+    bottom: 0px
+}
+.refine-nova-card .right-0 {
+    right: 0px
+}
+.refine-nova-card .z-10 {
+    z-index: 10
+}
+.refine-nova-card .my-2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem
+}
+.refine-nova-card .mx-2 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem
+}
+.refine-nova-card .mr-6 {
+    margin-right: 1.5rem
+}
+.refine-nova-card .mr-1 {
+    margin-right: 0.25rem
+}
+.refine-nova-card .-mt-px {
+    margin-top: -1px
+}
+.refine-nova-card .mb-4 {
+    margin-bottom: 1rem
+}
+.refine-nova-card .mt-px {
+    margin-top: 1px
+}
+.refine-nova-card .ml-auto {
+    margin-left: auto
+}
+.refine-nova-card .mt-2 {
+    margin-top: 0.5rem
+}
+.refine-nova-card .mr-4 {
+    margin-right: 1rem
+}
+.refine-nova-card .mt-1 {
+    margin-top: 0.25rem
+}
+.refine-nova-card .mr-3 {
+    margin-right: 0.75rem
+}
+.refine-nova-card .ml-1 {
+    margin-left: 0.25rem
+}
+.refine-nova-card .ml-2 {
+    margin-left: 0.5rem
+}
+.refine-nova-card .mr-2 {
+    margin-right: 0.5rem
+}
+.refine-nova-card .block {
+    display: block
+}
+.refine-nova-card .flex {
+    display: flex
+}
+.refine-nova-card .inline-flex {
+    display: inline-flex
+}
+.refine-nova-card .hidden {
+    display: none
+}
+.refine-nova-card .h-9 {
+    height: 2.25rem
+}
+.refine-nova-card .h-4 {
+    height: 1rem
+}
+.refine-nova-card .h-5 {
+    height: 1.25rem
+}
+.refine-nova-card .max-h-60 {
+    max-height: 15rem
+}
+.refine-nova-card .w-4 {
+    width: 1rem
+}
+.refine-nova-card .w-full {
+    width: 100%
+}
+.refine-nova-card .w-5 {
+    width: 1.25rem
+}
+.refine-nova-card .w-48 {
+    width: 12rem
+}
+.refine-nova-card .w-auto {
+    width: auto
+}
+.refine-nova-card .flex-shrink-0 {
+    flex-shrink: 0
+}
+.refine-nova-card .cursor-pointer {
+    cursor: pointer
+}
+.refine-nova-card .select-none {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none
+}
+.refine-nova-card .list-none {
+    list-style-type: none
+}
+.refine-nova-card .flex-wrap {
+    flex-wrap: wrap
+}
+.refine-nova-card .items-start {
+    align-items: flex-start
+}
+.refine-nova-card .items-center {
+    align-items: center
+}
+.refine-nova-card .justify-between {
+    justify-content: space-between
+}
+.refine-nova-card .gap-\[1ch\] {
+    gap: 1ch
+}
+.refine-nova-card .overflow-auto {
+    overflow: auto
+}
+.refine-nova-card .overflow-x-auto {
+    overflow-x: auto
+}
+.refine-nova-card .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+.refine-nova-card .rounded {
+    border-radius: 0.25rem
+}
+.refine-nova-card .rounded-lg {
+    border-radius: 0.5rem
+}
+.refine-nova-card .rounded-b-lg {
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem
+}
+.refine-nova-card .border {
+    border-width: 1px
+}
+.refine-nova-card .border-t {
+    border-top-width: 1px
+}
+.refine-nova-card .border-b {
+    border-bottom-width: 1px
+}
+.refine-nova-card .border-gray-100 {
+    border-color: rgba(var(--colors-gray-100))
+}
+.refine-nova-card .bg-primary-500 {
+    background-color: rgba(var(--colors-primary-500))
+}
+.refine-nova-card .bg-white {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+.refine-nova-card .bg-primary-600 {
+    background-color: rgba(var(--colors-primary-600))
+}
+.refine-nova-card .fill-current {
+    fill: currentColor
+}
+.refine-nova-card .p-4 {
+    padding: 1rem
+}
+.refine-nova-card .p-2 {
+    padding: 0.5rem
+}
+.refine-nova-card .p-1 {
+    padding: 0.25rem
+}
+.refine-nova-card .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem
+}
+.refine-nova-card .py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem
+}
+.refine-nova-card .py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem
+}
+.refine-nova-card .pl-4 {
+    padding-left: 1rem
+}
+.refine-nova-card .pt-px {
+    padding-top: 1px
+}
+.refine-nova-card .pl-2 {
+    padding-left: 0.5rem
+}
+.refine-nova-card .pt-4 {
+    padding-top: 1rem
+}
+.refine-nova-card .pr-8 {
+    padding-right: 2rem
+}
+.refine-nova-card .pl-3 {
+    padding-left: 0.75rem
+}
+.refine-nova-card .pr-4 {
+    padding-right: 1rem
+}
+.refine-nova-card .text-left {
+    text-align: left
+}
+.refine-nova-card .text-right {
+    text-align: right
+}
+.refine-nova-card .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem
+}
+.refine-nova-card .text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem
+}
+.refine-nova-card .font-bold {
+    font-weight: 700
+}
+.refine-nova-card .font-semibold {
+    font-weight: 600
+}
+.refine-nova-card .font-normal {
+    font-weight: 400
+}
+.refine-nova-card .text-white {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity))
+}
+.refine-nova-card .text-gray-400 {
+    color: rgba(var(--colors-gray-400))
+}
+.refine-nova-card .text-gray-300 {
+    color: rgba(var(--colors-gray-300))
+}
+.refine-nova-card .text-blue-600 {
+    color: rgba(var(--colors-blue-600))
+}
+.refine-nova-card .text-gray-500 {
+    color: rgba(var(--colors-gray-500))
+}
+.refine-nova-card .shadow {
+    --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.refine-nova-card .shadow-lg {
+    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.refine-nova-card .ring-primary-200 {
+    --tw-ring-color: rgba(var(--colors-primary-200))
+}
+.refine-nova-card .filter {
+    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+}
+.refine-nova-card .transition {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+.refine-nova-card .first\:rounded-t-lg:first-child {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem
+}
+.refine-nova-card .hover\:bg-primary-400:hover {
+    background-color: rgba(var(--colors-primary-400))
+}
+.refine-nova-card .hover\:text-gray-500:hover {
+    color: rgba(var(--colors-gray-500))
+}
+.refine-nova-card .focus\:outline-none:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px
+}
+.refine-nova-card .focus\:ring:focus {
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
+}
+.refine-nova-card .active\:bg-primary-600:active {
+    background-color: rgba(var(--colors-primary-600))
+}
+.refine-nova-card .dark .dark\:border-gray-800 {
+    border-color: rgba(var(--colors-gray-800))
+}
+.refine-nova-card .dark .dark\:border-gray-700 {
+    border-color: rgba(var(--colors-gray-700))
+}
+.refine-nova-card .dark .dark\:bg-gray-800 {
+    background-color: rgba(var(--colors-gray-800))
+}
+.refine-nova-card .dark .dark\:text-gray-800 {
+    color: rgba(var(--colors-gray-800))
+}
+.refine-nova-card .dark .dark\:text-gray-400 {
+    color: rgba(var(--colors-gray-400))
+}
+.refine-nova-card .dark .dark\:text-white {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity))
+}
+.refine-nova-card .dark .dark\:ring-gray-600 {
+    --tw-ring-color: rgba(var(--colors-gray-600))
+}
+.refine-nova-card .dark .dark\:hover\:text-white:hover {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity))
+}
+@media (min-width: 640px) {
+    .refine-nova-card .sm\:inline-block {
+        display: inline-block
+    }
+}
+@media (min-width: 768px) {
+    .refine-nova-card .md\:flex {
+        display: flex
+    }
+    .refine-nova-card .md\:pt-0 {
+        padding-top: 0px
+    }
+}

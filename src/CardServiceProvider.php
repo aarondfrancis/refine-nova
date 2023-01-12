@@ -2,8 +2,11 @@
 
 namespace Hammerstone\Refine\Nova;
 
+use Hammerstone\Refine\Conditions\Clause;
+use Hammerstone\Refine\Frontend\Vue2Frontend;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 
@@ -20,9 +23,17 @@ class CardServiceProvider extends ServiceProvider
             $this->routes();
         });
 
-        Nova::serving(function (ServingNova $event) {
-            Nova::script('refine-nova-card', __DIR__ . '/../dist/js/card.js');
-            Nova::style('refine-nova', __DIR__ . '/../dist/css/card.css');
+        if (class_exists('\Hammerstone\Refine\Conditions\Clause')) {
+            if (is_null(Clause::$resolveComponentUsing)) {
+                Clause::$resolveComponentUsing = Vue2Frontend::class;
+            }
+        }
+
+        $path = Str::startsWith(Nova::version(), '4.') ? 'nova4' : 'nova3';
+
+        Nova::serving(function (ServingNova $event) use ($path) {
+            Nova::script('refine-nova-card', __DIR__."/../dist/$path/js/card.js");
+            Nova::style('refine-nova', __DIR__."/../dist/$path/css/card.css");
         });
     }
 
@@ -39,7 +50,7 @@ class CardServiceProvider extends ServiceProvider
 
         Route::middleware(['nova'])
             ->prefix('nova-vendor/refine-nova')
-            ->group(__DIR__ . '/../routes/api.php');
+            ->group(__DIR__.'/../routes/api.php');
     }
 
     /**

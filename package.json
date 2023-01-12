@@ -1,23 +1,24 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production"
-    },
-    "devDependencies": {
-        "cross-env": "^5.0.0",
-        "laravel-mix": "^6.0.39",
-        "vue-loader": "^15.9.8",
-        "vue-template-compiler": "^2.6.14",
-        "webpack-bundle-analyzer": "^4.5.0"
-    },
-    "dependencies": {
-        "@vue/composition-api": "^1.4.2",
-        "store2": "^2.13.1"
-    }
+  "name": "refine-nova",
+  "version": "0.0.0",
+  "author": "Aaron Francis <aarondfrancis@gmail.com> (http://aaronfrancis.com/)",
+  "scripts": {
+    "watch:nova3": "cd nova3 && npm run watch",
+    "watch:nova4": "cd nova4 && npm run watch",
+    "watch": "concurrently npm:watch:*",
+    "dev:nova3": "cd nova3 && npm run dev",
+    "dev:nova4": "cd nova4 && npm run dev",
+    "dev": "concurrently npm:dev:*",
+    "prod:nova3": "cd nova3 && npm run prod",
+    "prod:nova4": "cd nova4 && npm run prod",
+    "prod": "concurrently npm:prod:*",
+    "prep:nova3": "cd nova3 && npm ci",
+    "prep:nova4": "cd nova4 && npm ci && npm run nova:install",
+    "prep": "concurrently npm:prep:*",
+    "build": "npm run prep && npm run prod",
+    "format": "prettier . -w"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
 }

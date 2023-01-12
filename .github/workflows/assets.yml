@@ -1,0 +1,49 @@
+name: Compile assets
+
+on: [ push ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2 # This doesn't really matter, just need to get Nova 4.0 installed.
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+
+      - name: Composer auth
+        env:
+          NOVA_KEY: ${{ secrets.NOVA_KEY }}
+          REFINE_KEY: ${{ secrets.REFINE_KEY }}
+        run: |
+          composer config http-basic.nova.laravel.com aarondfrancis@gmail.com ${{ env.NOVA_KEY }}
+          composer config http-basic.refine.composer.sh aarondfrancis@gmail.com ${{ env.REFINE_KEY }}
+
+      - name: Build everything
+        run: npm run build
+
+      - name: Commit compiled files
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Compile Assets
+          # nova3/dist or nova4/dist
+          file_pattern: 'nova*/dist/**/*'

@@ -25,7 +25,7 @@ class RefineCard extends Card
         }
 
         return $this->withMeta([
-            'filter' => $filter
+            'filter' => $filter,
         ]);
     }
 

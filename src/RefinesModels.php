@@ -12,14 +12,40 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 trait RefinesModels
 {
     /**
-     * @param  NovaRequest  $request
+     * @param NovaRequest $request
+     *
      * @return string|Filter
      */
-    abstract public static function refineFilter(NovaRequest $request);
+    public static function refineFilter(NovaRequest $request = null)
+    {
+        return static::$filter;
+    }
 
     /**
-     * @param  NovaRequest  $request
+     * @param NovaRequest $request
+     *
+     * @return RefineCard
+     */
+    public static function refineCard(NovaRequest $request = null)
+    {
+        return RefineCard::forFilter(static::refineFilter($request));
+    }
+
+    /**
+     * @param NovaRequest $request
      * @param $query
+     *
+     * @return mixed
+     */
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return static::refine($request, $query);
+    }
+
+    /**
+     * @param NovaRequest $request
+     * @param $query
+     *
      * @return mixed
      */
     public static function refine(NovaRequest $request, $query)
@@ -30,8 +56,8 @@ trait RefinesModels
             $filter = app($filter);
         }
 
-        if ($id = $request->input(static::uriKey() . '_refine')) {
-            $filter = (new UrlEncodedStabilizer)->fromStableId($id);
+        if ($id = $request->input(static::uriKey().'_refine')) {
+            $filter = (new UrlEncodedStabilizer())->fromStableId($id);
         }
 
         // Typically we would start with the `initialQuery` from the filter,

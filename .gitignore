@@ -3,3 +3,7 @@
 .env
 npm-debug.log
 yarn-error.log
+/nova3/node_modules
+/nova4/node_modules
+auth.json
+composer.lock
