@@ -16,7 +16,7 @@
           />
 
           <div class="text-right">
-            <button @click.prevent="collapsed = !collapsed" class="text-sm mr-6 text-80">Collapse</button>
+            <button @click.prevent="collapsed = !collapsed" class="text-sm mr-6 text-80">{{ __('Collapse') }}</button>
             <button
               @click.prevent="submit"
               class="flex-shrink-0 shadow rounded focus:outline-none ring-primary-200 dark:ring-gray-600 focus:ring bg-primary-500 hover:bg-primary-400 active:bg-primary-600 text-white dark:text-gray-800 inline-flex items-center font-bold px-4 h-9 text-sm flex-shrink-0"
@@ -29,7 +29,7 @@
       <slide-down :show="collapsed">
         <div class="border rounded-lg shadow border-50 p-4 text-80 bg-white flex items-center justify-between text-sm">
           <div>{{ collapsedText }}</div>
-          <button class="text-80" @click.prevent="collapsed = !collapsed">Expand Filter</button>
+          <button class="text-80" @click.prevent="collapsed = !collapsed">{{ __('Expand Filter') }}</button>
         </div>
       </slide-down>
     </div>
@@ -124,7 +124,7 @@ export default {
     },
 
     collapsedText() {
-      return this.calculateCollapsedText(this.lastAppliedBlueprint);
+      return this.__(this.calculateCollapsedText(this.lastAppliedBlueprint));
     },
   },
 

@@ -1,7 +1,7 @@
 <template>
   <button v-on="$listeners">
     <heroicon-plus />
-    <span class="pt-px">Or</span>
+    <span class="pt-px">{{ __('Or') }}</span>
   </button>
 </template>
 

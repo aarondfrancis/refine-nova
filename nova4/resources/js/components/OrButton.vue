@@ -1,7 +1,7 @@
 <template>
   <button>
     <heroicon-plus />
-    <div class="pt-px text-xs font-bold">Or</div>
+    <div class="pt-px text-xs font-bold">{{ __('Or') }}</div>
   </button>
 </template>
 
