@@ -1,23 +1,25 @@
 {
-    "name": "refine-nova",
-    "version": "0.0.0",
-    "author": "Aaron Francis <aarondfrancis@gmail.com> (http://aaronfrancis.com/)",
-    "scripts": {
-        "watch:nova3": "cd nova3 && npm run watch",
-        "watch:nova4": "cd nova4 && npm run watch",
-        "watch": "concurrently npm:watch:*",
-        "dev:nova3": "cd nova3 && npm run dev",
-        "dev:nova4": "cd nova4 && npm run dev",
-        "dev": "concurrently npm:dev:*",
-        "prod:nova3": "cd nova3 && npm run prod",
-        "prod:nova4": "cd nova4 && npm run prod",
-        "prod": "concurrently npm:prod:*",
-        "prep:nova3": "cd nova3 && npm ci",
-        "prep:nova4": "cd nova4 && npm ci && npm run nova:install",
-        "prep": "concurrently npm:prep:*",
-        "build": "npm run prep && npm run prod"
-    },
-    "devDependencies": {
-        "concurrently": "^7.6.0"
-    }
+  "name": "refine-nova",
+  "version": "0.0.0",
+  "author": "Aaron Francis <aarondfrancis@gmail.com> (http://aaronfrancis.com/)",
+  "scripts": {
+    "watch:nova3": "cd nova3 && npm run watch",
+    "watch:nova4": "cd nova4 && npm run watch",
+    "watch": "concurrently npm:watch:*",
+    "dev:nova3": "cd nova3 && npm run dev",
+    "dev:nova4": "cd nova4 && npm run dev",
+    "dev": "concurrently npm:dev:*",
+    "prod:nova3": "cd nova3 && npm run prod",
+    "prod:nova4": "cd nova4 && npm run prod",
+    "prod": "concurrently npm:prod:*",
+    "prep:nova3": "cd nova3 && npm ci",
+    "prep:nova4": "cd nova4 && npm ci && npm run nova:install",
+    "prep": "concurrently npm:prep:*",
+    "build": "npm run prep && npm run prod",
+    "format": "prettier . -w"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "prettier": "^2.8.2"
+  }
 }

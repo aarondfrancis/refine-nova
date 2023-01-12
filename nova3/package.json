@@ -1,21 +1,21 @@
 {
-    "private": true,
-    "scripts": {
-        "demi": "vue-demi-switch 2",
-        "dev": "npm run demi && mix",
-        "watch": "npm run demi && mix watch",
-        "prod": "npm run demi && mix # @TODO Cant use --production here because it mangles something with vue-demi."
-    },
-    "devDependencies": {
-        "cross-env": "^5.0.0",
-        "laravel-mix": "^6.0.39",
-        "vue-loader": "^15.9.8",
-        "vue-template-compiler": "^2.6.14",
-        "webpack-bundle-analyzer": "^4.5.0"
-    },
-    "dependencies": {
-        "@hammerstone/refine-vue2-dev": "^1.0.1673298940",
-        "@vue/composition-api": "^1.7.1",
-        "store2": "^2.13.1"
-    }
+  "private": true,
+  "scripts": {
+    "demi": "vue-demi-switch 2",
+    "dev": "npm run demi && mix",
+    "watch": "npm run demi && mix watch",
+    "prod": "npm run demi && mix # @TODO Cant use --production here because it mangles something with vue-demi."
+  },
+  "devDependencies": {
+    "cross-env": "^5.0.0",
+    "laravel-mix": "^6.0.39",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14",
+    "webpack-bundle-analyzer": "^4.5.0"
+  },
+  "dependencies": {
+    "@hammerstone/refine-vue2": "^0.3.1",
+    "@vue/composition-api": "^1.7.1",
+    "store2": "^2.13.1"
+  }
 }

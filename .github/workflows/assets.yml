@@ -44,6 +44,6 @@ jobs:
       - name: Commit compiled files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Compile Assets
+          commit_message: Compile assets [ci skip]
           # nova3/dist or nova4/dist
           file_pattern: 'nova*/dist/**/*'

@@ -53,7 +53,7 @@ trait RefinesModels
         }
 
         if ($id = $request->input(static::uriKey() . '_refine')) {
-            $filter = (new UrlEncodedStabilizer)->fromStableId($id);
+            $filter = (new UrlEncodedStabilizer())->fromStableId($id);
         }
 
         // Typically we would start with the `initialQuery` from the filter,

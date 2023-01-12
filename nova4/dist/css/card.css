@@ -1,3 +1,14 @@
+.refine-nova-card .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0
+}
 .refine-nova-card .pointer-events-none {
     pointer-events: none
 }
@@ -30,6 +41,12 @@
 .refine-nova-card .mr-6 {
     margin-right: 1.5rem
 }
+.refine-nova-card .mt-1 {
+    margin-top: 0.25rem
+}
+.refine-nova-card .mt-2 {
+    margin-top: 0.5rem
+}
 .refine-nova-card .mr-1 {
     margin-right: 0.25rem
 }
@@ -45,14 +62,8 @@
 .refine-nova-card .ml-auto {
     margin-left: auto
 }
-.refine-nova-card .mt-2 {
-    margin-top: 0.5rem
-}
 .refine-nova-card .mr-4 {
     margin-right: 1rem
-}
-.refine-nova-card .mt-1 {
-    margin-top: 0.25rem
 }
 .refine-nova-card .mr-3 {
     margin-right: 0.75rem
@@ -81,6 +92,9 @@
 .refine-nova-card .h-9 {
     height: 2.25rem
 }
+.refine-nova-card .h-6 {
+    height: 1.5rem
+}
 .refine-nova-card .h-4 {
     height: 1rem
 }
@@ -89,6 +103,9 @@
 }
 .refine-nova-card .max-h-60 {
     max-height: 15rem
+}
+.refine-nova-card .w-6 {
+    width: 1.5rem
 }
 .refine-nova-card .w-4 {
     width: 1rem
@@ -133,6 +150,17 @@
 }
 .refine-nova-card .gap-\[1ch\] {
     gap: 1ch
+}
+.refine-nova-card .divide-y > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(1px * var(--tw-divide-y-reverse))
+}
+.refine-nova-card .divide-solid > :not([hidden]) ~ :not([hidden]) {
+    border-style: solid
+}
+.refine-nova-card .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(var(--colors-gray-200))
 }
 .refine-nova-card .overflow-auto {
     overflow: auto
@@ -193,6 +221,14 @@
     padding-left: 1rem;
     padding-right: 1rem
 }
+.refine-nova-card .px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem
+}
+.refine-nova-card .px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem
+}
 .refine-nova-card .py-3 {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem
@@ -203,6 +239,12 @@
 }
 .refine-nova-card .pl-4 {
     padding-left: 1rem
+}
+.refine-nova-card .pt-2 {
+    padding-top: 0.5rem
+}
+.refine-nova-card .pb-3 {
+    padding-bottom: 0.75rem
 }
 .refine-nova-card .pt-px {
     padding-top: 1px
@@ -244,6 +286,12 @@
 }
 .refine-nova-card .font-normal {
     font-weight: 400
+}
+.refine-nova-card .uppercase {
+    text-transform: uppercase
+}
+.refine-nova-card .tracking-wide {
+    letter-spacing: 0.025em
 }
 .refine-nova-card .text-white {
     --tw-text-opacity: 1;
@@ -291,6 +339,9 @@
 .refine-nova-card .hover\:bg-primary-400:hover {
     background-color: rgba(var(--colors-primary-400))
 }
+.refine-nova-card .hover\:bg-gray-100:hover {
+    background-color: rgba(var(--colors-gray-100))
+}
 .refine-nova-card .hover\:text-gray-500:hover {
     color: rgba(var(--colors-gray-500))
 }
@@ -306,11 +357,17 @@
 .refine-nova-card .active\:bg-primary-600:active {
     background-color: rgba(var(--colors-primary-600))
 }
+.refine-nova-card .dark .dark\:divide-gray-800 > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(var(--colors-gray-800))
+}
 .refine-nova-card .dark .dark\:border-gray-800 {
     border-color: rgba(var(--colors-gray-800))
 }
 .refine-nova-card .dark .dark\:border-gray-700 {
     border-color: rgba(var(--colors-gray-700))
+}
+.refine-nova-card .dark .dark\:bg-gray-900 {
+    background-color: rgba(var(--colors-gray-900))
 }
 .refine-nova-card .dark .dark\:bg-gray-800 {
     background-color: rgba(var(--colors-gray-800))
@@ -327,6 +384,9 @@
 }
 .refine-nova-card .dark .dark\:ring-gray-600 {
     --tw-ring-color: rgba(var(--colors-gray-600))
+}
+.refine-nova-card .dark .dark\:hover\:bg-gray-700:hover {
+    background-color: rgba(var(--colors-gray-700))
 }
 .refine-nova-card .dark .dark\:hover\:text-white:hover {
     --tw-text-opacity: 1;
@@ -345,3 +405,4 @@
         padding-top: 0px
     }
 }
+

@@ -15,13 +15,13 @@ class StabilizationController
     {
         $filter = Filter::fromState([
             'type' => $request->type,
-            'blueprint' => $request->blueprint
+            'blueprint' => $request->blueprint,
         ]);
 
-        $stabilizer = new UrlEncodedStabilizer;
+        $stabilizer = new UrlEncodedStabilizer();
 
         return [
-            'id' => $stabilizer->toStableId($filter)
+            'id' => $stabilizer->toStableId($filter),
         ];
     }
 
@@ -29,14 +29,14 @@ class StabilizationController
     {
         if (!$request->id) {
             return [
-                'blueprint' => []
+                'blueprint' => [],
             ];
         }
 
-        $filter = (new UrlEncodedStabilizer)->fromStableId($request->id);
+        $filter = (new UrlEncodedStabilizer())->fromStableId($request->id);
 
         return [
-            'blueprint' => $filter->getBlueprint()
+            'blueprint' => $filter->getBlueprint(),
         ];
     }
 }

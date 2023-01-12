@@ -1,8 +1,10 @@
 const novaFlavor = {
   emptyGroup: {
-    class: 'border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4',
+    class:
+      'border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4',
 
-    wrapper: 'border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4',
+    wrapper:
+      'border rounded-lg shadow border-50 p-2 text-80 bg-white flex items-center justify-between text-sm mb-4',
 
     addCriterionButton: {
       class: 'text-sm flex items-center p-2',
@@ -21,7 +23,7 @@ const novaFlavor = {
 
       // Dont show the divider on the last iteration
       class: ({ index, total }) => {
-        return index === total - 1 ? 'hidden' : 'flex';
+        return index === total - 1 ? 'hidden' : 'flex'
       },
     },
 
@@ -67,21 +69,28 @@ const novaFlavor = {
     },
     listbox: {
       class: ({ isClosed }) => {
-        return isClosed ? 'hidden' : 'max-h-60 shadow list-reset border border-50 rounded-lg overflow-auto';
+        return isClosed
+          ? 'hidden'
+          : 'max-h-60 shadow list-reset border border-50 rounded-lg overflow-auto'
       },
 
       wrapper: 'absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg',
 
       item: {
         class: ({ isHighlighted }) => {
-          return `py-2 pr-8 pl-3 relative cursor-pointer select-none ${isHighlighted ? 'bg-primary text-white' : ''}`;
+          return `py-2 pr-8 pl-3 relative cursor-pointer select-none ${
+            isHighlighted ? 'bg-primary text-white' : ''
+          }`
         },
 
-        text: (options) => `block truncate ${options.selected ? 'font-semibold' : 'font-normal'}`,
+        text: options =>
+          `block truncate ${
+            options.selected ? 'font-semibold' : 'font-normal'
+          }`,
 
         icon: {
           class: 'w-5 h-5',
-          wrapper: (options) =>
+          wrapper: options =>
             `absolute pin-t pin-b pin-r flex items-center pr-4 ${
               options.isHighlighted ? 'text-white' : 'text-blue-600'
             }`,
@@ -102,7 +111,8 @@ const novaFlavor = {
 
     multi: {
       button: {
-        class: 'form-control form-select w-full text-left flex items-center overflow-x-auto',
+        class:
+          'form-control form-select w-full text-left flex items-center overflow-x-auto',
 
         placeholder: 'block text-gray-300 truncate select-none',
 
@@ -148,6 +158,6 @@ const novaFlavor = {
 
     text: 'form-control form-input form-input-bordered',
   },
-};
+}
 
-export default novaFlavor;
+export default novaFlavor

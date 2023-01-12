@@ -17,5 +17,5 @@
 export default {
   // Don't inherit the attributes that Refine would normally put on this SVG.
   inheritAttrs: false,
-};
+}
 </script>
