@@ -6,42 +6,6 @@
           and by default the .dark class goes on the documentElement.
      -->
     <div :class="{ dark: dark }">
-      <slide-down :show="!collapsed">
-        <div>
-          <query-builder
-            :errors="errors"
-            v-model:blueprint="filter.blueprint"
-            :conditions="filter.conditions"
-            :flavor="flavor"
-          />
-
-          <div class="text-right">
-            <button
-              @click.prevent="collapsed = !collapsed"
-              class="text-sm mr-6 text-80"
-            >
-              {{ __('Collapse') }}
-            </button>
-            <button
-              @click.prevent="submit"
-              class="flex-shrink-0 shadow rounded focus:outline-none ring-primary-200 dark:ring-gray-600 focus:ring bg-primary-500 hover:bg-primary-400 active:bg-primary-600 text-white dark:text-gray-800 inline-flex items-center font-bold px-4 h-9 text-sm flex-shrink-0"
-            >
-              Filter
-            </button>
-          </div>
-        </div>
-      </slide-down>
-      <slide-down :show="collapsed">
-        <div
-          class="border rounded-lg shadow border-50 p-4 text-80 bg-white flex items-center justify-between text-sm"
-        >
-          <div>{{ collapsedText }}</div>
-          <button class="text-80" @click.prevent="collapsed = !collapsed">
-            {{ __('Expand Filter') }}
-          </button>
-        </div>
-      </slide-down>
-
       <Teleport v-if="savedFiltersTarget" :to="savedFiltersTarget">
         <div class="ml-4 flex gap-x-3">
           <div style="box-shadow: inset 0 -8px 0 rgb(52 144 220 / 20%)">
@@ -65,12 +29,11 @@
             <query-builder
               :errors="errors"
               v-model:blueprint="filter.blueprint"
+              :filter="filter"
               :conditions="filter.conditions"
-              :flavor="linear"
             />
           </div>
 
-          <!--          <test :fields="card.fields"></test>-->
           <test :fields="card.fields">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -99,10 +62,8 @@ function getDarkMode() {
   return document.documentElement.classList.contains('dark')
 }
 
+import QueryBuilder from './QueryBuilder/QueryBuilder.vue'
 import Test from './FieldSelector.vue'
-import { QueryBuilder } from '@hammerstone/refine-vue3'
-import novaFlavor from '../flavors/nova4'
-import linearFlavor from '../flavors/linear'
 import SlideDown from './SlideDown'
 import store from 'store2'
 import toPlainObject from 'lodash/toPlainObject'
@@ -121,14 +82,11 @@ export default {
     let filter = toPlainObject(this.card.filter)
 
     return {
-      flavor: novaFlavor,
-      linear: linearFlavor,
       dark: false,
       target: null,
       savedFiltersTarget: null,
       errors: {},
       lastAppliedBlueprint: filter.blueprint,
-      collapsed: store.get('refine-collapsed', false),
       filter: filter,
     }
   },

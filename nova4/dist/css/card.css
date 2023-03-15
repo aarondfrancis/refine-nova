@@ -12,41 +12,72 @@
 .refine-nova-card .pointer-events-none {
     pointer-events: none
 }
+.refine-nova-card .fixed {
+    position: fixed
+}
 .refine-nova-card .absolute {
     position: absolute
 }
 .refine-nova-card .relative {
     position: relative
 }
+.refine-nova-card .inset-0 {
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px
+}
 .refine-nova-card .inset-y-0 {
     top: 0px;
     bottom: 0px
 }
+.refine-nova-card .\!left-0 {
+    left: 0px !important
+}
 .refine-nova-card .right-0 {
     right: 0px
 }
-.refine-nova-card .top-0 {
-    top: 0px
-}
-.refine-nova-card .bottom-0 {
-    bottom: 0px
+.refine-nova-card .z-0 {
+    z-index: 0
 }
 .refine-nova-card .z-10 {
     z-index: 10
 }
-.refine-nova-card .my-2 {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem
+.refine-nova-card .z-20 {
+    z-index: 20
+}
+.refine-nova-card .mx-1 {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem
 }
 .refine-nova-card .mx-2 {
     margin-left: 0.5rem;
     margin-right: 0.5rem
 }
-.refine-nova-card .mr-6 {
-    margin-right: 1.5rem
+.refine-nova-card .my-2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem
+}
+.refine-nova-card .mb-2 {
+    margin-bottom: 0.5rem
+}
+.refine-nova-card .ml-1 {
+    margin-left: 0.25rem
+}
+.refine-nova-card .ml-2 {
+    margin-left: 0.5rem
 }
 .refine-nova-card .ml-4 {
     margin-left: 1rem
+}
+.refine-nova-card .ml-auto {
+    margin-left: auto
+}
+.refine-nova-card .mr-1 {
+    margin-right: 0.25rem
+}
+.refine-nova-card .mr-2 {
+    margin-right: 0.5rem
 }
 .refine-nova-card .mt-1 {
     margin-top: 0.25rem
@@ -54,41 +85,8 @@
 .refine-nova-card .mt-2 {
     margin-top: 0.5rem
 }
-.refine-nova-card .mr-1 {
-    margin-right: 0.25rem
-}
-.refine-nova-card .-mt-px {
-    margin-top: -1px
-}
-.refine-nova-card .ml-2 {
-    margin-left: 0.5rem
-}
-.refine-nova-card .mr-2 {
-    margin-right: 0.5rem
-}
-.refine-nova-card .ml-1 {
-    margin-left: 0.25rem
-}
-.refine-nova-card .mr-4 {
-    margin-right: 1rem
-}
-.refine-nova-card .mb-4 {
-    margin-bottom: 1rem
-}
-.refine-nova-card .mt-px {
-    margin-top: 1px
-}
-.refine-nova-card .ml-auto {
-    margin-left: auto
-}
-.refine-nova-card .mr-3 {
-    margin-right: 0.75rem
-}
-.refine-nova-card .-mt-2 {
-    margin-top: -0.5rem
-}
-.refine-nova-card .-mr-2 {
-    margin-right: -0.5rem
+.refine-nova-card .mt-4 {
+    margin-top: 1rem
 }
 .refine-nova-card .block {
     display: block
@@ -96,17 +94,11 @@
 .refine-nova-card .flex {
     display: flex
 }
-.refine-nova-card .inline-flex {
-    display: inline-flex
-}
 .refine-nova-card .hidden {
     display: none
 }
-.refine-nova-card .h-9 {
-    height: 2.25rem
-}
-.refine-nova-card .h-6 {
-    height: 1.5rem
+.refine-nova-card .h-3 {
+    height: 0.75rem
 }
 .refine-nova-card .h-4 {
     height: 1rem
@@ -114,47 +106,85 @@
 .refine-nova-card .h-5 {
     height: 1.25rem
 }
-.refine-nova-card .h-3 {
-    height: 0.75rem
+.refine-nova-card .h-6 {
+    height: 1.5rem
+}
+.refine-nova-card .h-9 {
+    height: 2.25rem
 }
 .refine-nova-card .max-h-60 {
     max-height: 15rem
 }
-.refine-nova-card .w-6 {
-    width: 1.5rem
+.refine-nova-card .min-h-full {
+    min-height: 100%
 }
-.refine-nova-card .w-4 {
-    width: 1rem
+.refine-nova-card .w-0 {
+    width: 0px
 }
-.refine-nova-card .w-full {
-    width: 100%
-}
-.refine-nova-card .w-auto {
-    width: auto
-}
-.refine-nova-card .w-5 {
-    width: 1.25rem
-}
-.refine-nova-card .w-32 {
-    width: 8rem
-}
-.refine-nova-card .w-12 {
-    width: 3rem
-}
-.refine-nova-card .w-14 {
-    width: 3.5rem
-}
-.refine-nova-card .w-24 {
-    width: 6rem
-}
-.refine-nova-card .w-48 {
-    width: 12rem
+.refine-nova-card .w-20 {
+    width: 5rem
 }
 .refine-nova-card .w-3 {
     width: 0.75rem
 }
-.refine-nova-card .flex-shrink-0 {
+.refine-nova-card .w-32 {
+    width: 8rem
+}
+.refine-nova-card .w-4 {
+    width: 1rem
+}
+.refine-nova-card .w-5 {
+    width: 1.25rem
+}
+.refine-nova-card .w-6 {
+    width: 1.5rem
+}
+.refine-nova-card .w-72 {
+    width: 18rem
+}
+.refine-nova-card .w-full {
+    width: 100%
+}
+.refine-nova-card .w-px {
+    width: 1px
+}
+.refine-nova-card .max-w-xl {
+    max-width: 36rem
+}
+.refine-nova-card .flex-auto {
+    flex: 1 1 auto
+}
+.refine-nova-card .shrink-0 {
     flex-shrink: 0
+}
+.refine-nova-card .origin-top-left {
+    transform-origin: top left
+}
+.refine-nova-card .rotate-45 {
+    --tw-rotate: 45deg;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.refine-nova-card .rotate-90 {
+    --tw-rotate: 90deg;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.refine-nova-card .scale-100 {
+    --tw-scale-x: 1;
+    --tw-scale-y: 1;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.refine-nova-card .scale-90 {
+    --tw-scale-x: .9;
+    --tw-scale-y: .9;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.refine-nova-card .scale-95 {
+    --tw-scale-x: .95;
+    --tw-scale-y: .95;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.refine-nova-card .transform {
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 .refine-nova-card .cursor-default {
     cursor: default
@@ -167,17 +197,11 @@
        -moz-user-select: none;
             user-select: none
 }
-.refine-nova-card .list-none {
-    list-style-type: none
-}
 .refine-nova-card .flex-col {
     flex-direction: column
 }
 .refine-nova-card .flex-wrap {
     flex-wrap: wrap
-}
-.refine-nova-card .items-start {
-    align-items: flex-start
 }
 .refine-nova-card .items-center {
     align-items: center
@@ -191,15 +215,18 @@
 .refine-nova-card .justify-between {
     justify-content: space-between
 }
-.refine-nova-card .gap-\[1ch\] {
-    gap: 1ch
+.refine-nova-card .gap-x-2 {
+    -moz-column-gap: 0.5rem;
+         column-gap: 0.5rem
 }
 .refine-nova-card .gap-x-3 {
     -moz-column-gap: 0.75rem;
          column-gap: 0.75rem
 }
-.refine-nova-card .gap-y-2 {
-    row-gap: 0.5rem
+.refine-nova-card .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse))
 }
 .refine-nova-card .divide-y > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-y-reverse: 0;
@@ -215,8 +242,11 @@
 .refine-nova-card .overflow-auto {
     overflow: auto
 }
-.refine-nova-card .overflow-x-auto {
-    overflow-x: auto
+.refine-nova-card .overflow-hidden {
+    overflow: hidden
+}
+.refine-nova-card .overflow-y-auto {
+    overflow-y: auto
 }
 .refine-nova-card .truncate {
     overflow: hidden;
@@ -226,81 +256,77 @@
 .refine-nova-card .rounded {
     border-radius: 0.25rem
 }
+.refine-nova-card .rounded-full {
+    border-radius: 9999px
+}
 .refine-nova-card .rounded-lg {
     border-radius: 0.5rem
 }
 .refine-nova-card .rounded-md {
     border-radius: 0.375rem
 }
-.refine-nova-card .rounded-full {
-    border-radius: 9999px
-}
-.refine-nova-card .rounded-b-lg {
-    border-bottom-right-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem
-}
 .refine-nova-card .border {
     border-width: 1px
+}
+.refine-nova-card .border-0 {
+    border-width: 0px
 }
 .refine-nova-card .border-b {
     border-bottom-width: 1px
 }
-.refine-nova-card .border-t {
-    border-top-width: 1px
-}
 .refine-nova-card .border-l {
     border-left-width: 1px
 }
-.refine-nova-card .border-gray-700 {
-    border-color: rgba(var(--colors-gray-700))
+.refine-nova-card .border-t {
+    border-top-width: 1px
+}
+.refine-nova-card .border-dashed {
+    border-style: dashed
 }
 .refine-nova-card .border-gray-200 {
     border-color: rgba(var(--colors-gray-200))
 }
-.refine-nova-card .border-gray-100 {
-    border-color: rgba(var(--colors-gray-100))
+.refine-nova-card .border-gray-300 {
+    border-color: rgba(var(--colors-gray-300))
 }
-.refine-nova-card .bg-primary-500 {
-    background-color: rgba(var(--colors-primary-500))
+.refine-nova-card .border-gray-400 {
+    border-color: rgba(var(--colors-gray-400))
+}
+.refine-nova-card .border-gray-700 {
+    border-color: rgba(var(--colors-gray-700))
+}
+.refine-nova-card .border-indigo-500 {
+    border-color: rgba(var(--colors-indigo-500))
+}
+.refine-nova-card .bg-black {
+    --tw-bg-opacity: 1;
+    background-color: rgb(0 0 0 / var(--tw-bg-opacity))
+}
+.refine-nova-card .bg-gray-100 {
+    background-color: rgba(var(--colors-gray-100))
+}
+.refine-nova-card .bg-gray-400 {
+    background-color: rgba(var(--colors-gray-400))
+}
+.refine-nova-card .bg-indigo-600 {
+    background-color: rgba(var(--colors-indigo-600))
 }
 .refine-nova-card .bg-white {
     --tw-bg-opacity: 1;
     background-color: rgb(255 255 255 / var(--tw-bg-opacity))
 }
-.refine-nova-card .bg-gray-100 {
-    background-color: rgba(var(--colors-gray-100))
+.refine-nova-card .bg-opacity-25 {
+    --tw-bg-opacity: 0.25
 }
-.refine-nova-card .bg-blue-600 {
-    background-color: rgba(var(--colors-blue-600))
-}
-.refine-nova-card .bg-primary-600 {
-    background-color: rgba(var(--colors-primary-600))
-}
-.refine-nova-card .bg-red-700 {
-    background-color: rgba(var(--colors-red-700))
-}
-.refine-nova-card .fill-current {
-    fill: currentColor
+.refine-nova-card .p-3 {
+    padding: 0.75rem
 }
 .refine-nova-card .p-4 {
     padding: 1rem
 }
-.refine-nova-card .p-1 {
-    padding: 0.25rem
-}
-.refine-nova-card .p-2 {
-    padding: 0.5rem
-}
-.refine-nova-card .p-px {
-    padding: 1px
-}
-.refine-nova-card .px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem
-}
-.refine-nova-card .py-3 {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem
+.refine-nova-card .px-1 {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem
 }
 .refine-nova-card .px-2 {
     padding-left: 0.5rem;
@@ -314,57 +340,60 @@
     padding-top: 0.25rem;
     padding-bottom: 0.25rem
 }
+.refine-nova-card .py-1\.5 {
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem
+}
 .refine-nova-card .py-2 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem
 }
-.refine-nova-card .pl-4 {
-    padding-left: 1rem
-}
-.refine-nova-card .pt-2 {
-    padding-top: 0.5rem
+.refine-nova-card .py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem
 }
 .refine-nova-card .pb-3 {
     padding-bottom: 0.75rem
 }
-.refine-nova-card .pt-px {
-    padding-top: 1px
+.refine-nova-card .pl-2 {
+    padding-left: 0.5rem
 }
-.refine-nova-card .pl-3 {
-    padding-left: 0.75rem
+.refine-nova-card .pl-4 {
+    padding-left: 1rem
 }
-.refine-nova-card .pt-4 {
-    padding-top: 1rem
+.refine-nova-card .pl-7 {
+    padding-left: 1.75rem
 }
-.refine-nova-card .pr-9 {
-    padding-right: 2.25rem
-}
-.refine-nova-card .pr-4 {
-    padding-right: 1rem
-}
-.refine-nova-card .pr-2 {
-    padding-right: 0.5rem
+.refine-nova-card .pr-0 {
+    padding-right: 0px
 }
 .refine-nova-card .pr-10 {
     padding-right: 2.5rem
 }
-.refine-nova-card .pl-1 {
-    padding-left: 0.25rem
+.refine-nova-card .pr-2 {
+    padding-right: 0.5rem
 }
-.refine-nova-card .pl-2 {
-    padding-left: 0.5rem
+.refine-nova-card .pr-4 {
+    padding-right: 1rem
 }
-.refine-nova-card .pr-8 {
-    padding-right: 2rem
+.refine-nova-card .pr-9 {
+    padding-right: 2.25rem
 }
-.refine-nova-card .pr-1 {
-    padding-right: 0.25rem
+.refine-nova-card .pt-2 {
+    padding-top: 0.5rem
 }
 .refine-nova-card .text-left {
     text-align: left
 }
-.refine-nova-card .text-right {
-    text-align: right
+.refine-nova-card .text-center {
+    text-align: center
+}
+.refine-nova-card .align-middle {
+    vertical-align: middle
+}
+.refine-nova-card .text-base {
+    font-size: 1rem;
+    line-height: 1.5rem
 }
 .refine-nova-card .text-sm {
     font-size: 0.875rem;
@@ -377,11 +406,14 @@
 .refine-nova-card .font-bold {
     font-weight: 700
 }
-.refine-nova-card .font-semibold {
-    font-weight: 600
+.refine-nova-card .font-medium {
+    font-weight: 500
 }
 .refine-nova-card .font-normal {
     font-weight: 400
+}
+.refine-nova-card .font-semibold {
+    font-weight: 600
 }
 .refine-nova-card .uppercase {
     text-transform: uppercase
@@ -389,27 +421,36 @@
 .refine-nova-card .tracking-wide {
     letter-spacing: 0.025em
 }
-.refine-nova-card .text-white {
-    --tw-text-opacity: 1;
-    color: rgb(255 255 255 / var(--tw-text-opacity))
-}
 .refine-nova-card .text-gray-400 {
     color: rgba(var(--colors-gray-400))
-}
-.refine-nova-card .text-gray-900 {
-    color: rgba(var(--colors-gray-900))
-}
-.refine-nova-card .text-blue-600 {
-    color: rgba(var(--colors-blue-600))
-}
-.refine-nova-card .text-gray-300 {
-    color: rgba(var(--colors-gray-300))
 }
 .refine-nova-card .text-gray-500 {
     color: rgba(var(--colors-gray-500))
 }
+.refine-nova-card .text-gray-700 {
+    color: rgba(var(--colors-gray-700))
+}
+.refine-nova-card .text-gray-900 {
+    color: rgba(var(--colors-gray-900))
+}
+.refine-nova-card .text-indigo-600 {
+    color: rgba(var(--colors-indigo-600))
+}
+.refine-nova-card .text-indigo-700 {
+    color: rgba(var(--colors-indigo-700))
+}
+.refine-nova-card .text-white {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity))
+}
 .refine-nova-card .opacity-0 {
     opacity: 0
+}
+.refine-nova-card .opacity-100 {
+    opacity: 1
+}
+.refine-nova-card .opacity-75 {
+    opacity: 0.75
 }
 .refine-nova-card .shadow {
     --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -421,8 +462,33 @@
     --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
 }
-.refine-nova-card .ring-primary-200 {
-    --tw-ring-color: rgba(var(--colors-primary-200))
+.refine-nova-card .shadow-sm {
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.refine-nova-card .shadow-xl {
+    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.refine-nova-card .ring-1 {
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
+}
+.refine-nova-card .ring-inset {
+    --tw-ring-inset: inset
+}
+.refine-nova-card .ring-black {
+    --tw-ring-opacity: 1;
+    --tw-ring-color: rgb(0 0 0 / var(--tw-ring-opacity))
+}
+.refine-nova-card .ring-gray-300 {
+    --tw-ring-color: rgba(var(--colors-gray-300))
+}
+.refine-nova-card .ring-opacity-5 {
+    --tw-ring-opacity: 0.05
 }
 .refine-nova-card .filter {
     filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
@@ -434,39 +500,70 @@
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms
 }
-.refine-nova-card .duration-1000 {
-    transition-duration: 1000ms
+.refine-nova-card .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
 }
-.refine-nova-card .first\:rounded-t-lg:first-child {
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem
+.refine-nova-card .duration-100 {
+    transition-duration: 100ms
 }
-.refine-nova-card .hover\:bg-primary-400:hover {
-    background-color: rgba(var(--colors-primary-400))
+.refine-nova-card .duration-200 {
+    transition-duration: 200ms
+}
+.refine-nova-card .duration-300 {
+    transition-duration: 300ms
+}
+.refine-nova-card .ease-in {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1)
+}
+.refine-nova-card .ease-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1)
+}
+.refine-nova-card .placeholder\:text-gray-400::-moz-placeholder {
+    color: rgba(var(--colors-gray-400))
+}
+.refine-nova-card .placeholder\:text-gray-400::placeholder {
+    color: rgba(var(--colors-gray-400))
 }
 .refine-nova-card .hover\:bg-gray-100:hover {
     background-color: rgba(var(--colors-gray-100))
 }
-.refine-nova-card .hover\:text-red-700:hover {
-    color: rgba(var(--colors-red-700))
+.refine-nova-card .hover\:bg-indigo-600:hover {
+    background-color: rgba(var(--colors-indigo-600))
 }
-.refine-nova-card .hover\:text-gray-500:hover {
-    color: rgba(var(--colors-gray-500))
+.refine-nova-card .hover\:text-white:hover {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity))
+}
+.refine-nova-card .hover\:opacity-100:hover {
+    opacity: 1
+}
+.refine-nova-card .focus\:border-indigo-500:focus {
+    border-color: rgba(var(--colors-indigo-500))
 }
 .refine-nova-card .focus\:outline-none:focus {
     outline: 2px solid transparent;
     outline-offset: 2px
 }
-.refine-nova-card .focus\:ring:focus {
+.refine-nova-card .focus\:ring-1:focus {
     --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
 }
-.refine-nova-card .active\:bg-primary-600:active {
-    background-color: rgba(var(--colors-primary-600))
+.refine-nova-card .focus\:ring-2:focus {
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
 }
-.refine-nova-card .group:hover .group-hover\:opacity-100 {
-    opacity: 1
+.refine-nova-card .focus\:ring-inset:focus {
+    --tw-ring-inset: inset
+}
+.refine-nova-card .focus\:ring-indigo-500:focus {
+    --tw-ring-color: rgba(var(--colors-indigo-500))
+}
+.refine-nova-card .focus\:ring-indigo-600:focus {
+    --tw-ring-color: rgba(var(--colors-indigo-600))
 }
 .refine-nova-card .dark .dark\:divide-gray-800 > :not([hidden]) ~ :not([hidden]) {
     border-color: rgba(var(--colors-gray-800))
@@ -474,46 +571,19 @@
 .refine-nova-card .dark .dark\:border-gray-800 {
     border-color: rgba(var(--colors-gray-800))
 }
-.refine-nova-card .dark .dark\:border-gray-700 {
-    border-color: rgba(var(--colors-gray-700))
-}
 .refine-nova-card .dark .dark\:bg-gray-900 {
     background-color: rgba(var(--colors-gray-900))
-}
-.refine-nova-card .dark .dark\:bg-gray-800 {
-    background-color: rgba(var(--colors-gray-800))
-}
-.refine-nova-card .dark .dark\:text-gray-800 {
-    color: rgba(var(--colors-gray-800))
-}
-.refine-nova-card .dark .dark\:text-gray-400 {
-    color: rgba(var(--colors-gray-400))
-}
-.refine-nova-card .dark .dark\:text-white {
-    --tw-text-opacity: 1;
-    color: rgb(255 255 255 / var(--tw-text-opacity))
-}
-.refine-nova-card .dark .dark\:ring-gray-600 {
-    --tw-ring-color: rgba(var(--colors-gray-600))
 }
 .refine-nova-card .dark .dark\:hover\:bg-gray-700:hover {
     background-color: rgba(var(--colors-gray-700))
 }
-.refine-nova-card .dark .dark\:hover\:text-white:hover {
-    --tw-text-opacity: 1;
-    color: rgb(255 255 255 / var(--tw-text-opacity))
-}
 @media (min-width: 640px) {
-    .refine-nova-card .sm\:inline-block {
-        display: inline-block
+    .refine-nova-card .sm\:text-sm {
+        font-size: 0.875rem;
+        line-height: 1.25rem
     }
-}
-@media (min-width: 768px) {
-    .refine-nova-card .md\:flex {
-        display: flex
-    }
-    .refine-nova-card .md\:pt-0 {
-        padding-top: 0px
+    .refine-nova-card .sm\:leading-6 {
+        line-height: 1.5rem
     }
 }
 

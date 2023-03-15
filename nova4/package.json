@@ -1,23 +1,27 @@
 {
   "private": true,
   "scripts": {
-    "demi": "vue-demi-switch 3",
-    "dev": "npm run demi && mix",
-    "watch": "npm run demi && mix watch",
-    "prod": "npm run demi && mix # @TODO Cant use --production here because it mangles something with vue-demi.",
+    "dev": "mix",
+    "watch": "mix watch",
+    "prod": "mix production",
     "nova:install": "composer update --working-dir \"../\" --with laravel/nova:\"^4.0\" && npm --prefix='../vendor/laravel/nova' ci"
   },
-  "devDependencies": {
-    "@vue/compiler-sfc": "^3.2.22",
-    "laravel-mix": "^6.0.41",
-    "postcss": "^8.3.11",
-    "tailwindcss": "^3.2.4",
-    "vue-loader": "^16.8.3"
-  },
   "dependencies": {
-    "@hammerstone/refine-vue3": "^0.3.1",
+    "pinia": "^2.0.33"
+  },
+  "devDependencies": {
+    "@headlessui-float/vue": "^0.10.1",
+    "@headlessui/vue": "^1.7.7",
+    "@heroicons/vue": "^2.0.13",
+    "@popperjs/core": "^2.11.6",
+    "@vue/compiler-sfc": "^3.2.22",
+    "@vuepic/vue-datepicker": "^3.6.5",
+    "laravel-mix": "^6.0.41",
     "lodash": "^4.17.21",
+    "postcss": "^8.3.11",
     "store2": "^2.14.2",
+    "tailwindcss": "^3.2.4",
+    "vue-loader": "^16.8.3",
     "webpack-bundle-analyzer": "^4.7.0"
   }
 }

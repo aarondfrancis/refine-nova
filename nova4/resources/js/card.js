@@ -1,26 +1,19 @@
 import Card from './components/Card'
 import endsWith from 'lodash/endsWith'
-import { RefinePlugin } from '@hammerstone/refine-vue3'
 
-import SelectIcon from './components/SelectIcon'
-import OrButton from './components/OrButton'
-import GroupDivider from './components/GroupDivider'
-
-import LinearCriterionRow from './components/LinearFlavor/CriterionRow'
-import LinearEmptyGroup from './components/LinearFlavor/EmptyGroup'
+import { registerInputComponents } from '@/components/QueryBuilder/Inputs'
+import { registerHeroiconComponents } from '@/components/Heroicons'
+import { createPinia } from 'pinia'
 
 Nova.booting((Vue, store) => {
-  Vue.component('custom-select-icon', SelectIcon)
-  Vue.component('custom-or-button', OrButton)
-  Vue.component('custom-group-divider', GroupDivider)
-  Vue.component('linear-criterion-row', LinearCriterionRow)
-  Vue.component('linear-empty-group', LinearEmptyGroup)
+  const pinia = createPinia()
 
-  Vue.use(RefinePlugin, {
-    showLocators: true,
-  })
+  registerInputComponents(Vue)
+  registerHeroiconComponents(Vue)
 
-  // Turn on for to get the Devtools to show up.
+  Vue.use(pinia)
+
+  // Turn on to get the Devtools to show up.
   // Vue.config.devtools = true;
   // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
 
@@ -32,6 +25,7 @@ Nova.booting((Vue, store) => {
 // Nova 4 axios gets created on every call of Nova.request, so
 // we can't attach the interceptors once to the singleton.
 const originalNovaRequest = Nova.request
+
 Nova.request = options => {
   // Call the original without any options
   // to get back the axios instance.
