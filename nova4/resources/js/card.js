@@ -6,10 +6,16 @@ import SelectIcon from './components/SelectIcon'
 import OrButton from './components/OrButton'
 import GroupDivider from './components/GroupDivider'
 
+import LinearCriterionRow from './components/LinearFlavor/CriterionRow'
+import LinearEmptyGroup from './components/LinearFlavor/EmptyGroup'
+
 Nova.booting((Vue, store) => {
   Vue.component('custom-select-icon', SelectIcon)
   Vue.component('custom-or-button', OrButton)
   Vue.component('custom-group-divider', GroupDivider)
+  Vue.component('linear-criterion-row', LinearCriterionRow)
+  Vue.component('linear-empty-group', LinearEmptyGroup)
+
   Vue.use(RefinePlugin, {
     showLocators: true,
   })

@@ -42,26 +42,52 @@
         </div>
       </slide-down>
 
-      <Teleport v-if="target" :to="target">
-        <test style="" :fields="card.fields"></test>
+      <Teleport v-if="savedFiltersTarget" :to="savedFiltersTarget">
+        <div class="ml-4 flex gap-x-3">
+          <div style="box-shadow: inset 0 -8px 0 rgb(52 144 220 / 20%)">
+            Favorites
+          </div>
+          <div>Losers</div>
+          <div>Aarons</div>
+          <div>Canceled</div>
+        </div>
       </Teleport>
+
       <Teleport v-if="target" :to="target">
-        <test style="" :fields="card.fields">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+        <!--
+          We have to repeat this class here because once the element is teleported,
+          it no longer is affected by our custom Tailwind styles, which rely on
+          the presence of a .refine-nova-card parent selector. We're safe to use
+          `flex` because the Nova css will always have that one.
+         -->
+        <div class="refine-nova-card">
+          <div class="flex items-baseline border-b pl-4 py-3">
+            <query-builder
+              :errors="errors"
+              v-model:blueprint="filter.blueprint"
+              :conditions="filter.conditions"
+              :flavor="linear"
             />
-          </svg>
-        </test>
+          </div>
+
+          <!--          <test :fields="card.fields"></test>-->
+          <!--          <test :fields="card.fields">-->
+          <!--            <svg-->
+          <!--              xmlns="http://www.w3.org/2000/svg"-->
+          <!--              fill="none"-->
+          <!--              viewBox="0 0 24 24"-->
+          <!--              stroke-width="1.5"-->
+          <!--              stroke="currentColor"-->
+          <!--              class="w-6 h-6"-->
+          <!--            >-->
+          <!--              <path-->
+          <!--                stroke-linecap="round"-->
+          <!--                stroke-linejoin="round"-->
+          <!--                d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"-->
+          <!--              />-->
+          <!--            </svg>-->
+          <!--          </test>-->
+        </div>
       </Teleport>
     </div>
   </div>
@@ -76,6 +102,7 @@ function getDarkMode() {
 import Test from './FieldSelector.vue'
 import { QueryBuilder } from '@hammerstone/refine-vue3'
 import novaFlavor from '../flavors/nova4'
+import linearFlavor from '../flavors/linear'
 import SlideDown from './SlideDown'
 import store from 'store2'
 import toPlainObject from 'lodash/toPlainObject'
@@ -95,8 +122,10 @@ export default {
 
     return {
       flavor: novaFlavor,
+      linear: linearFlavor,
       dark: false,
       target: null,
+      savedFiltersTarget: null,
       errors: {},
       lastAppliedBlueprint: filter.blueprint,
       collapsed: store.get('refine-collapsed', false),
@@ -132,9 +161,26 @@ export default {
   mounted() {
     this.dark = getDarkMode()
 
-    let el = document.querySelector('[dusk="filter-selector"]')
+    let toolBarItemsRight = document.querySelector(
+      '[dusk="filter-selector"]'
+    ).parentNode
+    //
+    // toolBarItemsRight.style.order = 3
+    //
+    // this.target = toolBarItemsRight.parentNode
 
-    this.target = el.parentNode
+    let target = document.createElement('div')
+    target.setAttribute('id', 'refine-builder-target')
+
+    let header = toolBarItemsRight.closest(
+      '.flex.flex-col.md\\:flex-row.md\\:items-center.py-3.border-b.border-gray-200.dark\\:border-gray-700'
+    )
+
+    header.parentNode.insertBefore(target, header)
+
+    this.target = target
+
+    this.addSavedFilterTarget()
 
     let observer = new MutationObserver(() => {
       this.dark = getDarkMode()
@@ -173,6 +219,22 @@ export default {
   },
 
   methods: {
+    addSavedFilterTarget() {
+      let h1 = document.querySelector('h1')
+      let wrapper = document.createElement('div')
+      wrapper.classList.add('refine-nova-card', 'flex')
+      wrapper.style.alignItems = 'baseline'
+
+      let target = document.createElement('div')
+      target.setAttribute('id', 'refine-saved-filters-target')
+
+      h1.parentNode.insertBefore(wrapper, h1)
+      wrapper.appendChild(h1)
+      wrapper.appendChild(target)
+
+      this.savedFiltersTarget = target
+    },
+
     updateBlueprintFromStableId(id, refresh = false) {
       this.errors = {}
 
