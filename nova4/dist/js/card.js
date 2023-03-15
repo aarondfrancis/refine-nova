@@ -495,9 +495,23 @@ var _hoisted_5 = {
 var _hoisted_6 = {
   "class": "flex items-baseline border-b pl-4 py-3"
 };
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  "stroke-width": "1.5",
+  stroke: "currentColor",
+  "class": "w-6 h-6"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  d: "M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+})], -1 /* HOISTED */);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_query_builder = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("query-builder");
   var _component_slide_down = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("slide-down");
+  var _component_test = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("test");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n          Because we use a Tailwind prefix, we have to inject our own \"dark\" class here.\n          All of our CSS is generated as e.g. `.refine-nova-card .dark .pl-4 {}`\n          and by default the .dark class goes on the documentElement.\n     "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
       dark: $data.dark
@@ -554,7 +568,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     conditions: $data.filter.conditions,
     flavor: $data.linear
-  }, null, 8 /* PROPS */, ["errors", "blueprint", "conditions", "flavor"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("          <test :fields=\"card.fields\"></test>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("          <test :fields=\"card.fields\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <svg"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              xmlns=\"http://www.w3.org/2000/svg\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              fill=\"none\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              viewBox=\"0 0 24 24\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              stroke-width=\"1.5\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              stroke=\"currentColor\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              class=\"w-6 h-6\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            >"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              <path"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                stroke-linecap=\"round\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                stroke-linejoin=\"round\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                d=\"M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              />"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            </svg>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("          </test>")])], 8 /* PROPS */, ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */)]);
+  }, null, 8 /* PROPS */, ["errors", "blueprint", "conditions", "flavor"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("          <test :fields=\"card.fields\"></test>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_test, {
+    fields: $props.card.fields
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_7];
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["fields"])])], 8 /* PROPS */, ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */)]);
 }
 
 /***/ }),
