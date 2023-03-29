@@ -39,8 +39,6 @@ trait RefinesModels
     }
 
     /**
-     * @param  NovaRequest  $request
-     * @param $query
      * @return mixed
      */
     public static function indexQuery(NovaRequest $request, $query)
@@ -57,8 +55,6 @@ trait RefinesModels
     }
 
     /**
-     * @param  NovaRequest  $request
-     * @param $query
      * @return mixed
      */
     public static function refine(NovaRequest $request, $query)
@@ -80,7 +76,6 @@ trait RefinesModels
     }
 
     /**
-     * @param  NovaRequest|null  $request
      * @return array
      */
     protected static function getBlueprint(NovaRequest $request = null)
