@@ -6,7 +6,7 @@ import stored from '@/lib/stored'
 export const useBlueprintStore = defineStore('Blueprint', {
   state() {
     return {
-      saved: stored,
+      stored: stored,
       blueprint: blueprint,
     }
   },
@@ -14,18 +14,18 @@ export const useBlueprintStore = defineStore('Blueprint', {
   actions: {
     saveCurrentBlueprint(name) {
       // Unselect the currently selected stored filter
-      this.resetSelectedSavedFilter()
+      this.resetSelectedStoredFilter()
 
       // Push the current one into the saved array
-      this.saved.push({
+      this.stored.push({
         name: name,
         blueprint: JSON.parse(JSON.stringify(this.blueprint)),
         selected: true,
       })
     },
 
-    resetSelectedSavedFilter() {
-      this.saved.forEach(f => (f.selected = false))
+    resetSelectedStoredFilter() {
+      this.stored.forEach(f => (f.selected = false))
     },
   },
 })

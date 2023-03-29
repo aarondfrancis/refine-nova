@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center">
-    <arrow-uturn-up-icon class="w-4 h-4 mr-2 text-indigo-700 rotate-90" />
+    <arrow-uturn-up-icon class="w-4 h-4 mr-2 text-blue-700 rotate-90" />
     <custom-datepicker
       :model-value="input.date1"
       @update:model-value="value => changeInput('date1', value)"

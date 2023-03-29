@@ -2,16 +2,7 @@ export default [
   {
     name: 'All',
     selected: true,
-    blueprint: [
-      {
-        depth: 1,
-        type: 'criterion',
-        condition_id: 'is_subscriber',
-        input: {
-          clause: 'true',
-        },
-      },
-    ],
+    blueprint: [],
   },
   {
     name: 'Favorites',
@@ -20,25 +11,24 @@ export default [
       {
         depth: 1,
         type: 'criterion',
-        condition_id: 'created_at',
+        condition_id: 'name',
         input: {
-          clause: 'lt',
-          date1: '2023-03-22',
+          clause: 'cont',
+          value: 'Aaron',
         },
       },
     ],
   },
   {
-    name: 'Trials',
+    name: 'Subscribers',
     selected: false,
     blueprint: [
       {
         depth: 1,
         type: 'criterion',
-        condition_id: 'id',
+        condition_id: 'is_subscriber',
         input: {
-          clause: 'lt',
-          value1: 10,
+          clause: 'true',
         },
       },
     ],

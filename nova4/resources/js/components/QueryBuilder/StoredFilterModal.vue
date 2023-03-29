@@ -8,7 +8,7 @@
   </button>
 
   <TransitionRoot appear :show="isOpen" as="template">
-    <Dialog as="div" @close="closeModal" class="relative z-10">
+    <Dialog as="div" @close="closeModal" class="relative z-50">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -18,7 +18,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black bg-opacity-25" />
+        <div class="fixed inset-0 backdrop-blur-sm backdrop-brightness-75" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
@@ -35,12 +35,9 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-xl transform overflow-hidden rounded bg-white text-left align-middle shadow-xl transition-all"
+              class="filter-none w-full max-w-xl transform overflow-hidden rounded bg-white border text-left align-middle shadow-lg transition-all"
             >
-              <DialogTitle
-                as="h3"
-                class="text font-medium text-gray-900 bg-white p-4"
-              >
+              <DialogTitle class="text-gray-900 bg-white p-4">
                 Save filter
               </DialogTitle>
               <div
@@ -58,7 +55,7 @@
                       type="name"
                       name="name"
                       id="name"
-                      class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      class="form-control form-input form-input-bordered w-full"
                       placeholder="My favorite customers"
                       aria-describedby="name-description"
                     />
@@ -67,19 +64,55 @@
                     Enter a memorable name for your filter.
                   </p>
                 </div>
+
+                <SwitchGroup
+                  as="div"
+                  class="mt-4 flex items-center justify-between"
+                >
+                  <span class="flex flex-grow flex-col">
+                    <SwitchLabel
+                      as="span"
+                      class="text-base font-semibold text-gray-900"
+                      passive
+                    >
+                      Make filter public
+                    </SwitchLabel>
+                    <SwitchDescription
+                      as="span"
+                      class="text-sm text-gray-500 pr-8"
+                    >
+                      Allow anyone to see this filter.
+                    </SwitchDescription>
+                  </span>
+                  <Switch
+                    v-model="shared"
+                    :class="[
+                      shared ? 'bg-primary-600' : 'bg-gray-200',
+                      'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',
+                    ]"
+                  >
+                    <span
+                      aria-hidden="true"
+                      :class="[
+                        shared ? 'translate-x-5' : 'translate-x-0',
+                        'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                      ]"
+                    />
+                  </Switch>
+                </SwitchGroup>
               </div>
 
-              <div class="p-4 flex justify-between">
+              <div class="p-4 flex justify-end">
                 <button
                   type="button"
-                  class="flex items-center border border-gray-300 shadow px-3 py-1 rounded text-sm"
+                  class="flex items-center border border-gray-300 shadow px-3 py-1 rounded mr-4"
                   @click="closeModal"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
-                  class="flex border bg-indigo-600 text-white rounded shadow border border-indigo-500 py-1 px-3"
+                  class="flex py-1 px-3 shadow rounded text-white focus:outline-none ring-primary-200 dark:ring-gray-600 focus:ring bg-primary-500 hover:bg-primary-400 active:bg-primary-600 dark:text-gray-800 font-bold"
                   @click="save"
                 >
                   Save
@@ -94,7 +127,7 @@
 </template>
 
 <script>
-import { useBlueprintStore } from '../stores/BlueprintStore'
+import { useBlueprintStore } from '@/stores/BlueprintStore'
 
 import { PlusIcon } from '@heroicons/vue/20/solid'
 import {
@@ -103,6 +136,10 @@ import {
   Dialog,
   DialogPanel,
   DialogTitle,
+  Switch,
+  SwitchLabel,
+  SwitchDescription,
+  SwitchGroup,
 } from '@headlessui/vue'
 
 export default {
@@ -113,12 +150,17 @@ export default {
     Dialog,
     DialogPanel,
     DialogTitle,
+    Switch,
+    SwitchLabel,
+    SwitchDescription,
+    SwitchGroup,
   },
 
   data() {
     return {
       isOpen: false,
       name: null,
+      shared: false,
     }
   },
 

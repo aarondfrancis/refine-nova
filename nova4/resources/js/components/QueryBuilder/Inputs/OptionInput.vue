@@ -7,7 +7,7 @@
         :value="option.id"
         type="checkbox"
         :id="`c${condition.id}-o${option.id}`"
-        class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 focus:ring-2"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
       />
 
       <input
@@ -16,7 +16,7 @@
         :value="option.id"
         type="radio"
         :id="`c${condition.id}-o${option.id}`"
-        class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 focus:ring-2"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
       />
 
       <label :for="`c${condition.id}-o${option.id}`" class="ml-2 text-sm">

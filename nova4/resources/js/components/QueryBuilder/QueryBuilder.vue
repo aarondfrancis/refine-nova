@@ -2,10 +2,10 @@
   <div class="flex flex-wrap gap-x-2">
     <template v-for="(item, index) in blueprint">
       <Condition
-        class="mb-2"
         v-if="item.type === 'criterion'"
         :condition="conditionForCriterion(item)"
         :input="item.input"
+        :auto-open="autoOpen"
         @update:input="value => handleInputUpdate(index, value)"
         @remove="remove(index)"
       />
@@ -44,6 +44,12 @@ export default {
 
   emits: ['update:blueprint'],
 
+  data() {
+    return {
+      autoOpen: false,
+    }
+  },
+
   created() {
     let blueprint = []
     let modified = false
@@ -64,14 +70,17 @@ export default {
       this.emitUpdate(blueprint)
     }
 
+    // If the blueprint is already pretty long, let's just leave it alone.
     if (blueprint.length >= 7) {
       return
     }
 
+    // Otherwise let's gather up all the unused conditions
     let unusedConditions = this.filter.conditions.filter(
       c => blueprint.findIndex(i => i?.condition_id === c.id) === -1
     )
 
+    // And push empty versions into the blueprint
     while (blueprint.length < 7 && unusedConditions.length > 0) {
       blueprint.push({
         depth: 1,
@@ -81,6 +90,7 @@ export default {
 
       blueprint.push({
         depth: 1,
+        uid: uid(),
         type: 'criterion',
         condition_id: unusedConditions.shift().id,
         input: {},
@@ -90,6 +100,9 @@ export default {
 
   methods: {
     add(condition) {
+      this.autoOpen = true
+      setTimeout(() => (this.autoOpen = false), 10)
+
       this.blueprint.push({
         depth: 1,
         type: 'conjunction',
@@ -120,7 +133,7 @@ export default {
     },
 
     emitUpdate(blueprint) {
-      useBlueprintStore().resetSelectedSavedFilter()
+      useBlueprintStore().resetSelectedStoredFilter()
 
       this.$emit('update:blueprint', blueprint)
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center">
     <arrow-uturn-up-icon
-      class="w-4 h-4 mr-2 shrink-0 text-indigo-700 rotate-90"
+      class="w-4 h-4 mr-2 shrink-0 text-blue-700 rotate-90"
     />
     <input
       type="number"

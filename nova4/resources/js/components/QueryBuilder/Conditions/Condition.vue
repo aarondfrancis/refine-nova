@@ -27,7 +27,7 @@
 
           <div class="w-px mx-1 h-4 border-l border-gray-300 shrink-0" />
 
-          <div class="text-indigo-600">
+          <div class="text-primary-500">
             {{ quicklook }}
           </div>
 
@@ -65,7 +65,7 @@
 
           <button
             @click="handleApply(close)"
-            class="mt-4 w-full bg-indigo-600 text-white rounded-md shadow border border-indigo-500 py-1"
+            class="mt-4 py-2 w-full shadow rounded text-white focus:outline-none ring-primary-200 dark:ring-gray-600 focus:ring bg-primary-500 hover:bg-primary-400 active:bg-primary-600 dark:text-gray-800 font-bold text-sm"
           >
             Apply
           </button>
@@ -81,7 +81,6 @@ import { Popover, PopoverPanel, PopoverOverlay } from '@headlessui/vue'
 import { Float, FloatArrow } from '@headlessui-float/vue'
 import ConditionPopoverButton from './ConditionPopoverButton.vue'
 import ClauseSelector from './ClauseSelector.vue'
-import { toPlainObject } from 'lodash'
 import { resolveComponent } from 'vue'
 
 export default {
@@ -97,6 +96,11 @@ export default {
   },
 
   props: {
+    autoOpen: {
+      type: Boolean,
+      required: true,
+    },
+
     condition: {
       type: Object,
       required: true,
@@ -118,6 +122,14 @@ export default {
       // Our internal cache of the input. We don't emit
       // an update until the apply button is pressed
       internal: {},
+    }
+  },
+
+  mounted() {
+    if (this.autoOpen) {
+      setTimeout(() => {
+        this.$el.querySelector('button').click()
+      }, 100)
     }
   },
 

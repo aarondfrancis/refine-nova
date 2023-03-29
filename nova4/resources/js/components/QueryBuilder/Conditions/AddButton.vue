@@ -37,7 +37,7 @@
           <button
             v-for="condition in conditions"
             @click.prevent="$emit('add', condition) || close()"
-            class="py-1 px-2 rounded w-full hover:bg-indigo-600 hover:text-white text-left"
+            class="py-1 px-2 rounded w-full hover:bg-primary-600 hover:text-white text-left"
           >
             {{ condition.display }}
           </button>

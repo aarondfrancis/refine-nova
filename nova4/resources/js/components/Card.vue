@@ -1,79 +1,62 @@
 <template>
-  <div class="refine-nova-card">
-    <!--
-          Because we use a Tailwind prefix, we have to inject our own "dark" class here.
-          All of our CSS is generated as e.g. `.refine-nova-card .dark .pl-4 {}`
-          and by default the .dark class goes on the documentElement.
-     -->
-    <div :class="{ dark: dark }">
-      <Teleport v-if="savedFiltersTarget" :to="savedFiltersTarget">
-        <div class="ml-4 flex gap-x-3">
-          <div style="box-shadow: inset 0 -8px 0 rgb(52 144 220 / 20%)">
-            Favorites
-          </div>
-          <div>Losers</div>
-          <div>Aarons</div>
-          <div>Canceled</div>
-        </div>
-      </Teleport>
+  <div class="hidden">
+    <Teleport v-if="savedFiltersTarget" :to="savedFiltersTarget">
+      <StoredFilterTabs />
+    </Teleport>
 
-      <Teleport v-if="target" :to="target">
-        <!--
-          We have to repeat this class here because once the element is teleported,
-          it no longer is affected by our custom Tailwind styles, which rely on
-          the presence of a .refine-nova-card parent selector. We're safe to use
-          `flex` because the Nova css will always have that one.
-         -->
-        <div class="refine-nova-card">
-          <div class="flex items-baseline border-b pl-4 py-3">
-            <query-builder
-              :errors="errors"
-              v-model:blueprint="filter.blueprint"
-              :filter="filter"
-              :conditions="filter.conditions"
-            />
-          </div>
+    <Teleport v-if="queryBuilderTarget" :to="queryBuilderTarget">
+      <div class="flex items-baseline border-b pl-4 py-3">
+        <QueryBuilder
+          :errors="errors"
+          :blueprint="blueprint"
+          @update:blueprint="blueprint => updateBlueprint(blueprint)"
+          :filter="filter"
+          :conditions="filter.conditions"
+        />
 
-          <test :fields="card.fields">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-              />
-            </svg>
-          </test>
-        </div>
-      </Teleport>
-    </div>
+        <StoredFilterModal />
+      </div>
+    </Teleport>
+
+    <Teleport v-if="fieldSelectorTarget" :to="fieldSelectorTarget">
+      <FieldSelector :fields="card.fields">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+          />
+        </svg>
+      </FieldSelector>
+    </Teleport>
   </div>
 </template>
 
 <script>
-// Instead of recreating any logic, we'll just watch what Nova does and go off of that.
-function getDarkMode() {
-  return document.documentElement.classList.contains('dark')
-}
-
 import QueryBuilder from './QueryBuilder/QueryBuilder.vue'
-import Test from './FieldSelector.vue'
+import FieldSelector from './FieldSelector.vue'
 import SlideDown from './SlideDown'
-import store from 'store2'
 import toPlainObject from 'lodash/toPlainObject'
 import forEach from 'lodash/forEach'
+import StoredFilterModal from './QueryBuilder/StoredFilterModal.vue'
+import StoredFilterTabs from './QueryBuilder/StoredFilterTabs.vue'
+import { storeToRefs } from 'pinia'
+import { useBlueprintStore } from '../stores/BlueprintStore'
 
 export default {
   props: ['card', 'resourceName'],
 
   components: {
-    Test,
+    StoredFilterModal,
+    StoredFilterTabs,
+    FieldSelector,
     SlideDown,
     QueryBuilder,
   },
@@ -81,13 +64,21 @@ export default {
   data() {
     let filter = toPlainObject(this.card.filter)
 
+    let store = useBlueprintStore()
+
+    // Load the filter into the store.
+    store.$patch({
+      blueprint: filter.blueprint,
+    })
+
     return {
-      dark: false,
-      target: null,
+      queryBuilderTarget: null,
+      fieldSelectorTarget: null,
       savedFiltersTarget: null,
       errors: {},
       lastAppliedBlueprint: filter.blueprint,
       filter: filter,
+      blueprint: storeToRefs(store).blueprint,
     }
   },
 
@@ -117,38 +108,9 @@ export default {
   },
 
   mounted() {
-    this.dark = getDarkMode()
-
-    let toolBarItemsRight = document.querySelector(
-      '[dusk="filter-selector"]'
-    ).parentNode
-    //
-    // toolBarItemsRight.style.order = 3
-    //
-    // this.target = toolBarItemsRight.parentNode
-
-    let target = document.createElement('div')
-    target.setAttribute('id', 'refine-builder-target')
-
-    let header = toolBarItemsRight.closest(
-      '.flex.flex-col.md\\:flex-row.md\\:items-center.py-3.border-b.border-gray-200.dark\\:border-gray-700'
-    )
-
-    header.parentNode.insertBefore(target, header)
-
-    this.target = target
-
+    this.addQueryBuilderTarget()
+    this.addFieldSelectorTarget()
     this.addSavedFilterTarget()
-
-    let observer = new MutationObserver(() => {
-      this.dark = getDarkMode()
-    })
-
-    // Watch for class changes on the documentElement
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    })
 
     // When the page initially loads, we only want to update from
     // the stable ID if there is an ID. Otherwise we will just
@@ -164,31 +126,45 @@ export default {
     refineParameterName() {
       return `${this.resourceName}_refine`
     },
-
-    collapsedText() {
-      return this.__(this.calculateCollapsedText(this.lastAppliedBlueprint))
-    },
   },
 
   watch: {
-    collapsed(val) {
-      store.set('refine-collapsed', val)
+    blueprint() {
+      this.submit()
     },
   },
 
   methods: {
+    addQueryBuilderTarget() {
+      let toolBarItemsRight = document.querySelector(
+        '[dusk="filter-selector"]'
+      ).parentNode
+
+      let queryBuilderTarget = document.createElement('div')
+      queryBuilderTarget.setAttribute('id', 'refine-builder-target')
+
+      let header = toolBarItemsRight.closest(
+        '.flex.flex-col.md\\:flex-row.md\\:items-center.py-3.border-b.border-gray-200.dark\\:border-gray-700'
+      )
+
+      header.parentNode.insertBefore(queryBuilderTarget, header)
+
+      this.queryBuilderTarget = queryBuilderTarget
+    },
+
+    addFieldSelectorTarget() {
+      this.fieldSelectorTarget = document.querySelector(
+        '[dusk="filter-selector"]'
+      ).parentNode
+    },
+
     addSavedFilterTarget() {
-      let h1 = document.querySelector('h1')
-      let wrapper = document.createElement('div')
-      wrapper.classList.add('refine-nova-card', 'flex')
-      wrapper.style.alignItems = 'baseline'
+      let parent = this.queryBuilderTarget.parentNode
 
       let target = document.createElement('div')
       target.setAttribute('id', 'refine-saved-filters-target')
 
-      h1.parentNode.insertBefore(wrapper, h1)
-      wrapper.appendChild(h1)
-      wrapper.appendChild(target)
+      parent.parentNode.insertBefore(target, parent)
 
       this.savedFiltersTarget = target
     },
@@ -204,7 +180,7 @@ export default {
           // more closely at the blueprint store to figure out why.
           this.$nextTick(() => {
             this.lastAppliedBlueprint = data.blueprint
-            this.filter.blueprint = data.blueprint
+            this.blueprint = data.blueprint
           })
 
           if (refresh) {
@@ -213,18 +189,11 @@ export default {
         })
     },
 
-    calculateCollapsedText(blueprint) {
-      let count = blueprint.filter(item => item.type === 'criterion').length
+    updateBlueprint(blueprint) {
+      console.log('updating')
+      this.blueprint = blueprint
 
-      if (count === 0) {
-        return 'No filter conditions applied.'
-      }
-
-      if (count === 1) {
-        return '1 filter condition applied.'
-      }
-
-      return `${count} filter conditions applied.`
+      this.submit()
     },
 
     submit() {
@@ -235,7 +204,7 @@ export default {
         // stabilize the blueprint, and then pop it in the querystring.
         .post('/nova-vendor/refine-nova/stabilize', {
           type: this.filter.type,
-          blueprint: this.filter.blueprint,
+          blueprint: this.blueprint,
         })
         .then(({ data }) => {
           // Put the new stable id in the querystring, and then the router will take over.
