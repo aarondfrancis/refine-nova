@@ -5,6 +5,7 @@
 
 namespace Hammerstone\Refine\Nova;
 
+use Hammerstone\Refine\Blueprints\Blueprint;
 use Hammerstone\Refine\Filter;
 use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -17,7 +18,15 @@ trait RefinesModels
      */
     public static function refineFilter(NovaRequest $request = null)
     {
-        return static::$filter;
+        $filter = static::$filter;
+
+        if (is_string($filter)) {
+            $filter = app($filter, [
+                'blueprint' => static::getBlueprint($request)
+            ]);
+        }
+
+        return $filter;
     }
 
     /**
@@ -40,6 +49,14 @@ trait RefinesModels
     }
 
     /**
+     * @return array|Blueprint
+     */
+    public static function defaultBlueprint()
+    {
+        return [];
+    }
+
+    /**
      * @param  NovaRequest  $request
      * @param $query
      * @return mixed
@@ -49,11 +66,9 @@ trait RefinesModels
         $filter = static::refineFilter($request);
 
         if (is_string($filter)) {
-            $filter = app($filter);
-        }
-
-        if ($id = $request->input(static::uriKey() . '_refine')) {
-            $filter = (new UrlEncodedStabilizer())->fromStableId($id);
+            $filter = app($filter, [
+                'blueprint' => static::getBlueprint($request),
+            ]);
         }
 
         // Typically we would start with the `initialQuery` from the filter,
@@ -62,5 +77,20 @@ trait RefinesModels
         $filter->useInitialQuery($query)->bind();
 
         return $query;
+    }
+
+    /**
+     * @param  NovaRequest|null  $request
+     * @return array
+     */
+    protected static function getBlueprint(NovaRequest $request = null)
+    {
+        // The NovaRequest isn't passed to the `cards` method so it might be null.
+        // We just need the query params so we use the global request helper.
+        if ($id = request()->input(static::uriKey() . '_refine')) {
+            return (new UrlEncodedStabilizer)->fromStableId($id)->getBlueprint();
+        }
+
+        return static::defaultBlueprint();
     }
 }

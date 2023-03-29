@@ -44,15 +44,23 @@ Nova.request = options => {
 function attachInterceptors(axios) {
   // Add a request interceptor so that we can add our Refine query params.
   axios.interceptors.request.use(function (config) {
-    // Instead of checking route patterns, just piggyback onto
-    // any request where the filters are included, because
-    // we'll want to Refine all of those requests.
-    if (config?.params?.hasOwnProperty('filters')) {
+    let shouldAttach =
+      // Piggyback onto any request where the filters are included,
+      // because we'll want to Refine all of those requests.
+      config?.params?.hasOwnProperty('filters') ||
+      // Also attach to the cards endpoint, so that we can
+      // get the right blueprint on initial load.
+      config?.url?.endsWith('/cards')
+
+    if (shouldAttach) {
       // Add every query param that ends in _refine, because
       // each resource will start with something different,
       // but they all end in _refine.
       new URLSearchParams(window.location.search).forEach((value, key) => {
         if (endsWith(key, '_refine')) {
+          if (!config.params) {
+            config.params = {}
+          }
           config.params[key] = value
         }
       })
