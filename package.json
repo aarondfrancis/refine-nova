@@ -7,7 +7,7 @@
     "dev": "cd nova4 && npm run dev",
     "prod": "cd nova4 && npm run prod",
     "prep": "cd nova4 && npm ci && npm run nova:install",
-    "build": "npm run prep && npm run prod",
+    "build": "./build/versions.sh && ./build/install.sh && npm run prep && ./build/compile.sh",
     "format": "prettier . -w"
   },
   "devDependencies": {

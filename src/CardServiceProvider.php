@@ -4,6 +4,7 @@ namespace Hammerstone\Refine\Nova;
 
 use Hammerstone\Refine\Conditions\Clause;
 use Hammerstone\Refine\Frontend\Vue2Frontend;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -32,11 +33,22 @@ class CardServiceProvider extends ServiceProvider
             }
         }
 
-        $path = Str::startsWith(Nova::version(), '4.') ? 'nova4' : 'nova3';
+        $version = head(explode(' ', Nova::version()));
 
-        Nova::serving(function (ServingNova $event) use ($path) {
-            Nova::script('refine-nova-card', __DIR__ . "/../$path/dist/js/card.js");
-            Nova::style('refine-nova', __DIR__ . "/../$path/dist/css/card.css");
+        $css = Cache::rememberForever('refine-nova-css-' . $version, function () use ($version) {
+            $path = __DIR__ . "/../nova4/dist/css/v$version.css";
+
+            if (!realpath($path)) {
+                // Guarantee that we have a CSS file to use.
+                $path = __DIR__ . "/../nova4/dist/css/v4.22.2.css";
+            }
+
+            return $path;
+        });
+
+        Nova::serving(function (ServingNova $event) use ($css) {
+            Nova::script('refine-nova-card', __DIR__ . "/../nova4/dist/js/card.js");
+            Nova::style('refine-nova', $css);
         });
 
         /** @TODO */
