@@ -36,18 +36,18 @@ class CardServiceProvider extends ServiceProvider
         $version = head(explode(' ', Nova::version()));
 
         $css = Cache::rememberForever('refine-nova-css-' . $version, function () use ($version) {
-            $path = __DIR__ . "/../nova4/dist/css/v$version.css";
+            $path = __DIR__ . "/../dist/css/v$version.css";
 
             if (!realpath($path)) {
                 // Guarantee that we have a CSS file to use.
-                $path = __DIR__ . "/../nova4/dist/css/v4.22.2.css";
+                $path = __DIR__ . "/../dist/css/v4.22.2.css";
             }
 
             return $path;
         });
 
         Nova::serving(function (ServingNova $event) use ($css) {
-            Nova::script('refine-nova-card', __DIR__ . "/../nova4/dist/js/card.js");
+            Nova::script('refine-nova-card', __DIR__ . "/../dist/js/card.js");
             Nova::style('refine-nova', $css);
         });
 

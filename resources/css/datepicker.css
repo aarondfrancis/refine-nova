@@ -1,0 +1,46 @@
+@import '@vuepic/vue-datepicker/dist/main.css';
+
+.dp__arrow_top {
+    left: 10%;
+}
+
+.dp__menu {
+    @apply rounded-md pt-1 p-3
+}
+
+.dp__month_year_row, .dp__month_year_select {
+    height: 30px;
+}
+
+.dp__month_year_select {
+    @apply text-sm
+}
+
+.dp__calendar_row {
+    @apply mt-0 -mb-px
+}
+
+.dp__calendar_item {
+    @apply border border-gray-200 bg-gray-50 -mx-px text-sm
+}
+
+.dp__today {
+    @apply border-0
+}
+
+.dp__active_date {
+    @apply bg-indigo-600 text-white
+}
+
+.dp__cell_inner {
+    @apply rounded-none
+}
+
+.dp__calendar_header_item {
+    height: 30px;
+    @apply text-xs font-normal text-gray-500
+}
+
+.dp__calendar_header_separator {
+    @apply hidden
+}

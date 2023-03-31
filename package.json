@@ -1,17 +1,36 @@
 {
-  "name": "refine-nova",
-  "version": "0.0.0",
-  "author": "Aaron Francis <aarondfrancis@gmail.com> (http://aaronfrancis.com/)",
+  "private": true,
   "scripts": {
-    "watch": "cd nova4 && npm run watch",
-    "dev": "cd nova4 && npm run dev",
-    "prod": "cd nova4 && npm run prod",
-    "prep": "cd nova4 && npm ci && npm run nova:install",
-    "build": "./build/versions.sh && ./build/install.sh && npm run prep && ./build/compile.sh",
-    "format": "prettier . -w"
+    "format": "prettier . -w",
+    "dev": "mix",
+    "watch": "mix watch",
+    "prod": "mix --production",
+    "prep": "npm ci && npm run nova:install",
+    "nova:install": "composer update --with laravel/nova:\"^4.13\" && npm --prefix='vendor/laravel/nova' ci",
+    "nova:fetch-versions": "./build/versions.sh",
+    "nova:stash-css": "./build/install.sh",
+    "build": "npm run nova:fetch-versions && npm run nova:stash-css && npm run prep && ./build/compile.sh"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.22"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0",
-    "prettier": "^2.8.2"
+    "@headlessui-float/vue": "^0.10.1",
+    "@headlessui/vue": "^1.7.7",
+    "@heroicons/vue": "^2.0.13",
+    "@popperjs/core": "^2.11.6",
+    "@vue/compiler-sfc": "^3.2.22",
+    "@vuepic/vue-datepicker": "^3.6.5",
+    "laravel-mix": "^6.0.41",
+    "lodash": "^4.17.21",
+    "pinia": "^2.0.33",
+    "postcss": "^8.4.21",
+    "postcss-import": "^15.1.0",
+    "prettier": "^2.8.2",
+    "store2": "^2.14.2",
+    "tailwindcss": "^3.2.4",
+    "vue-loader": "^16.8.3",
+    "vue-template-compiler": "^2.7.14",
+    "webpack-bundle-analyzer": "^4.7.0"
   }
 }

@@ -42,9 +42,6 @@ class UserFilter extends Filter
 ![Refine Nova 4](art/refine-nova4.png)
 Refine for Laravel Nova 4
 
-![Refine Nova 3](art/refine-nova3.png)
-Refine for Laravel Nova 3
-
 ## Installation
 
 To use Refine with Nova, you must first require the package `composer require hammerstone/refine-nova`. This will

@@ -2,8 +2,7 @@
 set -e
 
 #
-# Install all the versions of Nova listed in the versions.txt
-# file and copy the app.css out to the build/css directory.
+# Use composer to list all available versions of Nova.
 #
 
 # Get the directory of the current script

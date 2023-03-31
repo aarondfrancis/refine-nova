@@ -9,7 +9,7 @@
     "require": {
         "php": "^7.2|^8.0",
         "hammerstone/refine-laravel": "^0.3.4",
-        "laravel/nova": "^4.0"
+        "laravel/nova": "^4.13"
     },
     "autoload": {
         "psr-4": {
