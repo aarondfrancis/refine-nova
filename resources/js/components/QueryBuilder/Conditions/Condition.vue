@@ -199,7 +199,6 @@ export default {
     // Clear the input altogether. This is happens when
     // the little X button is pressed.
     clearInput() {
-      this.$emit('update:input', {})
       this.$emit('remove')
     },
   },

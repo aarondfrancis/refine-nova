@@ -19,10 +19,8 @@
 <script>
 import Condition from './Conditions/Condition'
 import AddButton from './Conditions/AddButton'
-import uid from '@/lib/uid'
-import { toPlainObject } from 'lodash'
-import BlueprintHelper from '@/blueprint'
 import { useBlueprintStore } from '@/stores/BlueprintStore'
+import { storeToRefs } from 'pinia'
 
 export default {
   components: {
@@ -31,94 +29,68 @@ export default {
   },
 
   props: {
-    blueprint: {
-      required: true,
-      type: Object,
-    },
-
     filter: {
       required: true,
       type: Object,
     },
   },
 
-  emits: ['update:blueprint'],
-
   data() {
     return {
       autoOpen: false,
+      blueprint: storeToRefs(useBlueprintStore()).blueprint,
     }
   },
 
   created() {
-    let blueprint = []
-    let modified = false
-
-    // Ensure that all blueprint criterion have a UID.
-    this.blueprint.map(item => {
-      let copy = toPlainObject(item)
-
-      if (item.type === 'criterion' && !item.uid) {
-        copy.uid = uid()
-        modified = true
-      }
-
-      blueprint.push(copy)
-    })
-
-    if (modified) {
-      this.emitUpdate(blueprint)
-    }
-
-    // If the blueprint is already pretty long, let's just leave it alone.
-    if (blueprint.length >= 7) {
-      return
-    }
-
-    // Otherwise let's gather up all the unused conditions
-    let unusedConditions = this.filter.conditions.filter(
-      c => blueprint.findIndex(i => i?.condition_id === c.id) === -1
-    )
-
-    // And push empty versions into the blueprint
-    while (blueprint.length < 7 && unusedConditions.length > 0) {
-      blueprint.push({
-        depth: 1,
-        type: 'conjunction',
-        word: 'and',
-      })
-
-      blueprint.push({
-        depth: 1,
-        uid: uid(),
-        type: 'criterion',
-        condition_id: unusedConditions.shift().id,
-        input: {},
-      })
-    }
+    //
+    //
+    // // If the blueprint is already pretty long, let's just leave it alone.
+    // if (blueprint.length >= 7) {
+    //   return
+    // }
+    //
+    // // Otherwise let's gather up all the unused conditions
+    // let unusedConditions = this.filter.conditions.filter(
+    //   c => blueprint.findIndex(i => i?.condition_id === c.id) === -1
+    // )
+    //
+    // // And push empty versions into the blueprint
+    // while (blueprint.length < 7 && unusedConditions.length > 0) {
+    //   blueprint.push({
+    //     depth: 1,
+    //     type: 'conjunction',
+    //     word: 'and',
+    //   })
+    //
+    //   blueprint.push({
+    //     depth: 1,
+    //     uid: uid(),
+    //     type: 'criterion',
+    //     condition_id: unusedConditions.shift().id,
+    //     input: {},
+    //   })
+    // }
   },
 
   methods: {
     add(condition) {
+      // Auto-open is checked in the condition on mount only, so
+      // all the currently existing conditions will not be
+      // opened, but the new one will.
       this.autoOpen = true
+
+      // Switch it back off after 10ms, which is enough time for
+      // the new component to mount and open itself.
       setTimeout(() => (this.autoOpen = false), 10)
 
-      this.blueprint.push({
-        depth: 1,
-        type: 'conjunction',
-        word: 'and',
-      })
-
-      this.blueprint.push({
-        depth: 1,
-        type: 'criterion',
-        condition_id: condition.id,
-        input: {},
-      })
+      useBlueprintStore().addCriterion(condition)
     },
 
     remove(index) {
-      this.emitUpdate(BlueprintHelper.remove(this.blueprint, index))
+      useBlueprintStore().removeCriterion(index)
+
+      Nova.$emit('submit-refine')
     },
 
     conditionForCriterion(criterion) {
@@ -126,16 +98,9 @@ export default {
     },
 
     handleInputUpdate(index, input) {
-      let copy = this.blueprint
-      copy[index].input = input
+      useBlueprintStore().updateInput(index, input)
 
-      this.emitUpdate(copy)
-    },
-
-    emitUpdate(blueprint) {
-      useBlueprintStore().resetSelectedStoredFilter()
-
-      this.$emit('update:blueprint', blueprint)
+      Nova.$emit('submit-refine')
     },
   },
 }

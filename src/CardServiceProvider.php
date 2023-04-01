@@ -80,6 +80,7 @@ class CardServiceProvider extends ServiceProvider
                 $fields = explode(',', $fields);
             }
 
+            // No fields selected means all fields selected.
             if (empty($fields)) {
                 return $this;
             }

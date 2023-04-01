@@ -3,6 +3,8 @@ let tailwindcss = require('tailwindcss')
 let path = require('path')
 let unique = require('./unique')
 let fs = require('fs')
+let BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // In our build step we pass a --cssonly flag when
 // building the multiple Nova CSS files.
@@ -36,6 +38,7 @@ mix
     output: {
       uniqueName: 'hammerstone/refine',
     },
+    plugins: [new BundleAnalyzerPlugin()],
   })
   .postCss('resources/css/card.css', `dist/css/${novaVersion}.css`, [
     require('postcss-import'),

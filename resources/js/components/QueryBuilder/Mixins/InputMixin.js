@@ -1,4 +1,6 @@
-import { isEqual, toPlainObject, defaults } from 'lodash'
+import isEqual from 'lodash/isEqual'
+import toPlainObject from 'lodash/toPlainObject'
+import defaults from 'lodash/defaults'
 
 export default {
   props: {

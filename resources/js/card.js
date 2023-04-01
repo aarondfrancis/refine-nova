@@ -6,16 +6,16 @@ import { registerHeroiconComponents } from '@/components/Heroicons'
 import { createPinia } from 'pinia'
 
 Nova.booting((Vue, store) => {
+  // Turn on to get the Devtools to show up.
+  // Vue.config.devtools = true
+  // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
+
   const pinia = createPinia()
 
   registerInputComponents(Vue)
   registerHeroiconComponents(Vue)
 
   Vue.use(pinia)
-
-  // Turn on to get the Devtools to show up.
-  Vue.config.devtools = true
-  // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
 
   Vue.component('refine-nova', Card)
 })

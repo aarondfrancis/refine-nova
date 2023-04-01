@@ -7,35 +7,13 @@
 
     <Teleport v-if="queryBuilderTarget" :to="queryBuilderTarget">
       <div class="flex items-baseline border-b pl-4 py-3">
-        <QueryBuilder
-          :errors="errors"
-          :blueprint="blueprint"
-          @update:blueprint="blueprint => updateBlueprint(blueprint)"
-          :filter="filter"
-          :conditions="filter.conditions"
-        />
-
+        <QueryBuilder :errors="errors" :filter="filter" />
         <StoredFilterModal />
       </div>
     </Teleport>
 
     <Teleport v-if="fieldSelectorTarget" :to="fieldSelectorTarget">
-      <FieldSelector :fields="card.fields">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-          />
-        </svg>
-      </FieldSelector>
+      <FieldSelector :fields="card.fields" />
     </Teleport>
   </div>
 </template>
@@ -66,9 +44,7 @@ export default {
     let store = useBlueprintStore()
 
     // Load the filter into the store.
-    store.$patch({
-      blueprint: filter.blueprint,
-    })
+    store.loadBlueprint(filter.blueprint)
 
     return {
       queryBuilderTarget: null,
@@ -82,6 +58,10 @@ export default {
   },
 
   created() {
+    Nova.$on('submit-refine', () => {
+      this.submit()
+    })
+
     Nova.$on('validation-error', response => {
       if (response === false) {
         return
@@ -124,12 +104,6 @@ export default {
   computed: {
     refineParameterName() {
       return `${this.resourceName}_refine`
-    },
-  },
-
-  watch: {
-    blueprint() {
-      this.submit()
     },
   },
 
@@ -188,22 +162,16 @@ export default {
         })
     },
 
-    updateBlueprint(blueprint) {
-      console.log('updating')
-      this.blueprint = blueprint
-
-      this.submit()
-    },
-
     submit() {
       this.errors = {}
+      let store = useBlueprintStore()
 
       Nova.request()
         // Because of the way Nova works, we have to make a round trip to
         // stabilize the blueprint, and then pop it in the querystring.
         .post('/nova-vendor/refine-nova/stabilize', {
           type: this.filter.type,
-          blueprint: this.blueprint,
+          blueprint: store.blueprint,
           // This is the FQCN of the Nova resource, if they are using
           // the AdHocFilter.
           resource: this.filter.resource,
