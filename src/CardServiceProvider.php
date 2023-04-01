@@ -51,6 +51,28 @@ class CardServiceProvider extends ServiceProvider
             Nova::style('refine-nova', $css);
         });
 
+
+        // In Nova you could define two fields with the same attribute AND with the same name,
+        // which means there's no way for us to directly address a field without doing some
+        // weird stuff. We'll start by referencing via attribute, since that doesn't change
+        // very often. If we *do* come across a duplicate attribute, we'll append an
+        // `:N` to the attribute name. About as good as we can do, unfortunately.
+        FieldCollection::macro('disambiguateFields', function () {
+            // Find duplicate attributes in the fields.
+            $duplicates = $this->pluck('attribute')->duplicates()->values()->flip()->toArray();
+
+            return $this->map(function (Field $field) use (&$duplicates) {
+                $field = clone $field;
+
+                if (array_key_exists($field->attribute, $duplicates)) {
+                    // Increment the counter while appending it to the attribute.
+                    $field->attribute = $field->attribute . ':' . $duplicates[$field->attribute]++;
+                }
+
+                return $field;
+            });
+        });
+
         FieldCollection::macro('onlyRequested', function (NovaRequest $request) {
             $fields = $request->get('refined_fields');
 
@@ -62,10 +84,12 @@ class CardServiceProvider extends ServiceProvider
                 return $this;
             }
 
-            return $this->filter(function (Field $field) use ($fields) {
-                // @TODO: We need to be filtering by not attribute, probably by name
-                return in_array($field->attribute, $fields);
-            })->values();
+            return $this
+                ->disambiguateFields()
+                ->filter(function (Field $field) use ($fields) {
+                    return in_array($field->attribute, $fields);
+                })
+                ->values();
         });
     }
 

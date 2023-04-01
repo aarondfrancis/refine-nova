@@ -91,13 +91,18 @@ trait AddsReporting
      */
     public function unrefinedIndexFields(NovaRequest $request)
     {
-        return parent::indexFields($request)->map(function (Field $field) {
-            return [
-                'value' => $field->attribute,
-                'label' => $field->name,
-                'checked' => false,
-            ];
-        })->toArray();
+        $selected = $this->indexFields($request)->disambiguateFields()->pluck('attribute')->flip();
+
+        return parent::indexFields($request)
+            ->disambiguateFields()
+            ->map(function (Field $field) use ($selected) {
+                return [
+                    'value' => $field->attribute,
+                    'label' => $field->name,
+                    'checked' => $selected->has($field->attribute)
+                ];
+            })
+            ->toArray();
     }
 
     /**
@@ -105,10 +110,11 @@ trait AddsReporting
      */
     protected function isUsingAdHocFilter(NovaRequest $request)
     {
-        $cardManuallyDefined = collect($this->cards($request))->filter(function ($card) {
-            return $card instanceof RefineCard;
-        })->isNotEmpty();
-
-        return !$cardManuallyDefined && method_exists($this, 'conditions');
+        // They've defined conditions and haven't added a card manually.
+        return method_exists($this, 'conditions') && collect($this->cards($request))
+                ->filter(function ($card) {
+                    return $card instanceof RefineCard;
+                })
+                ->isEmpty();
     }
 }

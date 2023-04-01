@@ -1691,12 +1691,9 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 var _hoisted_6 = {
   "class": "mt-1 px-3"
 };
-var _hoisted_7 = {
-  "class": "mt-2 flex items-center select-none"
-};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_DropdownTrigger = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DropdownTrigger");
-  var _component_Checkbox = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Checkbox");
+  var _component_CheckboxWithLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CheckboxWithLabel");
   var _component_ScrollWrap = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("ScrollWrap");
   var _component_DropdownMenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DropdownMenu");
   var _component_Dropdown = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Dropdown");
@@ -1717,16 +1714,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Per Page "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.value, function (option, i) {
-                return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("label", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Checkbox, {
-                  onInput: _cache[0] || (_cache[0] = function ($event) {
-                    return _ctx.$emit('input', $event);
+                return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CheckboxWithLabel, {
+                  "class": "mt-2",
+                  key: option.name,
+                  name: option.name,
+                  checked: option.checked,
+                  onInput: function onInput($event) {
+                    return $options.toggle($event, i);
+                  }
+                }, {
+                  "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                    return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option.label), 1 /* TEXT */)];
                   }),
-                  "class": "mr-2",
-                  checked: _ctx.checked,
-                  name: _ctx.name,
-                  disabled: _ctx.disabled
-                }, null, 8 /* PROPS */, ["checked", "name", "disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option.label), 1 /* TEXT */)]);
-              }), 256 /* UNKEYED_FRAGMENT */))])])], 512 /* NEED_PATCH */)];
+
+                  _: 2 /* DYNAMIC */
+                }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["name", "checked", "onInput"]);
+              }), 128 /* KEYED_FRAGMENT */))])])], 512 /* NEED_PATCH */)];
             }),
 
             _: 1 /* STABLE */
@@ -2830,7 +2833,7 @@ Nova.booting(function (Vue, store) {
   Vue.use(pinia);
 
   // Turn on to get the Devtools to show up.
-  // Vue.config.devtools = true;
+  Vue.config.devtools = true;
   // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
 
   Vue.component('refine-nova', _components_Card__WEBPACK_IMPORTED_MODULE_0__["default"]);
@@ -2856,15 +2859,21 @@ Nova.request = function (options) {
 function attachInterceptors(axios) {
   // Add a request interceptor so that we can add our Refine query params.
   axios.interceptors.request.use(function (config) {
-    var _config$params;
-    // Instead of checking route patterns, just piggyback onto
-    // any request where the filters are included, because
-    // we'll want to Refine all of those requests.
-    if (config !== null && config !== void 0 && (_config$params = config.params) !== null && _config$params !== void 0 && _config$params.hasOwnProperty('filters')) {
-      // Add every query param that ends in _refine, because
-      // each resource will start with something different,
-      // but they all end in _refine.
+    var _config$params, _config$url;
+    var shouldAttach =
+    // Piggyback onto any request where the filters are included,
+    // because we'll want to Refine all of those requests.
+    (config === null || config === void 0 ? void 0 : (_config$params = config.params) === null || _config$params === void 0 ? void 0 : _config$params.hasOwnProperty('filters')) || ( // Also attach to the cards endpoint, so that we can
+    // get the right blueprint on initial load.
+    config === null || config === void 0 ? void 0 : (_config$url = config.url) === null || _config$url === void 0 ? void 0 : _config$url.endsWith('/cards'));
+    if (shouldAttach) {
+      if (!config.params) {
+        config.params = {};
+      }
       new URLSearchParams(window.location.search).forEach(function (value, key) {
+        // Add every query param that ends in _refine, because
+        // each resource will start with something different,
+        // but they all end in _refine.
         if (lodash_endsWith__WEBPACK_IMPORTED_MODULE_1___default()(key, '_refine')) {
           config.params[key] = value;
         }

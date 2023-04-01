@@ -14,7 +14,7 @@ Nova.booting((Vue, store) => {
   Vue.use(pinia)
 
   // Turn on to get the Devtools to show up.
-  // Vue.config.devtools = true;
+  Vue.config.devtools = true
   // __VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = Vue
 
   Vue.component('refine-nova', Card)
@@ -44,14 +44,23 @@ Nova.request = options => {
 function attachInterceptors(axios) {
   // Add a request interceptor so that we can add our Refine query params.
   axios.interceptors.request.use(function (config) {
-    // Instead of checking route patterns, just piggyback onto
-    // any request where the filters are included, because
-    // we'll want to Refine all of those requests.
-    if (config?.params?.hasOwnProperty('filters')) {
-      // Add every query param that ends in _refine, because
-      // each resource will start with something different,
-      // but they all end in _refine.
+    let shouldAttach =
+      // Piggyback onto any request where the filters are included,
+      // because we'll want to Refine all of those requests.
+      config?.params?.hasOwnProperty('filters') ||
+      // Also attach to the cards endpoint, so that we can
+      // get the right blueprint on initial load.
+      config?.url?.endsWith('/cards')
+
+    if (shouldAttach) {
+      if (!config.params) {
+        config.params = {}
+      }
+
       new URLSearchParams(window.location.search).forEach((value, key) => {
+        // Add every query param that ends in _refine, because
+        // each resource will start with something different,
+        // but they all end in _refine.
         if (endsWith(key, '_refine')) {
           config.params[key] = value
         }

@@ -1,4 +1,5 @@
 dist/
+build/
 vendor/
 .github/
 package-lock.json
