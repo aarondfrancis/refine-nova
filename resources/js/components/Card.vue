@@ -205,6 +205,9 @@ export default {
         .post('/nova-vendor/refine-nova/stabilize', {
           type: this.filter.type,
           blueprint: this.blueprint,
+          // This is the FQCN of the Nova resource, if they are using
+          // the AdHocFilter.
+          resource: this.filter.resource,
         })
         .then(({ data }) => {
           // Put the new stable id in the querystring, and then the router will take over.

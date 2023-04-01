@@ -38,16 +38,19 @@
                 Show Columns
               </h3>
               <div class="mt-1 px-3">
-                <CheckboxWithLabel
-                  class="mt-2"
+                <label
                   v-for="(option, i) in value"
-                  :key="option.name"
-                  :name="option.name"
-                  :checked="option.checked"
-                  @input="toggle($event, i)"
+                  class="mt-2 flex items-center select-none"
                 >
+                  <Checkbox
+                    @input="$emit('input', $event)"
+                    class="mr-2"
+                    :checked="checked"
+                    :name="name"
+                    :disabled="disabled"
+                  />
                   {{ option.label }}
-                </CheckboxWithLabel>
+                </label>
               </div>
             </div>
           </div>

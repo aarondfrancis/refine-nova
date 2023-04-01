@@ -16,6 +16,7 @@ class StabilizationController
         $filter = Filter::fromState([
             'type' => $request->type,
             'blueprint' => $request->blueprint,
+            'resource' => $request->resource,
         ]);
 
         $stabilizer = new UrlEncodedStabilizer();
@@ -33,7 +34,7 @@ class StabilizationController
             ];
         }
 
-        $filter = (new UrlEncodedStabilizer())->fromStableId($request->id);
+        $filter = (new UrlEncodedStabilizer)->fromStableId($request->id);
 
         return [
             'blueprint' => $filter->getBlueprint(),

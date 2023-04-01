@@ -12,7 +12,7 @@ let shouldCompileJavascript = process.env.npm_config_cssonly !== 'true'
 // recent version listed in the versions.txt file.
 let novaVersion =
   process.env.npm_config_nova ||
-  'v4.19.6' ||
+  'v4.22.2' ||
   fs
     .readFileSync(path.join(__dirname, `build/versions.txt`), 'utf8')
     .split('\n')[0]

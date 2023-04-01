@@ -33,6 +33,7 @@ class CardServiceProvider extends ServiceProvider
             }
         }
 
+        // We base our CSS file on what version of Nova we're using.
         $version = head(explode(' ', Nova::version()));
 
         $css = Cache::rememberForever('refine-nova-css-' . $version, function () use ($version) {
@@ -51,7 +52,6 @@ class CardServiceProvider extends ServiceProvider
             Nova::style('refine-nova', $css);
         });
 
-        /** @TODO */
         FieldCollection::macro('onlyRequested', function (NovaRequest $request) {
             $fields = $request->get('refined_fields');
 
@@ -63,11 +63,10 @@ class CardServiceProvider extends ServiceProvider
                 return $this;
             }
 
-            return $this
-                ->filter(function (Field $field) use ($fields) {
-                    return in_array($field->attribute, $fields);
-                })
-                ->values();
+            return $this->filter(function (Field $field) use ($fields) {
+                // @TODO: We need to be filtering by not attribute, probably by name
+                return in_array($field->attribute, $fields);
+            })->values();
         });
     }
 

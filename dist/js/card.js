@@ -595,7 +595,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       // stabilize the blueprint, and then pop it in the querystring.
       .post('/nova-vendor/refine-nova/stabilize', {
         type: this.filter.type,
-        blueprint: this.blueprint
+        blueprint: this.blueprint,
+        // This is the FQCN of the Nova resource, if they are using
+        // the AdHocFilter.
+        resource: this.filter.resource
       }).then(function (_ref2) {
         var _this3$updateQueryStr;
         var data = _ref2.data;
@@ -1688,9 +1691,12 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 var _hoisted_6 = {
   "class": "mt-1 px-3"
 };
+var _hoisted_7 = {
+  "class": "mt-2 flex items-center select-none"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_DropdownTrigger = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DropdownTrigger");
-  var _component_CheckboxWithLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CheckboxWithLabel");
+  var _component_Checkbox = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Checkbox");
   var _component_ScrollWrap = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("ScrollWrap");
   var _component_DropdownMenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DropdownMenu");
   var _component_Dropdown = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Dropdown");
@@ -1711,22 +1717,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Per Page "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.value, function (option, i) {
-                return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CheckboxWithLabel, {
-                  "class": "mt-2",
-                  key: option.name,
-                  name: option.name,
-                  checked: option.checked,
-                  onInput: function onInput($event) {
-                    return $options.toggle($event, i);
-                  }
-                }, {
-                  "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                    return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option.label), 1 /* TEXT */)];
+                return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("label", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Checkbox, {
+                  onInput: _cache[0] || (_cache[0] = function ($event) {
+                    return _ctx.$emit('input', $event);
                   }),
-
-                  _: 2 /* DYNAMIC */
-                }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["name", "checked", "onInput"]);
-              }), 128 /* KEYED_FRAGMENT */))])])], 512 /* NEED_PATCH */)];
+                  "class": "mr-2",
+                  checked: _ctx.checked,
+                  name: _ctx.name,
+                  disabled: _ctx.disabled
+                }, null, 8 /* PROPS */, ["checked", "name", "disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option.label), 1 /* TEXT */)]);
+              }), 256 /* UNKEYED_FRAGMENT */))])])], 512 /* NEED_PATCH */)];
             }),
 
             _: 1 /* STABLE */
@@ -2878,9 +2878,6 @@ function attachInterceptors(axios) {
 
   // Add a response interceptor so we can catch validation errors.
   axios.interceptors.response.use(function (response) {
-    if (response.config.url === '/nova-api/users/cards') {
-      // response.data = []
-    }
     return response;
   }, function (error) {
     if (error.response && error.response.status === 422) {
@@ -44934,7 +44931,7 @@ function del(target, key) {
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/card": 0,
-/******/ 			"css/v4.19.6": 0
+/******/ 			"css/v4.22.2": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -44984,8 +44981,8 @@ function del(target, key) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/v4.19.6"], () => (__webpack_require__("./resources/js/card.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/v4.19.6"], () => (__webpack_require__("./resources/css/card.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/v4.22.2"], () => (__webpack_require__("./resources/js/card.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/v4.22.2"], () => (__webpack_require__("./resources/css/card.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

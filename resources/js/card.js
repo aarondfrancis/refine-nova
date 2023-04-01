@@ -67,12 +67,7 @@ function attachInterceptors(axios) {
 
   // Add a response interceptor so we can catch validation errors.
   axios.interceptors.response.use(
-    response => {
-      if (response.config.url === '/nova-api/users/cards') {
-        // response.data = []
-      }
-      return response
-    },
+    response => response,
     error => {
       if (error.response && error.response.status === 422) {
         // Emit an event with the error data over to our Card
