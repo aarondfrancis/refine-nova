@@ -1,4 +1,5 @@
 <template>
+  <!-- Everything is teleported, so we hide the empty card -->
   <div class="hidden">
     <Teleport v-if="savedFiltersTarget" :to="savedFiltersTarget">
       <StoredFilterTabs />
@@ -42,7 +43,6 @@
 <script>
 import QueryBuilder from './QueryBuilder/QueryBuilder.vue'
 import FieldSelector from './FieldSelector.vue'
-import SlideDown from './SlideDown'
 import toPlainObject from 'lodash/toPlainObject'
 import forEach from 'lodash/forEach'
 import StoredFilterModal from './QueryBuilder/StoredFilterModal.vue'
@@ -57,7 +57,6 @@ export default {
     StoredFilterModal,
     StoredFilterTabs,
     FieldSelector,
-    SlideDown,
     QueryBuilder,
   },
 

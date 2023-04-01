@@ -1,13 +1,12 @@
 import { defineStore } from 'pinia'
 
-import blueprint from '@/lib/blueprint'
 import stored from '@/lib/stored'
 
 export const useBlueprintStore = defineStore('Blueprint', {
   state() {
     return {
       stored: stored,
-      blueprint: blueprint,
+      blueprint: [],
     }
   },
 
