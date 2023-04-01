@@ -13,7 +13,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 trait AddsReporting
 {
     /**
-     * @param  NovaRequest  $request
      * @return mixed
      */
     public function indexFields(NovaRequest $request)
@@ -25,9 +24,8 @@ trait AddsReporting
     }
 
     /**
-     * @param  NovaRequest  $request
-     * @param $query
      * @return mixed
+     *
      * @throws \Exception
      */
     public static function indexQuery(NovaRequest $request, $query)
@@ -51,7 +49,7 @@ trait AddsReporting
             return (new UrlEncodedStabilizer)->fromStableId($id);
         }
 
-        $card = (new static)->resolveCards($request)->first(function ($card) use ($request) {
+        $card = (new static)->resolveCards($request)->first(function ($card) {
             return $card instanceof RefineCard;
         });
 
@@ -64,8 +62,8 @@ trait AddsReporting
      * This extends the parent method to add a RefineCard to the
      * cards if one isn't already present but should be.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return \Illuminate\Support\Collection<int, \Laravel\Nova\Metrics\Metric|\Laravel\Nova\Card>
+     *
      * @see \Laravel\Nova\Resource::resolveCards()
      */
     public function resolveCards(NovaRequest $request)
@@ -89,7 +87,6 @@ trait AddsReporting
     }
 
     /**
-     * @param  NovaRequest  $request
      * @return array
      */
     public function unrefinedIndexFields(NovaRequest $request)
@@ -104,7 +101,6 @@ trait AddsReporting
     }
 
     /**
-     * @param  NovaRequest  $request
      * @return bool
      */
     protected function isUsingAdHocFilter(NovaRequest $request)

@@ -7,7 +7,6 @@ use Hammerstone\Refine\Frontend\Vue2Frontend;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Fields\FieldCollection;
@@ -41,14 +40,14 @@ class CardServiceProvider extends ServiceProvider
 
             if (!realpath($path)) {
                 // Guarantee that we have a CSS file to use.
-                $path = __DIR__ . "/../dist/css/v4.22.2.css";
+                $path = __DIR__ . '/../dist/css/v4.22.2.css';
             }
 
             return $path;
         });
 
         Nova::serving(function (ServingNova $event) use ($css) {
-            Nova::script('refine-nova-card', __DIR__ . "/../dist/js/card.js");
+            Nova::script('refine-nova-card', __DIR__ . '/../dist/js/card.js');
             Nova::style('refine-nova', $css);
         });
 

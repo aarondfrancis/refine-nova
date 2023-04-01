@@ -52,7 +52,6 @@ class AdHocFilter extends Filter
     }
 
     /**
-     * @param $resource
      * @return $this
      */
     public function setResource($resource)

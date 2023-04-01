@@ -5,11 +5,6 @@
 
 namespace Hammerstone\Refine\Nova;
 
-use Hammerstone\Refine\Filter;
-use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;
-use Laravel\Nova\Http\Requests\NovaRequest;
-
 trait RefinesResources
 {
-
 }
