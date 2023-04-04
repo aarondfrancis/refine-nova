@@ -51,7 +51,6 @@ class CardServiceProvider extends ServiceProvider
             Nova::style('refine-nova', $css);
         });
 
-
         // In Nova you could define two fields with the same attribute AND with the same name,
         // which means there's no way for us to directly address a field without doing some
         // weird stuff. We'll start by referencing via attribute, since that doesn't change
