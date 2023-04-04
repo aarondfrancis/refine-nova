@@ -1,29 +1,34 @@
 import { defineStore } from 'pinia'
-import stored from '@/lib/stored'
 import uid from '@/lib/uid'
 
 export const useBlueprintStore = defineStore('Blueprint', {
   state() {
     return {
-      stored: stored,
+      stored: [],
       blueprint: [],
     }
   },
 
   actions: {
+    loadStoredFilters(blueprints) {
+      this.stored = blueprints
+    },
+
     loadBlueprint(blueprint) {
       // Ensure that all blueprint criterion have a UID.
       this.blueprint = blueprint.map(item => {
-        if (item.type === 'criterion' && !item.uid) {
+        if (item.type === 'criterion' && !item.hasOwnProperty('uid')) {
           item.uid = uid()
         }
 
         return item
       })
+
+      this.resetSelectedStoredFilter()
     },
 
     addCriterion(condition, input = {}) {
-      if (this.blueprint.length === 0) {
+      if (this.blueprint.length > 0) {
         this.blueprint.push({
           depth: 1,
           type: 'conjunction',
@@ -39,6 +44,8 @@ export const useBlueprintStore = defineStore('Blueprint', {
         input: input,
         uid: uid(),
       })
+
+      this.resetSelectedStoredFilter()
     },
 
     removeCriterion(index) {
@@ -83,11 +90,13 @@ export const useBlueprintStore = defineStore('Blueprint', {
         this.blueprint.splice(index - 1, 2)
       }
 
-      return this.blueprint
+      this.resetSelectedStoredFilter()
     },
 
     updateInput(index, input) {
       this.blueprint[index].input = input
+
+      this.resetSelectedStoredFilter()
     },
 
     saveCurrentBlueprint(name) {

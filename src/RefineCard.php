@@ -2,6 +2,7 @@
 
 namespace Hammerstone\Refine\Nova;
 
+use Hammerstone\Refine\Nova\Filters\AdHocFilter;
 use Laravel\Nova\Card;
 use Laravel\Nova\Resource;
 

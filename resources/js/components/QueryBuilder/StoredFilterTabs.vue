@@ -42,10 +42,12 @@ export default {
       let store = useBlueprintStore()
 
       store.$patch({
-        blueprint: JSON.parse(JSON.stringify(filter.blueprint)),
+        blueprint: JSON.parse(JSON.stringify(filter.state.blueprint)),
       })
 
       filter.selected = true
+
+      Nova.$emit('submit-refine')
     },
   },
 }

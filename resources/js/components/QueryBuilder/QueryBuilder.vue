@@ -20,7 +20,7 @@
 import Condition from './Conditions/Condition'
 import AddButton from './Conditions/AddButton'
 import { useBlueprintStore } from '@/stores/BlueprintStore'
-import { storeToRefs } from 'pinia'
+import { storeToRefs, mapActions } from 'pinia'
 
 export default {
   components: {
@@ -43,8 +43,6 @@ export default {
   },
 
   created() {
-    //
-    //
     // // If the blueprint is already pretty long, let's just leave it alone.
     // if (blueprint.length >= 7) {
     //   return
@@ -74,6 +72,16 @@ export default {
   },
 
   methods: {
+    ...mapActions(useBlueprintStore, [
+      'addCriterion',
+      'removeCriterion',
+      'updateInput',
+    ]),
+
+    conditionForCriterion(criterion) {
+      return this.filter.conditions.find(c => c.id === criterion.condition_id)
+    },
+
     add(condition) {
       // Auto-open is checked in the condition on mount only, so
       // all the currently existing conditions will not be
@@ -84,21 +92,17 @@ export default {
       // the new component to mount and open itself.
       setTimeout(() => (this.autoOpen = false), 10)
 
-      useBlueprintStore().addCriterion(condition)
+      this.addCriterion(condition)
     },
 
     remove(index) {
-      useBlueprintStore().removeCriterion(index)
+      this.removeCriterion(index)
 
       Nova.$emit('submit-refine')
     },
 
-    conditionForCriterion(criterion) {
-      return this.filter.conditions.find(c => c.id === criterion.condition_id)
-    },
-
     handleInputUpdate(index, input) {
-      useBlueprintStore().updateInput(index, input)
+      this.updateInput(index, input)
 
       Nova.$emit('submit-refine')
     },

@@ -8,7 +8,7 @@
     <Teleport v-if="queryBuilderTarget" :to="queryBuilderTarget">
       <div class="flex items-baseline border-b pl-4 py-3">
         <QueryBuilder :errors="errors" :filter="filter" />
-        <StoredFilterModal />
+        <StoredFilterModal :filter="filter" />
       </div>
     </Teleport>
 
@@ -45,6 +45,7 @@ export default {
 
     // Load the filter into the store.
     store.loadBlueprint(filter.blueprint)
+    store.loadStoredFilters(this.card.stored)
 
     return {
       queryBuilderTarget: null,

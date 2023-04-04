@@ -5,8 +5,9 @@
 
 namespace Hammerstone\Refine\Nova;
 
-use Hammerstone\Refine\Filter;
+use Hammerstone\Refine\Nova\Models\NovaStoredFilter;
 use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -79,11 +80,26 @@ trait AddsReporting
             // Regardless of how the card is created, we want
             // to append the fields to meta on the way out.
             if ($card instanceof RefineCard) {
-                $card->withMeta([
-                    'fields' => $this->unrefinedIndexFields($request)
-                ]);
+                $this->addRequiredMeta($card, $request);
             }
         });
+    }
+
+    protected function addRequiredMeta(RefineCard $card, NovaRequest $request)
+    {
+        $card->withMeta([
+            'fields' => $this->unrefinedIndexFields($request),
+            'stored' => $this->getStoredFilters($request),
+        ]);
+    }
+
+    protected function getStoredFilters(NovaRequest $request)
+    {
+        // Gotta check the resource / filter type
+        return NovaStoredFilter::query()
+            ->where('user_id', Auth::id())
+            ->orderBy('name', 'asc')
+            ->get();
     }
 
     /**

@@ -3,7 +3,7 @@
  * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\Refine\Nova;
+namespace Hammerstone\Refine\Nova\Controllers;
 
 use Hammerstone\Refine\Filter;
 use Hammerstone\Refine\Stabilizers\UrlEncodedStabilizer;

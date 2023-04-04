@@ -117,6 +117,24 @@ class CardServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->runningInConsole()) {
+            $this->publishMigration();
+        }
+    }
+
+    protected function publishMigration()
+    {
+        if (class_exists('CreateNovaStoredFiltersTable')) {
+            return;
+        }
+
+        $source = __DIR__ . '/../stubs/create_nova_stored_filters_table.php.stub';
+        $destination = database_path(
+            'migrations/' . date('Y_m_d_His', time()) . '_create_nova_stored_filters_table.php'
+        );
+
+        $this->publishes([
+            $source => $destination
+        ]);
     }
 }

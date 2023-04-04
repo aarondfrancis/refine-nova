@@ -65,41 +65,41 @@
                   </p>
                 </div>
 
-                <SwitchGroup
-                  as="div"
-                  class="mt-4 flex items-center justify-between"
-                >
-                  <span class="flex flex-grow flex-col">
-                    <SwitchLabel
-                      as="span"
-                      class="text-base font-semibold text-gray-900"
-                      passive
-                    >
-                      Make filter public
-                    </SwitchLabel>
-                    <SwitchDescription
-                      as="span"
-                      class="text-sm text-gray-500 pr-8"
-                    >
-                      Allow anyone to see this filter.
-                    </SwitchDescription>
-                  </span>
-                  <Switch
-                    v-model="shared"
-                    :class="[
-                      shared ? 'bg-primary-600' : 'bg-gray-200',
-                      'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',
-                    ]"
-                  >
-                    <span
-                      aria-hidden="true"
-                      :class="[
-                        shared ? 'translate-x-5' : 'translate-x-0',
-                        'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-                      ]"
-                    />
-                  </Switch>
-                </SwitchGroup>
+                <!--                <SwitchGroup-->
+                <!--                  as="div"-->
+                <!--                  class="mt-4 flex items-center justify-between"-->
+                <!--                >-->
+                <!--                  <span class="flex flex-grow flex-col">-->
+                <!--                    <SwitchLabel-->
+                <!--                      as="span"-->
+                <!--                      class="text-base font-semibold text-gray-900"-->
+                <!--                      passive-->
+                <!--                    >-->
+                <!--                      Make filter public-->
+                <!--                    </SwitchLabel>-->
+                <!--                    <SwitchDescription-->
+                <!--                      as="span"-->
+                <!--                      class="text-sm text-gray-500 pr-8"-->
+                <!--                    >-->
+                <!--                      Allow anyone to see this filter.-->
+                <!--                    </SwitchDescription>-->
+                <!--                  </span>-->
+                <!--                  <Switch-->
+                <!--                    v-model="shared"-->
+                <!--                    :class="[-->
+                <!--                      shared ? 'bg-primary-600' : 'bg-gray-200',-->
+                <!--                      'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',-->
+                <!--                    ]"-->
+                <!--                  >-->
+                <!--                    <span-->
+                <!--                      aria-hidden="true"-->
+                <!--                      :class="[-->
+                <!--                        shared ? 'translate-x-5' : 'translate-x-0',-->
+                <!--                        'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',-->
+                <!--                      ]"-->
+                <!--                    />-->
+                <!--                  </Switch>-->
+                <!--                </SwitchGroup>-->
               </div>
 
               <div class="p-4 flex justify-end">
@@ -156,6 +156,13 @@ export default {
     SwitchGroup,
   },
 
+  props: {
+    filter: {
+      type: Object,
+      required: true,
+    },
+  },
+
   data() {
     return {
       isOpen: false,
@@ -166,7 +173,29 @@ export default {
 
   methods: {
     save() {
-      useBlueprintStore().saveCurrentBlueprint(this.name)
+      let store = useBlueprintStore()
+
+      Nova.request()
+        .post('/nova-vendor/refine-nova/stored', {
+          name: this.name,
+          state: {
+            type: this.filter.type,
+            blueprint: store.blueprint,
+            // This is the FQCN of the Nova resource, if they are using
+            // the AdHocFilter.
+            resource: this.filter.resource,
+          },
+        })
+        .then(({ data }) => {
+          console.log(data)
+        })
+
+      // post
+      // add to the store
+      // select in the store
+      // dont update the table because it's already good
+
+      // store.saveCurrentBlueprint(this.name)
 
       this.closeModal()
     },

@@ -3,7 +3,7 @@
  * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\Refine\Nova;
+namespace Hammerstone\Refine\Nova\Filters;
 
 use App\Nova\Resource;
 use Hammerstone\Refine\Concerns\FilterCallbacks;

@@ -512,6 +512,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     // Load the filter into the store.
     store.loadBlueprint(filter.blueprint);
+    store.loadStoredFilters(this.card.stored);
     return {
       queryBuilderTarget: null,
       fieldSelectorTarget: null,
@@ -1302,6 +1303,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Conditions_AddButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Conditions/AddButton */ "./resources/js/components/QueryBuilder/Conditions/AddButton.vue");
 /* harmony import */ var _stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/stores/BlueprintStore */ "./resources/js/stores/BlueprintStore.js");
 /* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
 
@@ -1324,8 +1331,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    //
-    //
     // // If the blueprint is already pretty long, let's just leave it alone.
     // if (blueprint.length >= 7) {
     //   return
@@ -1353,7 +1358,12 @@ __webpack_require__.r(__webpack_exports__);
     //   })
     // }
   },
-  methods: {
+  methods: _objectSpread(_objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapActions)(_stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_2__.useBlueprintStore, ['addCriterion', 'removeCriterion', 'updateInput'])), {}, {
+    conditionForCriterion: function conditionForCriterion(criterion) {
+      return this.filter.conditions.find(function (c) {
+        return c.id === criterion.condition_id;
+      });
+    },
     add: function add(condition) {
       var _this = this;
       // Auto-open is checked in the condition on mount only, so
@@ -1366,22 +1376,17 @@ __webpack_require__.r(__webpack_exports__);
       setTimeout(function () {
         return _this.autoOpen = false;
       }, 10);
-      (0,_stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_2__.useBlueprintStore)().addCriterion(condition);
+      this.addCriterion(condition);
     },
     remove: function remove(index) {
-      (0,_stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_2__.useBlueprintStore)().removeCriterion(index);
+      this.removeCriterion(index);
       Nova.$emit('submit-refine');
-    },
-    conditionForCriterion: function conditionForCriterion(criterion) {
-      return this.filter.conditions.find(function (c) {
-        return c.id === criterion.condition_id;
-      });
     },
     handleInputUpdate: function handleInputUpdate(index, input) {
-      (0,_stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_2__.useBlueprintStore)().updateInput(index, input);
+      this.updateInput(index, input);
       Nova.$emit('submit-refine');
     }
-  }
+  })
 });
 
 /***/ }),
@@ -1419,6 +1424,12 @@ __webpack_require__.r(__webpack_exports__);
     SwitchDescription: _headlessui_vue__WEBPACK_IMPORTED_MODULE_4__.SwitchDescription,
     SwitchGroup: _headlessui_vue__WEBPACK_IMPORTED_MODULE_4__.SwitchGroup
   },
+  props: {
+    filter: {
+      type: Object,
+      required: true
+    }
+  },
   data: function data() {
     return {
       isOpen: false,
@@ -1428,7 +1439,28 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     save: function save() {
-      (0,_stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_0__.useBlueprintStore)().saveCurrentBlueprint(this.name);
+      var store = (0,_stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_0__.useBlueprintStore)();
+      Nova.request().post('/nova-vendor/refine-nova/stored', {
+        name: this.name,
+        state: {
+          type: this.filter.type,
+          blueprint: store.blueprint,
+          // This is the FQCN of the Nova resource, if they are using
+          // the AdHocFilter.
+          resource: this.filter.resource
+        }
+      }).then(function (_ref) {
+        var data = _ref.data;
+        console.log(data);
+      });
+
+      // post
+      // add to the store
+      // select in the store
+      // dont update the table because it's already good
+
+      // store.saveCurrentBlueprint(this.name)
+
       this.closeModal();
     },
     openModal: function openModal() {
@@ -1476,9 +1508,10 @@ __webpack_require__.r(__webpack_exports__);
       }
       var store = (0,_stores_BlueprintStore__WEBPACK_IMPORTED_MODULE_0__.useBlueprintStore)();
       store.$patch({
-        blueprint: JSON.parse(JSON.stringify(filter.blueprint))
+        blueprint: JSON.parse(JSON.stringify(filter.state.blueprint))
       });
       filter.selected = true;
+      Nova.$emit('submit-refine');
     }
   }
 });
@@ -1519,7 +1552,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_QueryBuilder, {
     errors: $data.errors,
     filter: $data.filter
-  }, null, 8 /* PROPS */, ["errors", "filter"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_StoredFilterModal)])], 8 /* PROPS */, ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.fieldSelectorTarget ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Teleport, {
+  }, null, 8 /* PROPS */, ["errors", "filter"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_StoredFilterModal, {
+    filter: $data.filter
+  }, null, 8 /* PROPS */, ["filter"])])], 8 /* PROPS */, ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.fieldSelectorTarget ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Teleport, {
     key: 2,
     to: $data.fieldSelectorTarget
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FieldSelector, {
@@ -1785,9 +1820,7 @@ var _hoisted_2 = {
 var _hoisted_3 = {
   "class": "bg-gray-400 mr-1 rounded-full"
 };
-var _hoisted_4 = {
-  "class": "p-3 rounded-lg relative z-10 bg-white"
-};
+var _hoisted_4 = ["onKeyup"];
 var _hoisted_5 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_plus_icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("plus-icon");
@@ -1843,7 +1876,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               var close = _ref.close;
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FloatArrow, {
                 "class": "absolute !left-0 ml-2 z-0 bg-white w-5 h-5 rotate-45 border border-gray-300"
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ClauseSelector, {
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+                "class": "p-3 rounded-lg relative z-10 bg-white",
+                onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function ($event) {
+                  return $options.handleApply(close);
+                }, ["enter"])
+              }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ClauseSelector, {
                 condition: $props.condition,
                 modelValue: $data.internal.clause,
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
@@ -1863,7 +1901,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   return $options.handleApply(close);
                 },
                 "class": "mt-4 py-2 w-full shadow rounded text-white focus:outline-none ring-primary-200 dark:ring-gray-600 focus:ring bg-primary-500 hover:bg-primary-400 active:bg-primary-600 dark:text-gray-800 font-bold text-sm"
-              }, " Apply ", 8 /* PROPS */, _hoisted_5)])];
+              }, " Apply ", 8 /* PROPS */, _hoisted_5)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_4)];
             }),
             _: 1 /* STABLE */
           })];
@@ -2408,19 +2446,12 @@ var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   id: "name-description"
 }, " Enter a memorable name for your filter. ", -1 /* HOISTED */);
 var _hoisted_8 = {
-  "class": "flex flex-grow flex-col"
-};
-var _hoisted_9 = {
   "class": "p-4 flex justify-end"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_plus_icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("plus-icon");
   var _component_TransitionChild = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("TransitionChild");
   var _component_DialogTitle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DialogTitle");
-  var _component_SwitchLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SwitchLabel");
-  var _component_SwitchDescription = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SwitchDescription");
-  var _component_Switch = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Switch");
-  var _component_SwitchGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SwitchGroup");
   var _component_DialogPanel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DialogPanel");
   var _component_Dialog = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Dialog");
   var _component_TransitionRoot = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("TransitionRoot");
@@ -2487,56 +2518,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     "class": "form-control form-input form-input-bordered w-full",
                     placeholder: "My favorite customers",
                     "aria-describedby": "name-description"
-                  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.name]])]), _hoisted_7]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SwitchGroup, {
-                    as: "div",
-                    "class": "mt-4 flex items-center justify-between"
-                  }, {
-                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SwitchLabel, {
-                        as: "span",
-                        "class": "text-base font-semibold text-gray-900",
-                        passive: ""
-                      }, {
-                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Make filter public ")];
-                        }),
-                        _: 1 /* STABLE */
-                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SwitchDescription, {
-                        as: "span",
-                        "class": "text-sm text-gray-500 pr-8"
-                      }, {
-                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Allow anyone to see this filter. ")];
-                        }),
-                        _: 1 /* STABLE */
-                      })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Switch, {
-                        modelValue: $data.shared,
-                        "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-                          return $data.shared = $event;
-                        }),
-                        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$data.shared ? 'bg-primary-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2'])
-                      }, {
-                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-                            "aria-hidden": "true",
-                            "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$data.shared ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'])
-                          }, null, 2 /* CLASS */)];
-                        }),
-
-                        _: 1 /* STABLE */
-                      }, 8 /* PROPS */, ["modelValue", "class"])];
-                    }),
-                    _: 1 /* STABLE */
-                  })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+                  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.name]])]), _hoisted_7]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <SwitchGroup"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                  as=\"div\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                  class=\"mt-4 flex items-center justify-between\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                >"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                  <span class=\"flex flex-grow flex-col\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <SwitchLabel"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      as=\"span\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      class=\"text-base font-semibold text-gray-900\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      passive"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    >"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      Make filter public"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    </SwitchLabel>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <SwitchDescription"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      as=\"span\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      class=\"text-sm text-gray-500 pr-8\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    >"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      Allow anyone to see this filter."), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    </SwitchDescription>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                  </span>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                  <Switch"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    v-model=\"shared\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    :class=\"["), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      shared ? 'bg-primary-600' : 'bg-gray-200',"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    ]\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                  >"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <span"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      aria-hidden=\"true\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      :class=\"["), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                        shared ? 'translate-x-5' : 'translate-x-0',"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                        'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                      ]\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    />"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                  </Switch>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                </SwitchGroup>")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
                     type: "button",
                     "class": "flex items-center border border-gray-300 shadow px-3 py-1 rounded mr-4",
-                    onClick: _cache[3] || (_cache[3] = function () {
+                    onClick: _cache[2] || (_cache[2] = function () {
                       return $options.closeModal && $options.closeModal.apply($options, arguments);
                     })
                   }, " Cancel "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
                     type: "button",
                     "class": "flex py-1 px-3 shadow rounded text-white focus:outline-none ring-primary-200 dark:ring-gray-600 focus:ring bg-primary-500 hover:bg-primary-400 active:bg-primary-600 dark:text-gray-800 font-bold",
-                    onClick: _cache[4] || (_cache[4] = function () {
+                    onClick: _cache[3] || (_cache[3] = function () {
                       return $options.save && $options.save.apply($options, arguments);
                     })
                   }, " Save ")])];
@@ -2836,48 +2827,6 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 
 /***/ }),
 
-/***/ "./resources/js/lib/stored.js":
-/*!************************************!*\
-  !*** ./resources/js/lib/stored.js ***!
-  \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
-  name: 'All',
-  selected: true,
-  blueprint: []
-}, {
-  name: 'Favorites',
-  selected: false,
-  blueprint: [{
-    depth: 1,
-    type: 'criterion',
-    condition_id: 'name',
-    input: {
-      clause: 'cont',
-      value: 'Aaron'
-    }
-  }]
-}, {
-  name: 'Subscribers',
-  selected: false,
-  blueprint: [{
-    depth: 1,
-    type: 'criterion',
-    condition_id: 'is_subscriber',
-    input: {
-      clause: 'true'
-    }
-  }]
-}]);
-
-/***/ }),
-
 /***/ "./resources/js/lib/uid.js":
 /*!*********************************!*\
   !*** ./resources/js/lib/uid.js ***!
@@ -2906,37 +2855,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "useBlueprintStore": () => (/* binding */ useBlueprintStore)
 /* harmony export */ });
-/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
-/* harmony import */ var _lib_stored__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/lib/stored */ "./resources/js/lib/stored.js");
-/* harmony import */ var _lib_uid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/lib/uid */ "./resources/js/lib/uid.js");
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var _lib_uid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/lib/uid */ "./resources/js/lib/uid.js");
 
 
-
-var useBlueprintStore = (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)('Blueprint', {
+var useBlueprintStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('Blueprint', {
   state: function state() {
     return {
-      stored: _lib_stored__WEBPACK_IMPORTED_MODULE_0__["default"],
+      stored: [],
       blueprint: []
     };
   },
   actions: {
+    loadStoredFilters: function loadStoredFilters(blueprints) {
+      this.stored = blueprints;
+    },
     loadBlueprint: function loadBlueprint(blueprint) {
       // Ensure that all blueprint criterion have a UID.
       this.blueprint = blueprint.map(function (item) {
-        if (item.type === 'criterion' && !item.uid) {
-          item.uid = (0,_lib_uid__WEBPACK_IMPORTED_MODULE_1__["default"])();
+        if (item.type === 'criterion' && !item.hasOwnProperty('uid')) {
+          item.uid = (0,_lib_uid__WEBPACK_IMPORTED_MODULE_0__["default"])();
         }
         return item;
       });
+      this.resetSelectedStoredFilter();
     },
     addCriterion: function addCriterion(condition) {
       var input = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      if (this.blueprint.length === 0) {
+      if (this.blueprint.length > 0) {
         this.blueprint.push({
           depth: 1,
           type: 'conjunction',
           word: 'and',
-          uid: (0,_lib_uid__WEBPACK_IMPORTED_MODULE_1__["default"])()
+          uid: (0,_lib_uid__WEBPACK_IMPORTED_MODULE_0__["default"])()
         });
       }
       this.blueprint.push({
@@ -2944,8 +2895,9 @@ var useBlueprintStore = (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)('Blue
         type: 'criterion',
         condition_id: condition.id,
         input: input,
-        uid: (0,_lib_uid__WEBPACK_IMPORTED_MODULE_1__["default"])()
+        uid: (0,_lib_uid__WEBPACK_IMPORTED_MODULE_0__["default"])()
       });
+      this.resetSelectedStoredFilter();
     },
     removeCriterion: function removeCriterion(index) {
       /**
@@ -2979,10 +2931,11 @@ var useBlueprintStore = (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)('Blue
       } else {
         this.blueprint.splice(index - 1, 2);
       }
-      return this.blueprint;
+      this.resetSelectedStoredFilter();
     },
     updateInput: function updateInput(index, input) {
       this.blueprint[index].input = input;
+      this.resetSelectedStoredFilter();
     },
     saveCurrentBlueprint: function saveCurrentBlueprint(name) {
       // Unselect the currently selected stored filter

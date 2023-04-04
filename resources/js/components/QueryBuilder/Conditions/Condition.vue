@@ -52,7 +52,10 @@
           class="absolute !left-0 ml-2 z-0 bg-white w-5 h-5 rotate-45 border border-gray-300"
         />
 
-        <div class="p-3 rounded-lg relative z-10 bg-white">
+        <div
+          class="p-3 rounded-lg relative z-10 bg-white"
+          @keyup.enter="handleApply(close)"
+        >
           <ClauseSelector :condition="condition" v-model="internal.clause" />
           <component
             v-if="selectedClauseObject.component"
