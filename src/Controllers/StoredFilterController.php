@@ -35,7 +35,6 @@ class StoredFilterController
         ]);
     }
 
-
     public function destroy(NovaStoredFilter $filter, Request $request)
     {
         if ($filter->user_id !== Auth::id()) {
