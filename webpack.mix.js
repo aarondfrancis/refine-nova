@@ -3,6 +3,7 @@ let tailwindcss = require('tailwindcss')
 let path = require('path')
 let unique = require('./unique')
 let fs = require('fs')
+const { execSync } = require('child_process')
 let BundleAnalyzerPlugin =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
@@ -14,10 +15,29 @@ let shouldCompileJavascript = process.env.npm_config_cssonly !== 'true'
 // recent version listed in the versions.txt file.
 let novaVersion =
   process.env.npm_config_nova ||
-  'v4.22.2' ||
   fs
     .readFileSync(path.join(__dirname, `build/versions.txt`), 'utf8')
     .split('\n')[0]
+
+if (!mix.inProduction()) {
+  // Hard code for local testing.
+  novaVersion = 'v4.22.2'
+
+  try {
+    // Try to read it out of the nova4 project, if it exists.
+    novaVersion =
+      'v' +
+      execSync(
+        "composer show laravel/nova | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+'",
+        { cwd: '../nova4' }
+      )
+        .toString()
+        .trim()
+        .split('\n')[0]
+  } catch (e) {
+    console.log('Could not find nova4 version')
+  }
+}
 
 console.log(`Compiling for Nova version: ${novaVersion}`)
 
@@ -38,7 +58,9 @@ mix
     output: {
       uniqueName: 'hammerstone/refine',
     },
-    plugins: [new BundleAnalyzerPlugin()],
+    plugins: [mix.inProduction() ? new BundleAnalyzerPlugin() : null].filter(
+      p => p
+    ),
   })
   .postCss('resources/css/card.css', `dist/css/${novaVersion}.css`, [
     require('postcss-import'),
