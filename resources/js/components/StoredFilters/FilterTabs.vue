@@ -17,6 +17,7 @@
 
 <script>
 import { useBlueprintStore } from '@/stores/BlueprintStore'
+import { mapState, storeToRefs } from 'pinia'
 
 export default {
   data() {
@@ -28,29 +29,18 @@ export default {
   },
 
   computed: {
-    selectedFilter() {
-      return this.stored.find(f => f.selected)
-    },
+    ...mapState(useBlueprintStore, ['stored']),
+    // selectedFilter() {
+    //   return this.stored.find(f => f.selected)
+    // },
   },
 
   methods: {
     select(filter) {
-      if (this.selectedFilter) {
-        this.selectedFilter.selected = false
-      }
-
-      let store = useBlueprintStore()
-
-      store.$patch({
-        blueprint: JSON.parse(JSON.stringify(filter.state.blueprint)),
-      })
-
-      filter.selected = true
+      useBlueprintStore().loadBlueprint(filter.state.blueprint)
 
       Nova.$emit('submit-refine')
     },
   },
 }
 </script>
-
-<style scoped></style>

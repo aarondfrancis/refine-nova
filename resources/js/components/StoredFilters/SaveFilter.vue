@@ -1,7 +1,7 @@
 <template>
   <button
     @click="openModal"
-    class="flex items-center ml-auto mr-2 rounded px-2 py-1 text-sm text-gray-500 bg-white hover:bg-gray-100 cursor-pointer"
+    class="flex items-center rounded px-2 py-1 text-sm text-gray-500 bg-white hover:bg-gray-100 cursor-pointer"
   >
     <plus-icon class="w-3 h-3" />
     Save this filter

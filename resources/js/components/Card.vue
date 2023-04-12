@@ -2,13 +2,15 @@
   <!-- Everything is teleported, so we hide the empty card -->
   <div class="hidden">
     <Teleport v-if="savedFiltersTarget" :to="savedFiltersTarget">
-      <StoredFilterTabs />
+      <FilterTabs />
     </Teleport>
 
     <Teleport v-if="queryBuilderTarget" :to="queryBuilderTarget">
       <div class="flex items-baseline border-b pl-4 py-3">
         <QueryBuilder :errors="errors" :filter="filter" />
-        <StoredFilterModal :filter="filter" />
+        <div class="ml-auto mr-2">
+          <FilterAction :filter="filter" />
+        </div>
       </div>
     </Teleport>
 
@@ -22,9 +24,9 @@
 import QueryBuilder from './QueryBuilder/QueryBuilder.vue'
 import FieldSelector from './FieldSelector.vue'
 import toPlainObject from 'lodash/toPlainObject'
+import FilterTabs from './StoredFilters/FilterTabs.vue'
+import FilterAction from './StoredFilters/FilterAction.vue'
 import forEach from 'lodash/forEach'
-import StoredFilterModal from './QueryBuilder/StoredFilterModal.vue'
-import StoredFilterTabs from './QueryBuilder/StoredFilterTabs.vue'
 import { storeToRefs } from 'pinia'
 import { useBlueprintStore } from '../stores/BlueprintStore'
 
@@ -32,8 +34,8 @@ export default {
   props: ['card', 'resourceName'],
 
   components: {
-    StoredFilterModal,
-    StoredFilterTabs,
+    FilterTabs,
+    FilterAction,
     FieldSelector,
     QueryBuilder,
   },
@@ -154,7 +156,8 @@ export default {
           // more closely at the blueprint store to figure out why.
           this.$nextTick(() => {
             this.lastAppliedBlueprint = data.blueprint
-            this.blueprint = data.blueprint
+
+            useBlueprintStore().loadBlueprint(data.blueprint)
           })
 
           if (refresh) {

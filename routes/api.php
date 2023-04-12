@@ -8,3 +8,4 @@ Route::post('/stabilize', [StabilizationController::class, 'stabilize']);
 Route::post('/destabilize', [StabilizationController::class, 'destabilize']);
 
 Route::post('/stored', [StoredFilterController::class, 'store']);
+Route::delete('/stored/{filter}', [StoredFilterController::class, 'destroy']);

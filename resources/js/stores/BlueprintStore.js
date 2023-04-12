@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import uid from '@/lib/uid'
+import isEqual from 'lodash/isEqual'
 
 export const useBlueprintStore = defineStore('Blueprint', {
   state() {
@@ -9,12 +10,21 @@ export const useBlueprintStore = defineStore('Blueprint', {
     }
   },
 
+  getters: {
+    selectedStoredFilter() {
+      return this.stored.find(f => f.selected)
+    },
+  },
+
   actions: {
     loadStoredFilters(blueprints) {
       this.stored = blueprints
+      this.resetSelectedStoredFilter()
     },
 
     loadBlueprint(blueprint) {
+      blueprint = JSON.parse(JSON.stringify(blueprint))
+
       // Ensure that all blueprint criterion have a UID.
       this.blueprint = blueprint.map(item => {
         if (item.type === 'criterion' && !item.hasOwnProperty('uid')) {
@@ -25,6 +35,38 @@ export const useBlueprintStore = defineStore('Blueprint', {
       })
 
       this.resetSelectedStoredFilter()
+    },
+
+    removeStoredFilter(id) {
+      this.stored = this.stored.filter(filter => filter.id !== id)
+    },
+
+    withoutUuids(blueprint) {
+      // Make a non-reactive copy of the blueprint and remove all the UIDs.
+      return JSON.parse(JSON.stringify(blueprint)).map(item => {
+        delete item.uid
+        return item
+      })
+    },
+
+    blueprintsMatch(a, b) {
+      return isEqual(this.withoutUuids(a), this.withoutUuids(b))
+    },
+
+    resetSelectedStoredFilter() {
+      if (this.selectedStoredFilter) {
+        this.selectedStoredFilter.selected = false
+      }
+
+      this.potentiallySelectStoredFilter()
+    },
+
+    potentiallySelectStoredFilter() {
+      this.stored.forEach(filter => {
+        if (this.blueprintsMatch(filter.state.blueprint, this.blueprint)) {
+          filter.selected = true
+        }
+      })
     },
 
     addCriterion(condition, input = {}) {
@@ -97,22 +139,6 @@ export const useBlueprintStore = defineStore('Blueprint', {
       this.blueprint[index].input = input
 
       this.resetSelectedStoredFilter()
-    },
-
-    saveCurrentBlueprint(name) {
-      // Unselect the currently selected stored filter
-      this.resetSelectedStoredFilter()
-
-      // Push the current one into the saved array
-      this.stored.push({
-        name: name,
-        blueprint: JSON.parse(JSON.stringify(this.blueprint)),
-        selected: true,
-      })
-    },
-
-    resetSelectedStoredFilter() {
-      this.stored.forEach(f => (f.selected = false))
     },
   },
 })

@@ -34,4 +34,14 @@ class StoredFilterController
             'user_id' => Auth::id(),
         ]);
     }
+
+
+    public function destroy(NovaStoredFilter $filter, Request $request)
+    {
+        if ($filter->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $filter->delete();
+    }
 }
