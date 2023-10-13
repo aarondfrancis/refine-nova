@@ -150,6 +150,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.updateBlueprintFromStableId(id);
     }
   },
+  beforeDestroy: function beforeDestroy() {
+    Nova.$off('refresh-resources');
+  },
   computed: {
     refineParameterName: function refineParameterName() {
       return "".concat(this.resourceName, "_refine");
