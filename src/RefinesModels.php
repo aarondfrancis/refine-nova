@@ -13,7 +13,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 trait RefinesModels
 {
     /**
-     * @param  NovaRequest  $request
      * @return string|Filter
      */
     public static function refineFilter(NovaRequest $request = null)
@@ -30,7 +29,6 @@ trait RefinesModels
     }
 
     /**
-     * @param  NovaRequest  $request
      * @return RefineCard
      */
     public static function refineCard(NovaRequest $request = null)
