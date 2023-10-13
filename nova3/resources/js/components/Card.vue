@@ -97,6 +97,10 @@ export default {
     }
   },
 
+  beforeDestroy() {
+    Nova.$off('refresh-resources')
+  },
+
   computed: {
     refineParameterName() {
       return `${this.resourceName}_refine`
